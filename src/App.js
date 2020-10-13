@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, NavLink } from "react-router-dom";
 import Quiz from "./Page/quiz";
-import Navbar from "./Components/navbar"
+import Navbar from "./Components/navbar";
 
 export default function App() {
   return (

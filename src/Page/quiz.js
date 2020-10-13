@@ -2,50 +2,48 @@ import React, { useState } from "react";
 import Createquiz from "../Components/createquiz";
 import Showquiz from "../Components/showquiz";
 
+let step = 1;
 export default function Quiz() {
-  let [jsonobj, setjsonobj] = useState({
-    list: [],
-    step: 1,
-    t:""
-  });
+  // let [jsonobj, setjsonobj] = useState({
+  //   list: [],
+  //   step: 1,
+  //   t:""
+  // });
+  const [jsonobj, setjsonobj] = useState([]);
   const [btnCreate, setbtnCreate] = useState(false);
-  const setjson = (stepquiz, obj,question) => {
+  const setjson = (stepquiz, obj, question) => {
     console.log("stepquiz == ", stepquiz);
     console.log("obj == ", obj);
 
-    const newlist = jsonobj.list.concat(obj);
+    //const newlist = jsonobj.list.concat(obj);
+    const newlist = { stepquiz, obj };
+    console.log("newlist :::: ", newlist);
 
-    console.log('newlist :::: ',newlist);
+    // setjsonobj({
+    //   list: newlist,
+    //   step: stepquiz++,
+    //   t:question
+    // });key={jsonobj.stepquiz} () => setbtnCreate(true)
+    setjsonobj([newlist, ...jsonobj]);
+    step += 1;
+  };
 
-    setjsonobj({
-      list: newlist,
-      step: 2,
-      t:question
-    });
-
-    //setjsonobj({
-    //step:stepquiz,
-    //a:jsonobj.step++,
-    //list:[...jsonobj.list,newlist],
-    //step:jsonobj.step++
-    //})
-
-    console.log("--set---");
-    console.log(jsonobj.list);
-    console.log(jsonobj.t);
+  const clickCreate = () => {
+    setbtnCreate(!btnCreate);
   };
   return (
     <div>
       <div>
-        <button onClick={() => setbtnCreate(true)}>createquiz</button>
-        {btnCreate && <Createquiz step={jsonobj.step} setjson={setjson} />}
-        <h1>-- : {jsonobj.t}</h1>
-
-        
-        {/* <Createquiz step={this.state.step} setjson={this.state.setjson}/> */}
-        {/* <Showquiz list={jsonobj.list}></Showquiz> */}
-        {/* <h1>-- : {this.state.list | JSON}</h1> */}
-        <hr></hr>
+        {!btnCreate && <button onClick={clickCreate}>createquiz</button>}
+        {btnCreate && (
+          <div>
+            <Createquiz step={step} setjson={setjson} submit={clickCreate} />
+            <hr />
+            {jsonobj.map((jsonobj) => (
+              <Showquiz list={jsonobj.obj}/>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

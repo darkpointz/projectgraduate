@@ -1,8 +1,12 @@
-import React, {  } from "react";
-const Showquiz = (props) => {
+import React, { useState } from "react";
+const Showquiz = ({list }) => {
   return (
     <div>
-      <h1>:{props.list}</h1>
+      {/* <div>{jsonobj.question}</div> */}
+      <h1>{list.step}</h1>
+      <h2>{list.question}</h2>
+      {list.arrayans.map((list) => (<h3>{list}</h3>))}
+      <hr />
     </div>
   );
 };
