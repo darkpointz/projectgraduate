@@ -1,22 +1,26 @@
-import React, { useState } from "react";
+import React, { Component } from "react";
 import Createquiz from "../Components/createquiz";
 import Showquiz from "../Components/showquiz";
+import firebase from "firebase/app";
+import "firebase/firestore";
 
-let step = 1;
-export default function Quiz() {
-  // let [jsonobj, setjsonobj] = useState({
-  //   list: [],
-  //   step: 1,
-  //   t:""
-  // });
-  const [jsonobj, setjsonobj] = useState([]);
-  const [btnCreate, setbtnCreate] = useState(false);
-  const setjson = (stepquiz, obj, question) => {
-    console.log("stepquiz == ", stepquiz);
+export default class quiz extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      jsonobj: [],
+      btnCreate: false,
+    };
+    this.clickCreate = this.clickCreate.bind(this);
+    this.setjson = this.setjson.bind(this);
+    this.btnCreate = this.btnCreate.bind(this);
+  }
+
+  setjson(obj) {
     console.log("obj == ", obj);
 
     //const newlist = jsonobj.list.concat(obj);
-    const newlist = { stepquiz, obj };
+    const newlist = { obj };
     console.log("newlist :::: ", newlist);
 
     // setjsonobj({
@@ -24,27 +28,45 @@ export default function Quiz() {
     //   step: stepquiz++,
     //   t:question
     // });key={jsonobj.stepquiz} () => setbtnCreate(true)
-    setjsonobj([newlist, ...jsonobj]);
-    step += 1;
-  };
+    this.setState({
+      jsonobj: [...this.state.jsonobj,newlist],
+    });
+  }
+  clickCreate() {
+    this.setState({ btnCreate: !this.state.btnCreate });
+  }
 
-  const clickCreate = () => {
-    setbtnCreate(!btnCreate);
-  };
-  return (
-    <div>
+  clearstate() {
+    this.setState({
+      jsonobj: [],
+    });
+  }
+
+  async btnCreate() {
+    this.clickCreate();
+    // await firebase.firestore().collection("quiz").add({
+    //   json: this.state.jsonobj,
+    // }); 
+    await this.clearstate();
+  }
+
+  render() {
+    return (
       <div>
-        {!btnCreate && <button onClick={clickCreate}>createquiz</button>}
-        {btnCreate && (
-          <div>
-            <Createquiz step={step} setjson={setjson} submit={clickCreate} />
-            <hr />
-            {jsonobj.map((jsonobj) => (
-              <Showquiz list={jsonobj.obj}/>
-            ))}
-          </div>
-        )}
+        <div>
+          {!this.state.btnCreate ? (
+            <button onClick={this.clickCreate}>createquiz</button>
+          ) : (
+            <div>
+              <Createquiz setjson={this.setjson} submit={this.btnCreate} />
+              <hr />
+              {this.state.jsonobj.map((jsonobj) => (
+                <Showquiz list={jsonobj.obj} />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }

@@ -3,13 +3,20 @@ import { Label } from "@material-ui/icons";
 import Addanswer from "./addanswer";
 
 export default class Createquiz extends Component {
-  state = {
-    question: "",
-    ans1: "",
-    ans2: "",
-    ans3: "",
-    ans4: "",
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      question: "",
+      ans1: "",
+      ans2: "",
+      ans3: "",
+      ans4: "",
+      ans5: "",
+      ans:[],
+      btnAddans: false,
+    };
+  }
 
   onclicksumit = (event) => {
     event.preventDefault();
@@ -19,17 +26,17 @@ export default class Createquiz extends Component {
       this.state.ans2,
       this.state.ans3,
       this.state.ans4,
+      this.state.ans5,
     ];
-    let step = this.props.step;
-    let list = { step, question, arrayans };
-    this.props.setjson(step, list, question);
+    let list = { question, arrayans };
+    this.props.setjson(list, question);
     this.setState({
       question: "",
       ans1: "",
       ans2: "",
       ans3: "",
       ans4: "",
-      ans4: "",
+      ans5: "",
     });
   };
 
@@ -38,7 +45,7 @@ export default class Createquiz extends Component {
   };
 
   onChangeTextAnswer = (e) => {
-    this.setState({ ans1: e.target.value });
+    this.setState({ ans: [e.target.value, ...this.state.ans] });
   };
 
   checkaddanswer = () => {};
@@ -47,45 +54,61 @@ export default class Createquiz extends Component {
     return (
       <div>
         <form onSubmit={this.onclicksumit}>
-          <div className="Content">
-            คำถาม:
+          <div className="createquiz">
+            <label>คำถาม:</label>
             <input
               type="text"
-              id="ans1"
               value={this.state.question}
               onChange={this.onChangeTextQuestion}
             ></input>
             <br />
-            1:
+            <label>A:</label>
             <input
               type="text"
               name="question"
-              value={this.state.ans1}
-              onChange={this.onChangeTextAnswer}
+              value={this.state.ans1}//this.state.ans1
+              onChange={(e) => this.setState({ ans1: e.target.value })}
             ></input>
             <br />
-            2:
+            <label>B:</label>
             <input
               type="text"
               value={this.state.ans2}
               onChange={(e) => this.setState({ ans2: e.target.value })}
             ></input>
             <br />
-            3:
+            <label>C:</label>
             <input
               type="text"
               value={this.state.ans3}
               onChange={(e) => this.setState({ ans3: e.target.value })}
             ></input>
             <br />
-            4:
+            <label>D:</label>
             <input
               type="text"
               value={this.state.ans4}
               onChange={(e) => this.setState({ ans4: e.target.value })}
             ></input>
             <br />
-            <Addanswer></Addanswer>
+            {!this.state.btnAddans ? (
+              <button
+                onClick={() => {
+                  this.setState({ btnAddans: true });
+                }}
+              >
+                เพิ่ม
+              </button>
+            ) : (
+              <div>
+                <label>E:</label>
+                <input
+                  type="text"
+                  value={this.state.ans5}
+                  onChange={(e) => this.setState({ ans5: e.target.value })}
+                ></input>
+              </div>
+            )}
             <br />
             <button type="submit" value="Submit">
               ยืนยัน
