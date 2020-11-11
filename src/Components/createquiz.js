@@ -13,7 +13,7 @@ export default class Createquiz extends Component {
       ans3: "",
       ans4: "",
       ans5: "",
-      ans:[],
+      ans: [],
       btnAddans: false,
     };
   }
@@ -29,6 +29,7 @@ export default class Createquiz extends Component {
       this.state.ans5,
     ];
     let list = { question, arrayans };
+    console.log("radio:L ");
     this.props.setjson(list, question);
     this.setState({
       question: "",
@@ -62,15 +63,17 @@ export default class Createquiz extends Component {
               onChange={this.onChangeTextQuestion}
             ></input>
             <br />
-            <label>A:</label>
+            <label>A: </label>
+            <input type="radio" name="correct" value="1"></input>
             <input
               type="text"
               name="question"
-              value={this.state.ans1}//this.state.ans1
+              value={this.state.ans1} //this.state.ans1
               onChange={(e) => this.setState({ ans1: e.target.value })}
             ></input>
             <br />
             <label>B:</label>
+            <input type="radio" name="correct" value="2"></input>
             <input
               type="text"
               value={this.state.ans2}
@@ -78,6 +81,7 @@ export default class Createquiz extends Component {
             ></input>
             <br />
             <label>C:</label>
+            <input type="radio" name="correct" value="3"></input>
             <input
               type="text"
               value={this.state.ans3}
@@ -85,6 +89,7 @@ export default class Createquiz extends Component {
             ></input>
             <br />
             <label>D:</label>
+            <input type="radio" name="correct" value="4"></input>
             <input
               type="text"
               value={this.state.ans4}
@@ -102,6 +107,7 @@ export default class Createquiz extends Component {
             ) : (
               <div>
                 <label>E:</label>
+                <input type="radio" name="correct" value="5"></input>
                 <input
                   type="text"
                   value={this.state.ans5}

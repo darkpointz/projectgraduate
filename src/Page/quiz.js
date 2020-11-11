@@ -44,9 +44,9 @@ export default class quiz extends Component {
 
   async btnCreate() {
     this.clickCreate();
-    // await firebase.firestore().collection("quiz").add({
-    //   json: this.state.jsonobj,
-    // }); 
+    await firebase.firestore().collection("quiz").add({
+      json: this.state.jsonobj,
+    }); 
     await this.clearstate();
   }
 
