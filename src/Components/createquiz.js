@@ -11,6 +11,67 @@ export default class Createquiz extends Component {
     super(props);
 
     this.state = {
+      quizname: "",
+      quiz: [],
+      selectchoice:0
+    };
+    this.onClicksavequiz = this.onClicksavequiz.bind(this);
+    this.onclicksumit = this.onclicksumit.bind(this);
+  }
+
+  onclicksumit = (event) => {
+    event.preventDefault();
+    const question = this.state.question;
+    const quiz = this.state.quiz;
+    
+    this.props.setjson( question,quiz);
+   // this.props.submit(question,quiz)
+    //this.props.submit  this.onclicksumit
+  };
+
+  onClicksavequiz = (newquiz) => {
+    this.setState({quiz: [...this.state.quiz,newquiz]})
+
+    this.setState({selectchoice:0})
+  };
+
+  // onChangeTextAnswer = (e) => {
+  //   this.setState({ ans: [e.target.value, ...this.state.ans] });
+  // };
+
+  onClickSelectchoice=(e)=>{
+    const value=e.target.value
+    this.setState({selectchoice:value})
+  }
+  render() {
+    return (
+      <div>
+        <input
+          type="text" 
+          value={this.state.quizname}
+          placeholder="Quiz Title"
+          onChange={(e)=>this.setState({ quizname: e.target.value })}>
+          </input>
+        <button onClick={this.onclicksumit}>Save and Exit</button>
+        <hr />
+        <div>
+          {this.state.selectchoice === "1" ? <Multiplechoice savequiz={this.onClicksavequiz}/> : 
+           this.state.selectchoice === "2" ? <Truefalse savequiz={this.onClicksavequiz}/> :
+           this.state.selectchoice === "3" ? <Shortanswer/> : null}
+        </div>
+        <label>Add a question</label>
+        <br/>
+        <button value="1" onClick={this.onClickSelectchoice}>Multiplechoice</button>
+        <button value="2" onClick={this.onClickSelectchoice}>Truefalse</button>
+        <button value="3" onClick={this.onClickSelectchoice}>ShortAnswer</button>
+        
+      </div>
+    );
+  }
+}
+
+//-----
+{/* 
       question: "",
       ans1: "",
       ans2: "",
@@ -18,12 +79,8 @@ export default class Createquiz extends Component {
       ans4: "",
       ans5: "",
       ans: [],
-      btnAddans: false,
-      selectchoice:0
-    };
-  }
 
-  onclicksumit = (event) => {
+       onclicksumit = (event) => {
     event.preventDefault();
     let question = this.state.question;
     let arrayans = [
@@ -46,41 +103,7 @@ export default class Createquiz extends Component {
     });
   };
 
-  onChangeTextQuestion = (e) => {
-    this.setState({ question: e.target.value });
-  };
-
-  onChangeTextAnswer = (e) => {
-    this.setState({ ans: [e.target.value, ...this.state.ans] });
-  };
-
-  onClickSelectchoice=(e)=>{
-    const value=e.target.value
-    this.setState({selectchoice:value})
-    console.log(this.state.selectchoice);
-  }
-
-  render() {
-    return (
-      <div>
-        <button onClick={this.props.submit}>สร้าง</button>
-        <hr />
-        <div>
-          {this.state.selectchoice === "1" ? <Multiplechoice/> : 
-           this.state.selectchoice === "2" ? <Truefalse/> :
-           this.state.selectchoice === "3" ? <Shortanswer/> : null}
-        </div>
-        <button value="1" onClick={this.onClickSelectchoice}>Multiplechoice</button>
-        <button value="2" onClick={this.onClickSelectchoice}>Truefalse</button>
-        <button value="3" onClick={this.onClickSelectchoice}>ShortAnswer</button>
-        
-      </div>
-    );
-  }
-}
-
-//-----
-{/* <form onSubmit={this.onclicksumit}>
+  <form onSubmit={this.onclicksumit}>
           <div className="createquiz">
             <label>คำถาม:</label>
             <input

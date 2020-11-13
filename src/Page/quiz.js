@@ -8,7 +8,8 @@ export default class quiz extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      jsonobj: [],
+      quizname:"",
+      quiz: [],
       btnCreate: false,
     };
     this.clickCreate = this.clickCreate.bind(this);
@@ -16,21 +17,24 @@ export default class quiz extends Component {
     this.btnCreate = this.btnCreate.bind(this);
   }
 
-  setjson(obj) {
+  setjson(name,obj) {
     console.log("obj == ", obj);
 
     //const newlist = jsonobj.list.concat(obj);
     const newlist = { obj };
     console.log("newlist :::: ", newlist);
 
+     this.setState({
+      quizname:name,
+      quiz: [obj],
+    });
+    this.btnCreate()
     // setjsonobj({
     //   list: newlist,
     //   step: stepquiz++,
     //   t:question
     // });key={jsonobj.stepquiz} () => setbtnCreate(true)
-    this.setState({
-      jsonobj: [...this.state.jsonobj,newlist],
-    });
+   
   }
   clickCreate() {
     this.setState({ btnCreate: !this.state.btnCreate });
@@ -45,7 +49,8 @@ export default class quiz extends Component {
   async btnCreate() {
     this.clickCreate();
     await firebase.firestore().collection("quiz").add({
-      json: this.state.jsonobj,
+      quizname:this.state.quizname,
+      quiz: this.state.quiz
     }); 
     await this.clearstate();
   }
@@ -60,9 +65,7 @@ export default class quiz extends Component {
             <div>
               <Createquiz setjson={this.setjson} submit={this.btnCreate} />
               <hr />
-              {this.state.jsonobj.map((jsonobj) => (
-                <Showquiz list={jsonobj.obj} />
-              ))}
+              
             </div>
           )}
         </div>
@@ -70,3 +73,9 @@ export default class quiz extends Component {
     );
   }
 }
+
+
+//---
+// {this.state.jsonobj.map((jsonobj) => (
+//   <Showquiz list={jsonobj.obj} />
+// ))}
