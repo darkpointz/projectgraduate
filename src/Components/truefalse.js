@@ -1,64 +1,66 @@
 import { green } from '@material-ui/core/colors';
-import React ,{useState}from 'react'
+import React, { useState } from 'react'
 
-const Truefalse =(props) =>{
+const Truefalse = (props) => {
     const [quiz, setquiz] = useState({
-        type:"truefalse",
-        correct:"",
-        bgColor:'blue'
+        type: "truefalse",
+        correct: "",
+        bgColor: 'blue'
 
     })
     const [question, setquestion] = useState('')
     const [bgColor, setbgColor] = useState({  //จะแสดงเปลี่ยนสีtruefalse
-        color:""
+        color: ""
     })
 
     const handlesubmit = (e) => {
         e.preventDefault();
         const type = quiz.type
         const correct = quiz.correct
-        const list = {question,type,correct}
-        console.log('list ::' ,list);
+        const list = { question, type, correct }
+        console.log('list ::', list);
         props.savequiz(list)
     };
-    const changecorrect = (e)=>{
-        const value=e.target.value;
-        setquiz({correct:value})
+    const changecorrect = (e) => {
+        const value = e.target.value;
+        setquiz({ correct: value })
         console.log(value);
-        // if(value==="true"){
-        //     setbgColor({color:"green"})
-        // }else if(value==="false"){
-        //     setbgColor({color:"red"})
-        // }
+        if (value === "true") {
+            document.getElementById("btnt").style.backgroundColor = "green";
+            document.getElementById("btnf").style.backgroundColor = "";
+        } else if (value === "false") {
+            document.getElementById("btnt").style.backgroundColor = "";
+            document.getElementById("btnf").style.backgroundColor = "red";
+        }
     }
 
-    const handlequestion = (e) =>{
+    const handlequestion = (e) => {
         setquestion(e.target.value)
     }
 
     return (
         <div>
             <form onSubmit={handlesubmit}>
-            <div className="truefalse">
-            
-                <label>คำถาม:
+                <div className="truefalse">
+
+                    <label>คำถาม:
                     <input
-                    type="text"
-                    value ={question}
-                    placeholder="Have a question to ask?"
-                    onChange={handlequestion}
-                    ></input>
-                </label>
-                <br/>
-                <button type="button" value="true"  onClick={changecorrect}>True</button>
-                <button type="button" value="false" onClick={changecorrect}>False</button>
-                <br/>
-                <button type="submit" value="Submit">
-                ยืนยัน
+                            type="text"
+                            value={question}
+                            placeholder="Have a question to ask?"
+                            onChange={handlequestion}
+                        ></input>
+                    </label>
+                    <br />
+                    <button id="btnt" type="button" value="true" onClick={changecorrect}>True</button>
+                    <button id="btnf" type="button" value="false" onClick={changecorrect}>False</button>
+                    <br />
+                    <button type="submit" value="Submit">
+                        ยืนยัน
                 </button>
                 </div>
-              </form>
-            
+            </form>
+
             <br />
         </div>//this.setState({ question: e.target.value } style={{backgroundColor:bgColor.color}}  onClick={onsubmit}
     )

@@ -1,113 +1,149 @@
-import React, { Component } from 'react';
-import Checkbox from '@material-ui/core/Checkbox';
+import React, { Component, useState, Fragment } from 'react';
+import {
+  Button,
+  Checkbox,
+  TextField,
+  makeStyles
 
-export default class ComponentName extends Component {
+} from '@material-ui/core';
+import { brown } from '@material-ui/core/colors';
+
+
+// const useStyles = makeStyles((theme) => ({
+//   root: {
+//     '& .MuiTextField-root': {
+//       margin: theme.spacing(3),
+//       width: 400,
+//     },
+//   },
+// }));
+
+
+
+// const Multiplechoice = () => {
+//   const [inputFields, setInputFields] = useState([
+//     { firstName: '', lastName: '' }
+//   ]);
+
+//   const classes = useStyles();
+//   const handleSubmit = e => {
+//     e.preventDefault();
+//     console.log("inputFields", inputFields);
+//   };
+
+//   return (
+//     <div>
+//       <h1>Multiplechoice Form</h1>
+//       <form className={classes.root} onSubmit={handleSubmit}>
+
+//         <div>
+//           <TextField
+//             label="คำถาม"
+//             id="outlined-size-normal"
+//             variant="outlined"
+//             placeholder="คำถาม"
+//             InputLabelProps={{
+//               shrink: true,
+//             }}
+//           />
+//         </div>
+
+//         <div>
+//           {inputFields.map((inputField, index) => (
+
+//             <Fragment key={`${inputField}~${index}`}>
+//               <div className="form-group col-sm-6">
+//                 <label htmlFor="firstName">First Name</label>
+//                 <input
+//                   type="text"
+//                   className="form-control"
+//                   id="firstName"
+//                   name="firstName"
+//                   value={inputField.firstName}
+//                 />
+//               </div>
+
+
+//             </Fragment>
+//           ))}
+//         </div>
+//       </form>
+//     </div>
+//   )
+// }
+
+//
+
+
+export class Multiplechoice extends Component {
+
   constructor(props) {
     super(props);
 
     this.state = {
-      question:"",
-      type:"multiplechoice",
-      ans1:"",
-      ans2:"",
-      ans3:"",
-      ans4:"",
-      ans5:"",
-      correct:[],
-      chack1:false
+      question: "",
+      type: "multiplechoice",
+      arrAnsList: [5],
+      arrAnsChoice: [],
+      chack1: false,
+      chack2: false,
+      chack3: false,
+      chack4: false,
+      chack5: false,
     };
+
     this.handlechoice = this.handlechoice.bind(this);
     this.handlesubmit = this.handlesubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+    this.handleCheckbox = this.handleCheckbox.bind(this);
+
+
+
   }
+
 
   handlesubmit = (e) => {
     e.preventDefault();
-    const type = this.state.ans1
+    let choice = []
+    for (let i = 1; i <= 5; i++) {
+      let x = this.state.ans1
+      console.log(this.state.ans1, this.state.ans2);
+      // choice[i] = this.state.ans + `${i}`
+    }
     const correct = this.state.ans2
-    const list = {type,correct}
-    console.log('list1 ::' ,type);
-    console.log('list2 ::' ,correct);
+    const list = { correct }
+    console.log('list1 ::', choice);
+    console.log('list2 ::', correct);
     // props.savequiz(list)
   };
 
-  handlechoice=(e)=>{
-    const {name,value} = e.target
+  handlechoice = (i, e) => {
     this.setState({
-      [name]:value
+      arrAnsChoice: { ...this.state.arrAnsChoice, [i]: e.target.value }
     })
   }
 
-  handleChange = (e) =>{
-    console.log("Checkbox :: ",e.target.value);
-
-    const newchack=!this.state.chack1
-    console.log(newchack);
-    this.setState({chack1:newchack})
+  handleCheckbox = (e) => {
+    const { name, value } = e.target
+    const newchack = !value
+    this.setState({ [name]: newchack })
   }
 
   render() {
     return (
       <div>
         <form onSubmit={this.handlesubmit}>
-            <div className="createquiz">
-              <label>คำถาม:</label>
-              <input
+          <div className="createquiz">
+            <label>คำถาม:</label>
+            <input
               type="text"
               name="question"
               value={this.state.question}
-              onChange={this.handlechoice}
+            //onChange={this.handlechoice}
             ></input>
             <br />
-            <label>A: </label>
-            <Checkbox
-              checked={this.state.chack1}
-              onChange={this.handleChange}
-              inputProps={{ 'aria-label': 'primary checkbox' }}
-            />
-            <input
-              type="text"
-              name="ans1"
-              value={this.state.ans1}
-              onChange={this.handlechoice}
-            ></input>
-            <br />
-            <label>B:</label>
-            {/* <input type="radio" name="correct" value="2"></input> */}
-            <input
-              type="text"
-              name="ans2"
-              value={this.state.ans2}
-              onChange={this.handlechoice}
-            ></input>
-            <br />
-            <label>C:</label>
-            {/* <input type="radio" name="correct" value="3"></input> */}
-            <input
-              type="text"
-              name="ans3"
-              value={this.state.ans3}
-              onChange={this.handlechoice}
-            ></input>
-            <br />
-            <label>D:</label>
-            {/* <input type="radio" name="correct" value="4"></input> */}
-            <input
-              type="text"
-              name="ans4"
-              value={this.state.ans4}
-              onChange={this.handlechoice}
-            ></input>
-            <br />
-            <label>E:</label>
-            {/* <input type="radio" name="correct" value="4"></input> */}
-            <input
-              type="text"
-              name="ans5"
-              value={this.state.ans5}
-              onChange={this.handlechoice}
-            ></input>
-            <br />
+
+            {this.createAnswer()}
+
             {/* {!this.state.btnAddans ? (
               <button
                 onClick={() => {
@@ -136,4 +172,31 @@ export default class ComponentName extends Component {
       </div>
     );
   }
+
+
+
+  createAnswer = () => {
+    let answerList = [];
+    let aa = this.state.arrAnsList[0] + 1;
+    for (let i = 0; i < aa; i++) {
+      answerList.push(
+        <div>
+          <TextField
+            id={`ans-${i}`}
+            label={`คำตอบที่ ${i + 1}`}
+            value={this.state.arrAnsChoice[i]}
+            onChange={(this.handlechoice.bind(this, i))}
+            variant="outlined"
+          />
+          {i > 1 ? <Button>X</Button> : ''}
+
+        </div>
+      )
+    }
+    return answerList
+  }
 }
+
+export default Multiplechoice;
+
+
