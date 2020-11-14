@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 
 const Truefalse = (props) => {
     const [quiz, setquiz] = useState({
-        type: "truefalse",
         correct: "",
         bgColor: 'blue'
 
@@ -15,7 +14,7 @@ const Truefalse = (props) => {
 
     const handlesubmit = (e) => {
         e.preventDefault();
-        const type = quiz.type
+        const type = "truefalse"
         const correct = quiz.correct
         const list = { question, type, correct }
         console.log('list ::', list);

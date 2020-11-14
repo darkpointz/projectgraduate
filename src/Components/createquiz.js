@@ -13,7 +13,7 @@ export default class Createquiz extends Component {
     this.state = {
       quizname: "",
       quiz: [],
-      selectchoice:0
+      selectchoice: 0
     };
     this.onClicksavequiz = this.onClicksavequiz.bind(this);
     this.onclicksumit = this.onclicksumit.bind(this);
@@ -21,50 +21,57 @@ export default class Createquiz extends Component {
 
   onclicksumit = (event) => {
     event.preventDefault();
-    const question = this.state.question;
+    const quizname = this.state.quizname;
     const quiz = this.state.quiz;
-    
-    this.props.setjson( question,quiz);
-   // this.props.submit(question,quiz)
+
+    this.props.submit(quizname, quiz);
+    //this.props.setjson(quizname, quiz, event);
+    // this.props.submit(question,quiz)
     //this.props.submit  this.onclicksumit
+    //-----------
+    // const db = firebase.firestore();
+    // const userRef = db.collection("quiz").add({
+    //   quizname: quizname,
+    //   quiz: quiz
+    // });
   };
 
   onClicksavequiz = (newquiz) => {
-    this.setState({quiz: [...this.state.quiz,newquiz]})
+    this.setState({ quiz: [...this.state.quiz, newquiz] })
 
-    this.setState({selectchoice:0})
+    this.setState({ selectchoice: 0 })
   };
 
   // onChangeTextAnswer = (e) => {
   //   this.setState({ ans: [e.target.value, ...this.state.ans] });
   // };
 
-  onClickSelectchoice=(e)=>{
-    const value=e.target.value
-    this.setState({selectchoice:value})
+  onClickSelectchoice = (e) => {
+    const value = e.target.value
+    this.setState({ selectchoice: value })
   }
   render() {
     return (
       <div>
         <input
-          type="text" 
+          type="text"
           value={this.state.quizname}
           placeholder="Quiz Title"
-          onChange={(e)=>this.setState({ quizname: e.target.value })}>
-          </input>
+          onChange={(e) => this.setState({ quizname: e.target.value })}>
+        </input>
         <button onClick={this.onclicksumit}>Save and Exit</button>
         <hr />
         <div>
-          {this.state.selectchoice === "1" ? <Multiplechoice savequiz={this.onClicksavequiz}/> : 
-           this.state.selectchoice === "2" ? <Truefalse savequiz={this.onClicksavequiz}/> :
-           this.state.selectchoice === "3" ? <Shortanswer savequiz={this.onClicksavequiz}/> : null}
+          {this.state.selectchoice === "1" ? <Multiplechoice savequiz={this.onClicksavequiz} /> :
+            this.state.selectchoice === "2" ? <Truefalse savequiz={this.onClicksavequiz} /> :
+              this.state.selectchoice === "3" ? <Shortanswer savequiz={this.onClicksavequiz} /> : null}
         </div>
         <label>Add a question</label>
-        <br/>
+        <br />
         <button value="1" onClick={this.onClickSelectchoice}>Multiplechoice</button>
         <button value="2" onClick={this.onClickSelectchoice}>Truefalse</button>
         <button value="3" onClick={this.onClickSelectchoice}>ShortAnswer</button>
-        
+
       </div>
     );
   }

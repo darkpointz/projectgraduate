@@ -18,5 +18,5 @@ export default function initialFirebase() {
   };
   firebase.initializeApp(firebaseConfig);
   var db = firebase.firestore();
-  console.log("firebaseConfig:::: ",firebaseConfig);
+  console.log("firebaseConfig:::: ", firebaseConfig);
 }
