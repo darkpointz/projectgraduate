@@ -1,168 +1,101 @@
-import React, { Component, useState, Fragment } from 'react';
+import React,{useState} from 'react'
 import {
   Button,
   Checkbox,
   TextField,
-  makeStyles
 
 } from '@material-ui/core';
-import { brown } from '@material-ui/core/colors';
+import {
+  ClearIconm,
+  CheckCircle,
+  CheckCircleOutline,
+  Clear
+} from '@material-ui/icons';
 
-
-// const useStyles = makeStyles((theme) => ({
-//   root: {
-//     '& .MuiTextField-root': {
-//       margin: theme.spacing(3),
-//       width: 400,
-//     },
-//   },
-// }));
-
-
-
-// const Multiplechoice = () => {
-//   const [inputFields, setInputFields] = useState([
-//     { firstName: '', lastName: '' }
-//   ]);
-
-//   const classes = useStyles();
-//   const handleSubmit = e => {
-//     e.preventDefault();
-//     console.log("inputFields", inputFields);
-//   };
-
-//   return (
-//     <div>
-//       <h1>Multiplechoice Form</h1>
-//       <form className={classes.root} onSubmit={handleSubmit}>
-
-//         <div>
-//           <TextField
-//             label="คำถาม"
-//             id="outlined-size-normal"
-//             variant="outlined"
-//             placeholder="คำถาม"
-//             InputLabelProps={{
-//               shrink: true,
-//             }}
-//           />
-//         </div>
-
-//         <div>
-//           {inputFields.map((inputField, index) => (
-
-//             <Fragment key={`${inputField}~${index}`}>
-//               <div className="form-group col-sm-6">
-//                 <label htmlFor="firstName">First Name</label>
-//                 <input
-//                   type="text"
-//                   className="form-control"
-//                   id="firstName"
-//                   name="firstName"
-//                   value={inputField.firstName}
-//                 />
-//               </div>
-
-
-//             </Fragment>
-//           ))}
-//         </div>
-//       </form>
-//     </div>
-//   )
-// }
-
-//
-
-
-export class Multiplechoice extends Component {
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      question: "",
-      type: "multiplechoice",
-      arrAnsList: [5],
-      arrAnsChoice: [],
-      chack1: false,
-      chack2: false,
-      chack3: false,
-      chack4: false,
-      chack5: false,
-    };
-
-    this.handlechoice = this.handlechoice.bind(this);
-    this.handlesubmit = this.handlesubmit.bind(this);
-    this.handleCheckbox = this.handleCheckbox.bind(this);
-
-
-
+export default function Multiplechoice(props) {
+  const [arrAnsChoice, setarrAnsChoice] = useState(
+    [{ ans: "",correct:false},{ ans: "",correct:false},{ ans: "",correct:false},{ ans: "",correct:false},{ ans: "",correct:false}]
+  )
+  const [question, setquestion] = useState('')
+  
+  const handlechoice = (e,index) => {
+    const { name, value } = e.target;
+    const list = [...arrAnsChoice];
+    list[index][name] = value
+    setarrAnsChoice(list)
   }
 
-
-  handlesubmit = (e) => {
+  const handlesubmit = (e) => {
     e.preventDefault();
-    let choice = []
-    for (let i = 1; i <= 5; i++) {
-      let x = this.state.ans1
-      console.log(this.state.ans1, this.state.ans2);
-      // choice[i] = this.state.ans + `${i}`
-    }
-    const correct = this.state.ans2
+    const correct = this.state.arrAnsChoice[3]
     const list = { correct }
-    console.log('list1 ::', choice);
-    console.log('list2 ::', correct);
-    // props.savequiz(list)
+
+    props.savequiz(list)
   };
 
-  handlechoice = (i, e) => {
-    this.setState({
-      arrAnsChoice: { ...this.state.arrAnsChoice, [i]: e.target.value }
-    })
+  const handleDeletefield = (index) =>{
+    const list = [...arrAnsChoice]
+    list.splice(index,1)
+    setarrAnsChoice(list)
   }
 
-  handleCheckbox = (e) => {
-    const { name, value } = e.target
-    const newchack = !value
-    this.setState({ [name]: newchack })
+  const handleAddClick = () => {
+    setarrAnsChoice([...arrAnsChoice, { ans: ""}]);
+  };
+
+  const handleQuestion = (e) => {
+    setquestion(e.target.value)
   }
 
-  render() {
-    return (
-      <div>
-        <form onSubmit={this.handlesubmit}>
+  const handleCheckbox = (e,index) => {
+    const { name,checked } = e.target
+    const list = [...arrAnsChoice];
+    
+    list[index][name] = checked
+    setarrAnsChoice(list)
+  }
+
+  return (
+    <div>
+        <div>
+        <form onSubmit={handlesubmit}>
           <div className="createquiz">
             <label>คำถาม:</label>
             <input
               type="text"
               name="question"
-              value={this.state.question}
-            //onChange={this.handlechoice}
+              value={question}
+              onChange={handleQuestion}
             ></input>
             <br />
-
-            {this.createAnswer()}
-
-            {/* {!this.state.btnAddans ? (
-              <button
-                onClick={() => {
-                  this.setState({ btnAddans: true });
-                }}
-              >
-                เพิ่ม
-              </button>
-            ) : (
-              <div>
-                <label>E:</label>
-                <input type="radio" name="correct" value="5"></input>
-                <input
-                  type="text"
-                  value={this.state.ans5}
-                  onChange={(e) => this.setState({ ans5: e.target.value })}
-                ></input>
-              </div>
-            )} */}
+            {arrAnsChoice.map((x, i) => {   
+              return (
+                <div className="box">
+                  <Checkbox
+                    icon={<CheckCircleOutline fontSize="small" />}
+                    name="correct"
+                    checkedIcon={<CheckCircle/>}
+                    onChange={e => handleCheckbox(e, i)}
+                    inputProps={{ 'aria-label': 'primary checkbox' }}
+                  />
+                  <input
+                  name="ans"
+                  placeholder={`Answer ${i+1}`}
+                  value={x.ans}
+                  onChange={e => handlechoice(e, i)}
+                  />                
+                 {arrAnsChoice.length !== 2 && <button
+                  className="mr10"
+                  onClick={() => handleDeletefield(i)}>X</button>}
+                  <div className="btn-box">
+                    {(arrAnsChoice.length - 1 === i && arrAnsChoice.length <= 4) ? <button onClick={handleAddClick}>ADD ANSWER</button> :
+                       null
+                    }
+                    {/* arrAnsChoice.length !== 1 && <button */}
+                  </div>
+                </div>
+              );
+            })}
             <br />
             <button type="submit" value="Submit">
               ยืนยัน
@@ -170,33 +103,6 @@ export class Multiplechoice extends Component {
           </div>
         </form>
       </div>
-    );
-  }
-
-
-
-  createAnswer = () => {
-    let answerList = [];
-    let aa = this.state.arrAnsList[0] + 1;
-    for (let i = 0; i < aa; i++) {
-      answerList.push(
-        <div>
-          <TextField
-            id={`ans-${i}`}
-            label={`คำตอบที่ ${i + 1}`}
-            value={this.state.arrAnsChoice[i]}
-            onChange={(this.handlechoice.bind(this, i))}
-            variant="outlined"
-          />
-          {i > 1 ? <Button>X</Button> : ''}
-
-        </div>
-      )
-    }
-    return answerList
-  }
+    </div>
+  )
 }
-
-export default Multiplechoice;
-
-

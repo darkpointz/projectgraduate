@@ -57,7 +57,7 @@ export default class Createquiz extends Component {
         <div>
           {this.state.selectchoice === "1" ? <Multiplechoice savequiz={this.onClicksavequiz}/> : 
            this.state.selectchoice === "2" ? <Truefalse savequiz={this.onClicksavequiz}/> :
-           this.state.selectchoice === "3" ? <Shortanswer/> : null}
+           this.state.selectchoice === "3" ? <Shortanswer savequiz={this.onClicksavequiz}/> : null}
         </div>
         <label>Add a question</label>
         <br/>
