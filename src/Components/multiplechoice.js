@@ -30,8 +30,8 @@ export default function Multiplechoice(props) {
 
     const choice = arrAnsChoice
     const type = "multiplechoice"
-    const list = { question, type, choice }
-
+    const step = props.step
+    const list = { step,question, type, choice }
     props.savequiz(list)
   };
 
@@ -61,7 +61,7 @@ export default function Multiplechoice(props) {
     <div>
       <div>
         <div className="createquiz">
-          <label>คำถาม:</label>
+          <label>{`${props.step}. `}</label>
           <input
             type="text"
             name="question"
@@ -93,13 +93,12 @@ export default function Multiplechoice(props) {
                   {(arrAnsChoice.length - 1 === i && arrAnsChoice.length <= 4) ? <button onClick={handleAddClick}>ADD ANSWER</button> :
                     null
                   }
-                  {/* arrAnsChoice.length !== 1 && <button */}
                 </div>
               </div>
             );
           })}
           <br />
-          <button onClick={() => handlesubmit}>
+          <button onClick={handlesubmit}>
             ยืนยัน
             </button>
         </div>

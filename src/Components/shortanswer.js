@@ -7,7 +7,10 @@ export default function Shortanswer(props) {
     const handlesubmit = (e) => {
         e.preventDefault();
         const type = "shortanswer"
-        const list = { question, type, correct }
+        const step = props.step
+
+        const list = { step,question, type, correct }
+        
         props.savequiz(list)
     };
 
@@ -32,16 +35,14 @@ export default function Shortanswer(props) {
     };
     return (
         <div>
-
             <div className="shortanswer">
-                <label>คำถาม:
-                    <input
-                        type="text"
-                        value={question}
-                        placeholder="Have a question to ask?"
-                        onChange={handlequestion}
-                    ></input>
-                </label>
+                <label>{`${props.step}. `}</label>
+                <input
+                    type="text"
+                    value={question}
+                    placeholder="Have a question to ask?"
+                    onChange={handlequestion}
+                ></input>
                 <br />
                 {correct.map((x, i) => {
                     { }
@@ -67,7 +68,7 @@ export default function Shortanswer(props) {
                         </div>
                     );
                 })}
-                <button onClick={() => handlesubmit}>
+                <button onClick={handlesubmit}>
                     ยืนยัน
                 </button>
             </div>

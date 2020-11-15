@@ -8,22 +8,18 @@ const Truefalse = (props) => {
 
     })
     const [question, setquestion] = useState('')
-    const [bgColor, setbgColor] = useState({  //จะแสดงเปลี่ยนสีtruefalse
-        color: ""
-    })
 
     const handlesubmit = (e) => {
         e.preventDefault();
         const type = "truefalse"
         const correct = quiz.correct
-        const list = { question, type, correct }
-        console.log('list ::', list);
+        const step = props.step
+        const list = { step,question, type, correct }
         props.savequiz(list)
     };
     const changecorrect = (e) => {
         const value = e.target.value;
         setquiz({ correct: value })
-        console.log(value);
         if (value === "true") {
             document.getElementById("btnt").style.backgroundColor = "green";
             document.getElementById("btnf").style.backgroundColor = "";
@@ -39,27 +35,23 @@ const Truefalse = (props) => {
 
     return (
         <div>
-            <form onSubmit={handlesubmit}>
                 <div className="truefalse">
 
-                    <label>คำถาม:
+                    <label>{`${props.step}. `}</label>
                     <input
-                            type="text"
-                            value={question}
-                            placeholder="Have a question to ask?"
-                            onChange={handlequestion}
-                        ></input>
-                    </label>
+                        type="text"
+                        value={question}
+                        placeholder="Have a question to ask?"
+                        onChange={handlequestion}
+                    ></input>
                     <br />
                     <button id="btnt" type="button" value="true" onClick={changecorrect}>True</button>
                     <button id="btnf" type="button" value="false" onClick={changecorrect}>False</button>
                     <br />
-                    <button type="submit" value="Submit">
+                    <button onClick={handlesubmit}>
                         ยืนยัน
-                </button>
+                    </button>
                 </div>
-            </form>
-
             <br />
         </div>//this.setState({ question: e.target.value } style={{backgroundColor:bgColor.color}}  onClick={onsubmit}
     )
