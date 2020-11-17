@@ -35,8 +35,7 @@ const Truefalse = (props) => {
 
     return (
         <div>
-                <div className="truefalse">
-
+            <div className="truefalse">
                     <label>{`${props.step}. `}</label>
                     <input
                         type="text"

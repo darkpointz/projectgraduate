@@ -1,50 +1,179 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
+import React from 'react';
+import PropTypes from 'prop-types';
+import AppBar from '@material-ui/core/AppBar';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Divider from '@material-ui/core/Divider';
+import Drawer from '@material-ui/core/Drawer';
+import Hidden from '@material-ui/core/Hidden';
+import IconButton from '@material-ui/core/IconButton';
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import MailIcon from '@material-ui/icons/Mail';
+import MenuIcon from '@material-ui/icons/Menu';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { withRouter,Route,Switch } from "react-router-dom";
+
+import Lanunch from "../Page/lanunch";
+import Rooms from "../Page/rooms";
+import Report from "../Page/reports";
 import Quiz from "../Page/quiz";
-import { BrowserRouter, Route, NavLink } from "react-router-dom";
 
-const useStyles = makeStyles({
+const drawerWidth = 240;
+
+const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
+    display: 'flex',
   },
-});
+  drawer: {
+    [theme.breakpoints.up('sm')]: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
+  },
+  appBar: {
+    backgroundColor:"#19A999",
+    [theme.breakpoints.up('sm')]: {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: drawerWidth,
+    },
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.up('sm')]: {
+      display: 'none',
+    },
+  },
+  // necessary for content to be below app bar
+  toolbar: theme.mixins.toolbar,
+  
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+  },
+}));
 
-export default function Navbar() {
+function Navbar(props) {
+  const { history } = props;
+  const { window } = props;
+  const { children } = props;
+
+  
   const classes = useStyles();
-  const [value, setValue] = useState(0);
+  const theme = useTheme();
+  const [mobileOpen, setMobileOpen] = React.useState(false);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
   };
 
+  const itemsList = [
+    {
+      text: "Launch",
+      onClick: () => history.push("/")
+    },
+    {
+      text: "Quiz",
+      onClick: () => history.push("/quiz")
+    },
+    {
+      text: "Class",
+      onClick: () => history.push("/room")
+    },
+    {
+      text: "Report",
+      onClick: () => history.push("/report")
+    }
+  ];
+
+  const drawer = (
+    <div>
+      <div className={classes.toolbar} />
+      <Divider />
+      <List>
+        {itemsList.map((item, index) => {
+          const { text, icon, onClick } = item;
+          return (
+            <ListItem button key={text} onClick={onClick}>
+              {icon && <ListItemIcon>{icon}</ListItemIcon>}
+              <ListItemText primary={text} />
+            </ListItem>
+          );
+        })}
+      </List>
+    </div>
+  );
+
+  const container = window !== undefined ? () => window().document.body : undefined;
+
   return (
-    <Paper className={classes.root}>
-      <Tabs
-        value={value}
-        onChange={handleChange}
-        indicatorColor="primary"
-        textColor="primary"
-        centered
-      >
-        <Tab label="Launch" />
-        <Tab label="QUIZZES" containerElement={<NavLink to="/first"/>} />
-        <Tab label="ROOMS" />
-        <Tab label="REPORTS" />
-        <Tab label="RESULTS" />
-      </Tabs>
-    </Paper>
+    <div className={classes.root}>
+      <CssBaseline />
+      <AppBar position="fixed" className={classes.appBar}>
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            className={classes.menuButton}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap>
+            Qton
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <nav className={classes.drawer} aria-label="mailbox folders">
+        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+        <Hidden smUp implementation="css">
+          <Drawer
+            container={container}
+            variant="temporary"
+            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+            ModalProps={{
+              keepMounted: true, // Better open performance on mobile.
+            }}
+          >
+            {drawer}
+          </Drawer>
+        </Hidden>
+        <Hidden xsDown implementation="css">
+          <Drawer
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+            variant="permanent"
+            open
+          >
+            {drawer}
+          </Drawer>
+        </Hidden>
+      </nav>
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+      <Switch>
+        <Route exact from="/" render={props => <Lanunch {...props} />} />
+        <Route exact path="/quiz" render={props => <Quiz {...props} />} />
+        <Route exact path="/report" render={props => <Report {...props} />} />
+        <Route exact path="/room" render={props => <Rooms {...props} />} />
+      </Switch>
+      </main>
+    </div>
   );
 }
-// <BrowserRouter>
-    //   <div>
-    //     <ul>
-    //       <li>
-    //         <NavLink to="/quiz">QuizForm</NavLink>
-    //       </li>
-    //     </ul>
-    //     <Route path="/quiz" component={Quiz}></Route>
-    //   </div>
-    // </BrowserRouter>
+
+export default withRouter(Navbar);

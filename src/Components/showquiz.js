@@ -5,22 +5,26 @@ const Showquiz = ({ list }) => {
     {console.log("truefalse")}
     return(
       <div>
-        
-          <h1>truefalse</h1>
+          <h2>{list.step}. {list.question}</h2>
+          <h2>truefalse</h2>
       </div>
     )
   }
   const showsa = ()=>{
     return(
       <div>
-          shortanswer
+        <h2>{list.step}. {list.question}</h2>
+        <h2>shortanswer</h2>
+          
       </div>
     )
   }
   const showmc = ()=>{
     return(
       <div>
-          multiplechoice
+        <h2>{list.step}. {list.question}</h2>
+        <h2>multiplechoice</h2>
+          
       </div>
     )
   }
@@ -31,7 +35,7 @@ const Showquiz = ({ list }) => {
     <div>
       <div>
         {console.log(list)}
-        <h2>{list.step}. {list.question}</h2>
+        {/* <h2>{list.step}. {list.question}</h2> */}
         {list.type=== "truefalse" ? showtf() :
          list.type=== "shortanswer" ? showsa() :
          list.type=== "multiplechoice" ? showmc() : null
