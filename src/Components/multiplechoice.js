@@ -9,12 +9,15 @@ import {
   ClearIconm,
   CheckCircle,
   CheckCircleOutline,
-  Clear
 } from '@material-ui/icons';
 
 export default function Multiplechoice(props) {
   const [arrAnsChoice, setarrAnsChoice] = useState(
-    [{ ans: "", correct: false }, { ans: "", correct: false }, { ans: "", correct: false }, { ans: "", correct: false }, { ans: "", correct: false }]
+    [{ ans: "", correct: false },
+     { ans: "", correct: false }, 
+     { ans: "", correct: false }, 
+     { ans: "", correct: false },
+     { ans: "", correct: false }]
   )
   const [question, setquestion] = useState('')
 
@@ -75,6 +78,9 @@ export default function Multiplechoice(props) {
                 <Checkbox
                   icon={<CheckCircleOutline fontSize="small" />}
                   name="correct"
+                  style ={{
+                    color: "#00FF08",
+                  }}
                   checkedIcon={<CheckCircle />}
                   onChange={e => handleCheckbox(e, i)}
                   inputProps={{ 'aria-label': 'primary checkbox' }}

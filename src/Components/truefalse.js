@@ -4,7 +4,6 @@ import React, { useState } from 'react'
 const Truefalse = (props) => {
     const [quiz, setquiz] = useState({
         correct: "",
-        bgColor: 'blue'
 
     })
     const [question, setquestion] = useState('')
@@ -21,11 +20,11 @@ const Truefalse = (props) => {
         const value = e.target.value;
         setquiz({ correct: value })
         if (value === "true") {
-            document.getElementById("btnt").style.backgroundColor = "green";
+            document.getElementById("btnt").style.backgroundColor = "#00FF08";
             document.getElementById("btnf").style.backgroundColor = "";
         } else if (value === "false") {
             document.getElementById("btnt").style.backgroundColor = "";
-            document.getElementById("btnf").style.backgroundColor = "red";
+            document.getElementById("btnf").style.backgroundColor = "#E93939";
         }
     }
 
