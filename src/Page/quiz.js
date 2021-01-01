@@ -1,61 +1,49 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import Createquiz from "../Components/createquiz";
 import Showquiz from "../Components/showquiz";
 import firebase from "firebase/app";
 import "firebase/firestore";
+import { makeStyles } from "@material-ui/core";
 
-export default class quiz extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      btnCreate: false,
-    };
-    this.clickCreate = this.clickCreate.bind(this);
-    this.btnCreate = this.btnCreate.bind(this);
-  }
+const useStyles = makeStyles({
+  root: {
+    display: "flex",
+    flexGrow: 1,
+  },
+  btn: {},
+  content: {
+    flexGrow: 1,
+  },
+});
 
+export default function Quiz() {
+  const classes = useStyles();
+  const [btnCreate, setbtnCreate] = useState(false);
 
-  clickCreate() {
-    this.setState({ btnCreate: !this.state.btnCreate });
-  }
+  const clickCreate = () => {
+    setbtnCreate(!btnCreate);
+  };
 
-  clearstate() {
-    this.setState({
-      quizname: "",
-      quiz: []
-    });
-  }
+  const onsumit = (quizname, quiz) => {
+    clickCreate();
+    // firebase.firestore().collection("quiz").add({
+    //   quizname: quizname,
+    //   quiz: quiz,
+    // });
+  };
 
-  async btnCreate(quizname, quiz) {
-    this.clickCreate();
-    await firebase.firestore().collection("quiz").add({
-      quizname: quizname,
-      quiz: quiz
-    });
-    await this.clearstate();
-  }
-
-  render() {
-    return (
-      <div>
-        <div>
-          {!this.state.btnCreate ? (
-            <button onClick={this.clickCreate}>createquiz</button>
-          ) : (
-              <div>
-                <Createquiz submit={this.btnCreate} />
-                <hr />
-
-              </div>
-            )}
+  return (
+    <div className={classes.root}>
+      {!btnCreate ? (
+        <button className={classes.btn} onClick={clickCreate}>
+          createquiz
+        </button>
+      ) : (
+        <div className={classes.content}>
+          <Createquiz submit={onsumit} />
+          <hr />
         </div>
-      </div>
-    );
-  }
+      )}
+    </div>
+  );
 }
-
-
-//---
-// {this.state.jsonobj.map((jsonobj) => (
-//   <Showquiz list={jsonobj.obj} />
-// ))}

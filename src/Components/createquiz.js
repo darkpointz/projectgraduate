@@ -1,74 +1,149 @@
-import React, { Component } from "react";
-import { Label } from "@material-ui/icons";
+import React, { useState } from "react";
+import { makeStyles, TextField, Typography, Button } from "@material-ui/core";
 
-import Multiplechoice from './multiplechoice'
-import Truefalse from './truefalse'
-import Shortanswer from './shortanswer'
-import Showquiz from './showquiz'
+import "../index.css";
+import Multiplechoice from "./multiplechoice";
+import Truefalse from "./truefalse";
+import Shortanswer from "./shortanswer";
+import Showquiz from "./showquiz";
 
+const useStyles = makeStyles({
+  root: {
+    display: "flex",
+    flexGrow: 1,
+    flexDirection: "column",
+  },
+  btnsavequiz: {
+    fontFamily: "'Prompt', sans-serif",
+    fontWeight: 500,
+    fontSize: "18px",
 
-export default class Createquiz extends Component {
-  constructor(props) {
-    super(props);
+    backgroundColor: "#00FF08",
+  },
+  layertitle: {
+    display: "flex",
+    justifyContent: "space-between",
+    marginBottom: "16px",
+  },
+  groupquestion: {},
+  line: {
+    display: "flex",
+  },
+  text: {
+    fontFamily: "'Prompt', sans-serif",
+    fontWeight: 500,
+    fontSize: "24px",
+  },
+  layeraddquiz: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  btnMC: {
+    fontFamily: "'Prompt', sans-serif",
+    marginRight: "16px",
+    marginBottom: "8px",
+    backgroundColor: "#FF642A",
+    color: "white",
+  },
+  btnTF: {
+    fontFamily: "'Prompt', sans-serif",
+    marginRight: "16px",
+    marginBottom: "8px",
+    backgroundColor: "#786DC8",
+    color: "white",
+  },
+  btnSA: {
+    fontFamily: "'Prompt', sans-serif",
+    marginRight: "16px",
+    marginBottom: "8px",
+    backgroundColor: "#E93939",
+    color: "white",
+  },
+});
+export default function Createquiz({ submit }) {
+  const classes = useStyles();
+  const [quizname, setquizname] = useState("");
+  const [quiz, setquiz] = useState([]);
+  const [step, setstep] = useState(1);
+  const [selectchoice, setselectchoice] = useState(0);
 
-    this.state = {
-      quizname: "",
-      quiz: [],
-      selectchoice: 0,
-      step:1
-    };
-    this.onClicksavequiz = this.onClicksavequiz.bind(this);
-    this.onclicksumit = this.onclicksumit.bind(this);
-  }
-
-  onclicksumit = (event) => {
+  const onclicksumit = (event) => {
     event.preventDefault();
-    const quizname = this.state.quizname;
-    const quiz = this.state.quiz;
-
-    this.props.submit(quizname, quiz);
+    submit(quizname, quiz);
   };
 
-  onClicksavequiz = (newquiz) => {
-    this.setState({ quiz: [...this.state.quiz, newquiz] })
-
-    this.state.step++
-    this.setState({ selectchoice: 0 })
+  const onClicksavequiz = (newquiz) => {
+    setquiz([...quiz, newquiz]);
+    setstep(step + 1);
+    setselectchoice(0);
   };
 
+  const onClickSelectchoice = (e) => {
+    const { value } = e.currentTarget;
+    setselectchoice(value);
+  };
 
-  onClickSelectchoice = (e) => {
-    const value = e.target.value
-    this.setState({ selectchoice: value })
-  }
-  render() {
-    return (
-      <div>
-        <input
-          type="text"
-          value={this.state.quizname}
-          placeholder="Quiz Title"
-          onChange={(e) => this.setState({ quizname: e.target.value })}>
-        </input>
-        <button onClick={this.onclicksumit}>Save and Exit</button>
-        <hr />
-        <div>
-        {this.state.quiz.map((quiz) => (
-          <Showquiz list={quiz} />
-        ))}
-
-
-          {this.state.selectchoice === "1" ? <Multiplechoice step={this.state.step} setstep={this.onSetstep} savequiz={this.onClicksavequiz} /> :
-           this.state.selectchoice === "2" ? <Truefalse step={this.state.step} setstep={this.onSetstep} savequiz={this.onClicksavequiz} /> :
-           this.state.selectchoice === "3" ? <Shortanswer step={this.state.step} setstep={this.onSetstep} savequiz={this.onClicksavequiz} /> : null}
-        </div>
-        <label>Add a question</label>
-        <br />
-        <button value="1" onClick={this.onClickSelectchoice}>Multiplechoice</button>
-        <button value="2" onClick={this.onClickSelectchoice}>Truefalse</button>
-        <button value="3" onClick={this.onClickSelectchoice}>ShortAnswer</button>
-
+  return (
+    <div className={classes.root}>
+      <div className={classes.layertitle}>
+        <TextField
+          label="Quiz Title"
+          value={quizname}
+          variant="outlined"
+          size="small"
+          onChange={(e) => setquizname(e.target.value)}
+        ></TextField>
+        <Button
+          variant="contained"
+          className={classes.btnsavequiz}
+          onClick={onclicksumit}
+        >
+          Save and Exit
+        </Button>
       </div>
-    );
-  }
+
+      {quiz.map((quiz) => (
+        <Showquiz list={quiz} />
+      ))}
+      {selectchoice === "MC" ? (
+        <Multiplechoice step={step} savequiz={onClicksavequiz} />
+      ) : selectchoice === "TF" ? (
+        <Truefalse step={step} savequiz={onClicksavequiz} />
+      ) : selectchoice === "SA" ? (
+        <Shortanswer step={step} savequiz={onClicksavequiz} />
+      ) : null}
+
+      <div className={classes.layeraddquiz}>
+        <Typography className={classes.text}>Add a question</Typography>
+        <br />
+        <div className={classes.groupquestion}>
+          <Button
+            variant="contained"
+            value="MC"
+            onClick={onClickSelectchoice}
+            className={classes.btnMC}
+          >
+            Multiplechoice
+          </Button>
+          <Button
+            variant="contained"
+            value="TF"
+            onClick={onClickSelectchoice}
+            className={classes.btnTF}
+          >
+            Truefalse
+          </Button>
+          <Button
+            variant="contained"
+            value="SA"
+            onClick={onClickSelectchoice}
+            className={classes.btnSA}
+          >
+            ShortAnswer
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
 }
