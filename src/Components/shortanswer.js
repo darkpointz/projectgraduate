@@ -34,13 +34,21 @@ const useStyles = makeStyles({
   deleteAnswer: {
     fontSize: "18px",
   },
-  btnAddAnswer: {
+  boxAddAnswer: {
     marginBottom: "10px",
+  },
+  btnaddAnswer: {
+    fontFamily: "'Prompt', sans-serif",
+    backgroundColor: "#2196f3",
+    color: "white",
   },
   btnsubmit: {
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 500,
     marginLeft: "24px",
+    fontSize: "16px",
+    backgroundColor: "#6be17a",
+    color: "white",
   },
 });
 export default function Shortanswer(props) {
@@ -112,10 +120,11 @@ export default function Shortanswer(props) {
                 </Button>
               )}
             </div>
-            <div className={classes.btnAddAnswer}>
+            <div className={classes.boxAddAnswer}>
               {correct.length - 1 === i && correct.length <= 4 ? (
                 <Button
                   variant="contained"
+                  className={classes.btnaddAnswer}
                   size="small"
                   onClick={handleAddClick}
                 >

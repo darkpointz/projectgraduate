@@ -7,13 +7,8 @@ import {
   Button,
   Paper,
 } from "@material-ui/core";
-import {
-  ClearIconm,
-  CheckCircle,
-  CheckCircleOutline,
-} from "@material-ui/icons";
-
-const useStyles = makeStyles({
+import { CheckCircle, RadioButtonUnchecked } from "@material-ui/icons";
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexDirection: "column",
@@ -21,6 +16,9 @@ const useStyles = makeStyles({
     padding: "20px",
     marginBottom: "24px",
     backgroundColor: "#F5F5F5",
+    [theme.breakpoints.down("sm")]: {
+      marginBottom: "14px",
+    },
   },
   inputbox: {
     display: "flex",
@@ -32,20 +30,37 @@ const useStyles = makeStyles({
     marginRight: "14px",
   },
   eachAnswer: {
+    display: "flex",
     marginBottom: "10px",
   },
   Answer: {
     marginLeft: "24px",
   },
+  checkbox: {
+    "&$checked": {
+      color: "#6be17a",
+    },
+  },
+  boxAddAnswer: {
+    marginBottom: "10px",
+  },
+  btnaddAnswer: {
+    fontFamily: "'Prompt', sans-serif",
+    backgroundColor: "#2196f3",
+    color: "white",
+  },
   btnsubmit: {
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 500,
     marginLeft: "24px",
+    fontSize: "16px",
+    backgroundColor: "#6be17a",
+    color: "white",
   },
   deleteAnswer: {
     fontSize: "18px",
   },
-});
+}));
 
 export default function Multiplechoice(props) {
   const classes = useStyles();
@@ -105,6 +120,7 @@ export default function Multiplechoice(props) {
           <Typography className={classes.step}>{`${props.step}. `}</Typography>
           <TextField
             variant="outlined"
+            required={true}
             size="small"
             type="text"
             name="question"
@@ -118,11 +134,11 @@ export default function Multiplechoice(props) {
             <div className={classes.Answer}>
               <div className={classes.eachAnswer}>
                 <Checkbox
-                  icon={<CheckCircleOutline fontSize="small" />}
+                  // icon={<CheckCircleOutline fontSize="small" />}
+                  icon={<RadioButtonUnchecked fontSize="small" />}
                   name="correct"
-                  style={{
-                    color: "#00FF08",
-                  }}
+                  // className={classes.checkbox}
+                  style={{ color: "#6be17a" }}
                   checkedIcon={<CheckCircle />}
                   onChange={(e) => handleCheckbox(e, i)}
                   inputProps={{ "aria-label": "primary checkbox" }}
@@ -145,10 +161,11 @@ export default function Multiplechoice(props) {
                   </Button>
                 )}
               </div>
-              <div className="btn-box">
+              <div className={classes.boxAddAnswer}>
                 {arrAnsChoice.length - 1 === i && arrAnsChoice.length <= 4 ? (
                   <Button
                     variant="contained"
+                    className={classes.btnaddAnswer}
                     size="small"
                     onClick={handleAddClick}
                   >
@@ -159,11 +176,10 @@ export default function Multiplechoice(props) {
             </div>
           );
         })}
-        <br />
         <Button
           className={classes.btnsubmit}
           variant="contained"
-          size="small"
+          size="medium"
           onClick={handlesubmit}
         >
           ยืนยัน

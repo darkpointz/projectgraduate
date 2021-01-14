@@ -42,6 +42,9 @@ const useStyles = makeStyles({
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 500,
     marginLeft: "24px",
+    fontSize: "16px",
+    backgroundColor: "#6be17a",
+    color: "white",
   },
 });
 
@@ -112,6 +115,7 @@ const Truefalse = (props) => {
       <Button
         className={classes.btnsubmit}
         variant="contained"
+        size="medium"
         onClick={handlesubmit}
       >
         ยืนยัน

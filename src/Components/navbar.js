@@ -60,9 +60,12 @@ const useStyles = makeStyles((theme) => ({
   content: {
     display: "flex",
     flexGrow: 1,
-    padding: theme.spacing(12, 5),
     width: "100%",
     maxWidth: "1200px",
+    padding: theme.spacing(12, 5),
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(10, 2),
+    },
   },
 }));
 

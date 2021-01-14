@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { makeStyles, TextField, Typography, Button } from "@material-ui/core";
+import {
+  makeStyles,
+  TextField,
+  Typography,
+  Button,
+  Box,
+} from "@material-ui/core";
 
 import "../index.css";
 import Multiplechoice from "./multiplechoice";
@@ -7,25 +13,30 @@ import Truefalse from "./truefalse";
 import Shortanswer from "./shortanswer";
 import Showquiz from "./showquiz";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexGrow: 1,
     flexDirection: "column",
   },
-  btnsavequiz: {
-    fontFamily: "'Prompt', sans-serif",
-    fontWeight: 500,
-    fontSize: "18px",
-
-    backgroundColor: "#00FF08",
-  },
   layertitle: {
     display: "flex",
     justifyContent: "space-between",
     marginBottom: "16px",
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "column-reverse",
+    },
   },
-  groupquestion: {},
+  btnsavequiz: {
+    fontFamily: "'Prompt', sans-serif",
+    fontWeight: 500,
+    fontSize: "16px",
+    borderRadius: "10px",
+    backgroundColor: "#71F582",
+    color: "#29710e",
+    // backgroundColor: "#71F582",
+  },
+
   line: {
     display: "flex",
   },
@@ -39,28 +50,35 @@ const useStyles = makeStyles({
     flexDirection: "column",
     alignItems: "center",
   },
+  groupquestion: {
+    display: "flex",
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "column",
+    },
+  },
+
   btnMC: {
     fontFamily: "'Prompt', sans-serif",
     marginRight: "16px",
     marginBottom: "8px",
-    backgroundColor: "#FF642A",
+    backgroundColor: "#e2a073",
     color: "white",
   },
   btnTF: {
     fontFamily: "'Prompt', sans-serif",
     marginRight: "16px",
     marginBottom: "8px",
-    backgroundColor: "#786DC8",
+    backgroundColor: "#19b0b8",
     color: "white",
   },
   btnSA: {
     fontFamily: "'Prompt', sans-serif",
     marginRight: "16px",
     marginBottom: "8px",
-    backgroundColor: "#E93939",
+    backgroundColor: "#f66a7a",
     color: "white",
   },
-});
+}));
 export default function Createquiz({ submit }) {
   const classes = useStyles();
   const [quizname, setquizname] = useState("");
@@ -84,6 +102,12 @@ export default function Createquiz({ submit }) {
     setselectchoice(value);
   };
 
+  const deleteQuiz = (index) => {
+    let newQuiz = [...quiz];
+    newQuiz.splice(index, 1);
+    setquiz(newQuiz);
+  };
+
   return (
     <div className={classes.root}>
       <div className={classes.layertitle}>
@@ -94,17 +118,20 @@ export default function Createquiz({ submit }) {
           size="small"
           onChange={(e) => setquizname(e.target.value)}
         ></TextField>
-        <Button
-          variant="contained"
-          className={classes.btnsavequiz}
-          onClick={onclicksumit}
-        >
-          Save and Exit
-        </Button>
+        <Box display="flex" justifyContent="flex-end" marginBottom="14px">
+          <Button
+            variant="contained"
+            size="medium"
+            className={classes.btnsavequiz}
+            onClick={onclicksumit}
+          >
+            Save & Exit
+          </Button>
+        </Box>
       </div>
 
-      {quiz.map((quiz) => (
-        <Showquiz list={quiz} />
+      {quiz.map((quiz, index) => (
+        <Showquiz list={quiz} index={index} deleteQuiz={deleteQuiz} />
       ))}
       {selectchoice === "MC" ? (
         <Multiplechoice step={step} savequiz={onClicksavequiz} />
