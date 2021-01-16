@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+
 import {
   Checkbox,
   Button,
   Box,
   Typography,
   makeStyles,
+  Dialog,
 } from "@material-ui/core";
 import { display } from "@material-ui/system";
 import {
@@ -13,6 +15,7 @@ import {
   Delete,
   Edit,
 } from "@material-ui/icons";
+import DialogDelete from "./dialogDelete";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -25,9 +28,20 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     fontSize: "24px",
   },
+  btnDelete: {
+    "&:hover": {
+      cursor: "pointer",
+    },
+  },
+  btnEdit: {
+    "&:hover": {
+      cursor: "pointer",
+    },
+  },
 }));
 const Showquiz = ({ list }) => {
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
 
   const showtf = () => {
     return (
@@ -36,7 +50,7 @@ const Showquiz = ({ list }) => {
           <Typography className={classes.step}>
             {list.step}. {list.question}
           </Typography>
-          <Edit></Edit>
+          <Edit className={classes.btnEdit} />
         </Box>
         <Box display="flex" justifyContent="space-between">
           {list.correct === "true" ? (
@@ -44,7 +58,7 @@ const Showquiz = ({ list }) => {
           ) : (
             <Typography>false</Typography>
           )}
-          <Delete></Delete>
+          <Delete className={classes.btnDelete} onClick={handleClickOpen} />
         </Box>
       </Box>
     );
@@ -56,7 +70,7 @@ const Showquiz = ({ list }) => {
           <Typography className={classes.step}>
             {list.step}. {list.question}
           </Typography>
-          <Edit></Edit>
+          <Edit className={classes.btnEdit} />
         </Box>
         <Box display="flex" justifyContent="space-between">
           <Box>
@@ -64,7 +78,7 @@ const Showquiz = ({ list }) => {
               <Typography>{item.ans}</Typography>
             ))}
           </Box>
-          <Delete></Delete>
+          <Delete className={classes.btnDelete} />
         </Box>
       </Box>
     );
@@ -76,7 +90,7 @@ const Showquiz = ({ list }) => {
           <Typography className={classes.step}>
             {list.step}. {list.question}
           </Typography>
-          <Edit></Edit>
+          <Edit className={classes.btnEdit} />
         </Box>
         <Box display="flex" justifyContent="space-between">
           <Box>
@@ -93,10 +107,18 @@ const Showquiz = ({ list }) => {
               </Box>
             ))}
           </Box>
-          <Delete></Delete>
+          <Delete className={classes.btnDelete} />
         </Box>
       </Box>
     );
+  };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (value) => {
+    setOpen(false);
   };
 
   return (
@@ -111,11 +133,7 @@ const Showquiz = ({ list }) => {
           : list.type === "multiplechoice"
           ? showmc()
           : null}
-        {/* <h1>{list.step}</h1>
-        <h2>{list.question}</h2>
-        {list.arrayans.map((list) => (
-          <h3>{list}</h3>
-        ))} */}
+        <DialogDelete></DialogDelete>
       </div>
       <hr />
     </div>
