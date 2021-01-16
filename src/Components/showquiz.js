@@ -39,9 +39,10 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const Showquiz = ({ list }) => {
+const Showquiz = ({ key, list, step, deleteQuiz }) => {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [selectDelete, setselectDelete] = useState(false)
 
   const showtf = () => {
     return (
@@ -56,8 +57,8 @@ const Showquiz = ({ list }) => {
           {list.correct === "true" ? (
             <Typography>true</Typography>
           ) : (
-            <Typography>false</Typography>
-          )}
+              <Typography>false</Typography>
+            )}
           <Delete className={classes.btnDelete} onClick={handleClickOpen} />
         </Box>
       </Box>
@@ -78,7 +79,7 @@ const Showquiz = ({ list }) => {
               <Typography>{item.ans}</Typography>
             ))}
           </Box>
-          <Delete className={classes.btnDelete} />
+          <Delete className={classes.btnDelete} onClick={handleClickOpen} />
         </Box>
       </Box>
     );
@@ -107,7 +108,7 @@ const Showquiz = ({ list }) => {
               </Box>
             ))}
           </Box>
-          <Delete className={classes.btnDelete} />
+          <Delete className={classes.btnDelete} onClick={handleClickOpen} />
         </Box>
       </Box>
     );
@@ -119,6 +120,9 @@ const Showquiz = ({ list }) => {
 
   const handleClose = (value) => {
     setOpen(false);
+    if (value === "1") {
+      deleteQuiz(step)
+    }
   };
 
   return (
@@ -129,11 +133,11 @@ const Showquiz = ({ list }) => {
         {list.type === "truefalse"
           ? showtf()
           : list.type === "shortanswer"
-          ? showsa()
-          : list.type === "multiplechoice"
-          ? showmc()
-          : null}
-        <DialogDelete></DialogDelete>
+            ? showsa()
+            : list.type === "multiplechoice"
+              ? showmc()
+              : null}
+        <DialogDelete open={open} onClose={handleClose} />
       </div>
       <hr />
     </div>

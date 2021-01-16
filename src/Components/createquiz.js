@@ -83,7 +83,6 @@ export default function Createquiz({ submit }) {
   const classes = useStyles();
   const [quizname, setquizname] = useState("");
   const [quiz, setquiz] = useState([]);
-  const [step, setstep] = useState(1);
   const [selectchoice, setselectchoice] = useState(0);
 
   const onclicksumit = (event) => {
@@ -93,7 +92,6 @@ export default function Createquiz({ submit }) {
 
   const onClicksavequiz = (newquiz) => {
     setquiz([...quiz, newquiz]);
-    setstep(step + 1);
     setselectchoice(0);
   };
 
@@ -102,9 +100,12 @@ export default function Createquiz({ submit }) {
     setselectchoice(value);
   };
 
-  const deleteQuiz = (index) => {
+  const deleteQuiz = (step) => {
     let newQuiz = [...quiz];
-    newQuiz.splice(index, 1);
+    newQuiz.splice(step - 1, 1);
+    newQuiz.forEach((quiz, i) => {
+      quiz.step = i + 1
+    })
     setquiz(newQuiz);
   };
 
@@ -131,14 +132,14 @@ export default function Createquiz({ submit }) {
       </div>
 
       {quiz.map((quiz, index) => (
-        <Showquiz list={quiz} index={index} deleteQuiz={deleteQuiz} />
+        <Showquiz key={index} list={quiz} step={quiz.step} deleteQuiz={deleteQuiz} />
       ))}
       {selectchoice === "MC" ? (
-        <Multiplechoice step={step} savequiz={onClicksavequiz} />
+        <Multiplechoice step={quiz.length + 1} savequiz={onClicksavequiz} />
       ) : selectchoice === "TF" ? (
-        <Truefalse step={step} savequiz={onClicksavequiz} />
+        <Truefalse step={quiz.length + 1} savequiz={onClicksavequiz} />
       ) : selectchoice === "SA" ? (
-        <Shortanswer step={step} savequiz={onClicksavequiz} />
+        <Shortanswer step={quiz.length + 1} savequiz={onClicksavequiz} />
       ) : null}
 
       <div className={classes.layeraddquiz}>
