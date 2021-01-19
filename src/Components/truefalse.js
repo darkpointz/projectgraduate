@@ -6,6 +6,7 @@ import {
   Paper,
 } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
+import clsx from 'clsx';
 
 const useStyles = makeStyles({
   root: {
@@ -29,10 +30,12 @@ const useStyles = makeStyles({
     marginLeft: "24px",
     marginBottom: "24px",
   },
-  btnTrue: {
+  btnTF: {
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 500,
     marginRight: "24px",
+  },
+  btnTrue: {
     backgroundColor: "#00FF08",
   },
   btnFalse: {
@@ -97,7 +100,9 @@ const Truefalse = (props) => {
       </div>
       <div className={classes.groupbtn}>
         <Button
-          className={classes.btnTrue}
+          className={clsx(classes.btnTF, {
+            [classes.btnTrue]: correct === "true"
+          })}
           id="btnt"
           variant="contained"
           value="true"
