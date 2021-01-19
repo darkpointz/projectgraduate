@@ -115,7 +115,7 @@ export default function Multiplechoice(props) {
 
   return (
     <div>
-      <Paper className={classes.root}>
+      <Paper className={classes.root} elevation={3}>
         <div className={classes.inputbox}>
           <Typography className={classes.step}>{`${props.step}. `}</Typography>
           <TextField

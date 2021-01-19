@@ -16,6 +16,8 @@ import {
   Edit,
 } from "@material-ui/icons";
 import DialogDelete from "./dialogDelete";
+import Shortanswer from "./shortanswer";
+import Truefalse from "./truefalse";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -39,10 +41,10 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const Showquiz = ({ key, list, step, deleteQuiz }) => {
+const Showquiz = ({ list, step, deleteQuiz }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const [selectDelete, setselectDelete] = useState(false)
+  const [selectEdit, setselectEdit] = useState("");
 
   const showtf = () => {
     return (
@@ -51,15 +53,18 @@ const Showquiz = ({ key, list, step, deleteQuiz }) => {
           <Typography className={classes.step}>
             {list.step}. {list.question}
           </Typography>
-          <Edit className={classes.btnEdit} />
+          <Edit
+            className={classes.btnEdit}
+            onClick={() => handleClickEdit("tf")}
+          />
         </Box>
         <Box display="flex" justifyContent="space-between">
           {list.correct === "true" ? (
             <Typography>true</Typography>
           ) : (
-              <Typography>false</Typography>
-            )}
-          <Delete className={classes.btnDelete} onClick={handleClickOpen} />
+            <Typography>false</Typography>
+          )}
+          <Delete className={classes.btnDelete} onClick={handleClickOpenDel} />
         </Box>
       </Box>
     );
@@ -71,7 +76,10 @@ const Showquiz = ({ key, list, step, deleteQuiz }) => {
           <Typography className={classes.step}>
             {list.step}. {list.question}
           </Typography>
-          <Edit className={classes.btnEdit} />
+          <Edit
+            className={classes.btnEdit}
+            onClick={() => handleClickEdit("sa")}
+          />
         </Box>
         <Box display="flex" justifyContent="space-between">
           <Box>
@@ -79,7 +87,7 @@ const Showquiz = ({ key, list, step, deleteQuiz }) => {
               <Typography>{item.ans}</Typography>
             ))}
           </Box>
-          <Delete className={classes.btnDelete} onClick={handleClickOpen} />
+          <Delete className={classes.btnDelete} onClick={handleClickOpenDel} />
         </Box>
       </Box>
     );
@@ -108,37 +116,49 @@ const Showquiz = ({ key, list, step, deleteQuiz }) => {
               </Box>
             ))}
           </Box>
-          <Delete className={classes.btnDelete} onClick={handleClickOpen} />
+          <Delete className={classes.btnDelete} onClick={handleClickOpenDel} />
         </Box>
       </Box>
     );
   };
 
-  const handleClickOpen = () => {
+  const handleClickEdit = (type) => {
+    setselectEdit(type);
+  };
+
+  const handleClickOpenDel = () => {
     setOpen(true);
   };
 
   const handleClose = (value) => {
     setOpen(false);
     if (value === "1") {
-      deleteQuiz(step)
+      deleteQuiz(step);
     }
   };
 
   return (
     <div>
-      <div>
-        {console.log(list)}
-        {/* <h2>{list.step}. {list.question}</h2> */}
-        {list.type === "truefalse"
-          ? showtf()
-          : list.type === "shortanswer"
-            ? showsa()
-            : list.type === "multiplechoice"
-              ? showmc()
-              : null}
-        <DialogDelete open={open} onClose={handleClose} />
-      </div>
+      {list.type === "truefalse" && selectEdit === "" ? (
+        showtf()
+      ) : list.type === "shortanswer" && selectEdit === "" ? (
+        showsa()
+      ) : list.type === "multiplechoice" && selectEdit === "" ? (
+        showmc()
+      ) : selectEdit === "sa" ? (
+        <Shortanswer
+          questionEdit={list.question}
+          step={list.step}
+          correctEdit={list.correct}
+        />
+      ) : selectEdit === "tf" ? (
+        <Truefalse
+          questionEdit={list.question}
+          step={list.step}
+          correctEdit={list.correct}
+        />
+      ) : null}
+      <DialogDelete open={open} onClose={handleClose} step={step} />
       <hr />
     </div>
   );

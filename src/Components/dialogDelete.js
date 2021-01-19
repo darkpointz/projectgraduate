@@ -1,14 +1,23 @@
 import React, { useState } from "react";
-import { Typography, makeStyles, Dialog, Button, DialogTitle, Box } from "@material-ui/core";
+import {
+  Typography,
+  makeStyles,
+  Dialog,
+  Button,
+  DialogTitle,
+  Box,
+} from "@material-ui/core";
 
 const useStyles = makeStyles({
   root: {},
   btnConfirm: {
-    backgroundColor: "#6be17a"
+    backgroundColor: "#00b5e2",
+    color: "white",
   },
   btnCancel: {
-    backgroundColor: "#ff1744"
-  }
+    backgroundColor: "#E4FBFF",
+    color: "#00b5e2",
+  },
 });
 
 export default function DialogDelete(props) {
@@ -24,15 +33,16 @@ export default function DialogDelete(props) {
   };
   return (
     <Dialog onClose={handleClose} open={open}>
-      <DialogTitle id="simple-dialog-title">ยืนยันการลบ?</DialogTitle>
+      <DialogTitle id="simple-dialog-title">{`ยืนยันการลบข้อที่ ${props.step} ?`}</DialogTitle>
       <Box display="flex" justifyContent="space-evenly" marginBottom="12px">
         <Button
           className={classes.btnConfirm}
           variant="contained"
           size="medium"
           onClick={handlebtnconfirm}
-        >ตกลง
-          </Button>
+        >
+          ตกลง
+        </Button>
         <Button
           className={classes.btnCancel}
           variant="contained"
@@ -40,10 +50,8 @@ export default function DialogDelete(props) {
           onClick={handleClose}
         >
           ยกเลิก
-          </Button>
+        </Button>
       </Box>
-
     </Dialog>
-  )
-
+  );
 }

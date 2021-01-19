@@ -5,7 +5,7 @@ import {
   Button,
   Paper,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const useStyles = makeStyles({
   root: {
@@ -33,6 +33,7 @@ const useStyles = makeStyles({
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 500,
     marginRight: "24px",
+    backgroundColor: "#00FF08",
   },
   btnFalse: {
     fontFamily: "'Prompt', sans-serif",
@@ -50,29 +51,32 @@ const useStyles = makeStyles({
 
 const Truefalse = (props) => {
   const classes = useStyles();
-  const [quiz, setquiz] = useState({
-    correct: "",
-  });
+  const [correct, setcorrect] = useState("");
   const [question, setquestion] = useState("");
+
+  useEffect(() => {
+    setquestion(props.questionEdit);
+    // setcorrect(props.correctEdit);
+  }, []);
 
   const handlesubmit = (e) => {
     e.preventDefault();
     const type = "truefalse";
-    const correct = quiz.correct;
     const step = props.step;
     const list = { step, question, type, correct };
     props.savequiz(list);
   };
   const changecorrect = (e) => {
     const { value } = e.currentTarget;
-    setquiz({ correct: value });
-    if (value === "true") {
-      document.getElementById("btnt").style.backgroundColor = "#00FF08";
-      document.getElementById("btnf").style.backgroundColor = "";
-    } else if (value === "false") {
-      document.getElementById("btnt").style.backgroundColor = "";
-      document.getElementById("btnf").style.backgroundColor = "#E93939";
-    }
+    setcorrect(value);
+
+    // if (value === "true") {
+    //   document.getElementById("btnt").style.backgroundColor = "#00FF08";
+    //   document.getElementById("btnf").style.backgroundColor = "";
+    // } else if (value === "false") {
+    //   document.getElementById("btnt").style.backgroundColor = "";
+    //   document.getElementById("btnf").style.backgroundColor = "#E93939";
+    // }
   };
 
   const handlequestion = (e) => {
@@ -80,7 +84,7 @@ const Truefalse = (props) => {
   };
 
   return (
-    <Paper className={classes.root}>
+    <Paper className={classes.root} elevation={3}>
       <div className={classes.inputbox}>
         <Typography className={classes.step}>{`${props.step}. `}</Typography>
         <TextField
@@ -105,7 +109,6 @@ const Truefalse = (props) => {
           className={classes.btnFalse}
           id="btnf"
           variant="contained"
-          type="button"
           value="false"
           onClick={changecorrect}
         >

@@ -44,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 500,
     fontSize: "24px",
+    marginBottom: "14px",
   },
   layeraddquiz: {
     display: "flex",
@@ -104,8 +105,8 @@ export default function Createquiz({ submit }) {
     let newQuiz = [...quiz];
     newQuiz.splice(step - 1, 1);
     newQuiz.forEach((quiz, i) => {
-      quiz.step = i + 1
-    })
+      quiz.step = i + 1;
+    });
     setquiz(newQuiz);
   };
 
@@ -132,7 +133,12 @@ export default function Createquiz({ submit }) {
       </div>
 
       {quiz.map((quiz, index) => (
-        <Showquiz key={index} list={quiz} step={quiz.step} deleteQuiz={deleteQuiz} />
+        <Showquiz
+          key={index}
+          list={quiz}
+          step={quiz.step}
+          deleteQuiz={deleteQuiz}
+        />
       ))}
       {selectchoice === "MC" ? (
         <Multiplechoice step={quiz.length + 1} savequiz={onClicksavequiz} />
@@ -144,7 +150,6 @@ export default function Createquiz({ submit }) {
 
       <div className={classes.layeraddquiz}>
         <Typography className={classes.text}>Add a question</Typography>
-        <br />
         <div className={classes.groupquestion}>
           <Button
             variant="contained"

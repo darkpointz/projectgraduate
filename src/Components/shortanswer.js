@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   makeStyles,
   Typography,
@@ -56,6 +56,13 @@ export default function Shortanswer(props) {
 
   const [question, setquestion] = useState("");
   const [correct, setcorrect] = useState([{ ans: "" }]);
+  const [state, setstate] = useState([{ ans: "" }]);
+
+  useEffect(() => {
+    setquestion(props.questionEdit);
+    setstate(props.correctEdit);
+    // setcorrect(props.correctEdit);
+  }, []);
 
   const handlesubmit = (e) => {
     e.preventDefault();
@@ -87,7 +94,7 @@ export default function Shortanswer(props) {
     setcorrect([...correct, { ans: "" }]);
   };
   return (
-    <Paper className={classes.root}>
+    <Paper className={classes.root} elevation={3}>
       <div className={classes.inputbox}>
         <Typography className={classes.step}>{`${props.step}. `}</Typography>
         <TextField
