@@ -143,6 +143,7 @@ export default function Multiplechoice(props) {
                 name="correct"
                 // className={classes.checkbox}
                 style={{ color: "#6be17a" }}
+                checked={x.correct}
                 checkedIcon={<CheckCircle />}
                 onChange={(e) => handleCheckbox(e, i)}
                 inputProps={{ "aria-label": "primary checkbox" }}
