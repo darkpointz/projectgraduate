@@ -6,7 +6,7 @@ import {
   Paper,
 } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
-import clsx from 'clsx';
+import clsx from "clsx";
 
 const useStyles = makeStyles({
   root: {
@@ -39,8 +39,7 @@ const useStyles = makeStyles({
     backgroundColor: "#00FF08",
   },
   btnFalse: {
-    fontFamily: "'Prompt', sans-serif",
-    fontWeight: 500,
+    backgroundColor: "#E93939",
   },
   btnsubmit: {
     fontFamily: "'Prompt', sans-serif",
@@ -59,7 +58,7 @@ const Truefalse = (props) => {
 
   useEffect(() => {
     setquestion(props.questionEdit);
-    // setcorrect(props.correctEdit);
+    setcorrect(props.correctQuiz);
   }, []);
 
   const handlesubmit = (e) => {
@@ -72,14 +71,6 @@ const Truefalse = (props) => {
   const changecorrect = (e) => {
     const { value } = e.currentTarget;
     setcorrect(value);
-
-    // if (value === "true") {
-    //   document.getElementById("btnt").style.backgroundColor = "#00FF08";
-    //   document.getElementById("btnf").style.backgroundColor = "";
-    // } else if (value === "false") {
-    //   document.getElementById("btnt").style.backgroundColor = "";
-    //   document.getElementById("btnf").style.backgroundColor = "#E93939";
-    // }
   };
 
   const handlequestion = (e) => {
@@ -101,7 +92,7 @@ const Truefalse = (props) => {
       <div className={classes.groupbtn}>
         <Button
           className={clsx(classes.btnTF, {
-            [classes.btnTrue]: correct === "true"
+            [classes.btnTrue]: correct === "true",
           })}
           id="btnt"
           variant="contained"
@@ -111,7 +102,9 @@ const Truefalse = (props) => {
           True
         </Button>
         <Button
-          className={classes.btnFalse}
+          className={clsx(classes.btnTF, {
+            [classes.btnFalse]: correct === "false",
+          })}
           id="btnf"
           variant="contained"
           value="false"

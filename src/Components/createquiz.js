@@ -110,6 +110,13 @@ export default function Createquiz({ submit }) {
     setquiz(newQuiz);
   };
 
+  const savequizEdit = (newquiz, index) => {
+    let Quiz = [...quiz];
+    Quiz[index] = newquiz;
+    console.log(index);
+    setquiz(Quiz);
+  };
+
   return (
     <div className={classes.root}>
       <div className={classes.layertitle}>
@@ -131,21 +138,37 @@ export default function Createquiz({ submit }) {
           </Button>
         </Box>
       </div>
-
-      {quiz.map((quiz, index) => (
-        <Showquiz
-          key={index}
-          list={quiz}
-          step={quiz.step}
-          deleteQuiz={deleteQuiz}
-        />
-      ))}
+      {quiz.map((quiz, index) => {
+        return (
+          <Showquiz
+            key={index}
+            list={quiz}
+            step={quiz.step}
+            deleteQuiz={deleteQuiz}
+            savequiz={savequizEdit}
+          />
+        );
+      })}
       {selectchoice === "MC" ? (
-        <Multiplechoice step={quiz.length + 1} savequiz={onClicksavequiz} />
+        <Multiplechoice
+          step={quiz.length + 1}
+          savequiz={onClicksavequiz}
+          correctQuiz={[
+            { ans: "", correct: false },
+            { ans: "", correct: false },
+            { ans: "", correct: false },
+            { ans: "", correct: false },
+            { ans: "", correct: false },
+          ]}
+        />
       ) : selectchoice === "TF" ? (
         <Truefalse step={quiz.length + 1} savequiz={onClicksavequiz} />
       ) : selectchoice === "SA" ? (
-        <Shortanswer step={quiz.length + 1} savequiz={onClicksavequiz} />
+        <Shortanswer
+          step={quiz.length + 1}
+          savequiz={onClicksavequiz}
+          correctQuiz={[{ ans: "" }]}
+        />
       ) : null}
 
       <div className={classes.layeraddquiz}>

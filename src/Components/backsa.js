@@ -56,17 +56,21 @@ export default function Shortanswer(props) {
 
   const [question, setquestion] = useState("");
   const [correct, setcorrect] = useState([{ ans: "" }]);
+  const [state, setstate] = useState([{ ans: "" }]);
 
   useEffect(() => {
     setquestion(props.questionEdit);
-    setcorrect(props.correctQuiz);
+    setstate(props.correctEdit);
+    //setcorrect(props.correctEdit);
   }, []);
 
   const handlesubmit = (e) => {
     e.preventDefault();
     const type = "shortanswer";
     const step = props.step;
+
     const list = { step, question, type, correct };
+
     props.savequiz(list);
   };
 
@@ -101,7 +105,7 @@ export default function Shortanswer(props) {
           onChange={handlequestion}
         ></TextField>
       </div>
-      {correct.map((item, i) => {
+      {correct.map((x, i) => {
         return (
           <div className={classes.Answer}>
             <div className={classes.eachAnswer}>
@@ -110,9 +114,10 @@ export default function Shortanswer(props) {
                 size="small"
                 name="ans"
                 label="Correct Answer(Optional)"
-                value={item.ans}
+                value={x.ans}
                 onChange={(e) => handleInputChange(e, i)}
               />
+
               {correct.length !== 1 && (
                 <Button
                   className={classes.deleteAnswer}

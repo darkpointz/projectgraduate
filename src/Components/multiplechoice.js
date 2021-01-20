@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   makeStyles,
   Checkbox,
@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Multiplechoice(props) {
   const classes = useStyles();
 
-  const [arrAnsChoice, setarrAnsChoice] = useState([
+  const [ansChoice, setAnsChoice] = useState([
     { ans: "", correct: false },
     { ans: "", correct: false },
     { ans: "", correct: false },
@@ -74,17 +74,22 @@ export default function Multiplechoice(props) {
   ]);
   const [question, setquestion] = useState("");
 
+  useEffect(() => {
+    setquestion(props.questionEdit);
+    setAnsChoice(props.correctQuiz);
+  }, []);
+
   const handlechoice = (e, index) => {
     const { name, value } = e.target;
-    const list = [...arrAnsChoice];
+    const list = [...ansChoice];
     list[index][name] = value;
-    setarrAnsChoice(list);
+    setAnsChoice(list);
   };
 
   const handlesubmit = (e) => {
     e.preventDefault();
 
-    const choice = arrAnsChoice;
+    const choice = ansChoice;
     const type = "multiplechoice";
     const step = props.step;
     const list = { step, question, type, choice };
@@ -92,13 +97,13 @@ export default function Multiplechoice(props) {
   };
 
   const handleDeletefield = (index) => {
-    const list = [...arrAnsChoice];
+    const list = [...ansChoice];
     list.splice(index, 1);
-    setarrAnsChoice(list);
+    setAnsChoice(list);
   };
 
   const handleAddClick = () => {
-    setarrAnsChoice([...arrAnsChoice, { ans: "" }]);
+    setAnsChoice([...ansChoice, { ans: "" }]);
   };
 
   const handleQuestion = (e) => {
@@ -107,84 +112,82 @@ export default function Multiplechoice(props) {
 
   const handleCheckbox = (e, index) => {
     const { name, checked } = e.target;
-    const list = [...arrAnsChoice];
+    const list = [...ansChoice];
 
     list[index][name] = checked;
-    setarrAnsChoice(list);
+    setAnsChoice(list);
   };
 
   return (
-    <div>
-      <Paper className={classes.root} elevation={3}>
-        <div className={classes.inputbox}>
-          <Typography className={classes.step}>{`${props.step}. `}</Typography>
-          <TextField
-            variant="outlined"
-            required={true}
-            size="small"
-            type="text"
-            name="question"
-            label="Have a question to ask?"
-            value={question}
-            onChange={handleQuestion}
-          ></TextField>
-        </div>
-        {arrAnsChoice.map((x, i) => {
-          return (
-            <div className={classes.Answer}>
-              <div className={classes.eachAnswer}>
-                <Checkbox
-                  // icon={<CheckCircleOutline fontSize="small" />}
-                  icon={<RadioButtonUnchecked fontSize="small" />}
-                  name="correct"
-                  // className={classes.checkbox}
-                  style={{ color: "#6be17a" }}
-                  checkedIcon={<CheckCircle />}
-                  onChange={(e) => handleCheckbox(e, i)}
-                  inputProps={{ "aria-label": "primary checkbox" }}
-                />
-                <TextField
-                  variant="outlined"
-                  size="small"
-                  name="ans"
-                  label={`Answer ${i + 1}`}
-                  value={x.ans}
-                  onChange={(e) => handlechoice(e, i)}
-                />
+    <Paper className={classes.root} elevation={3}>
+      <div className={classes.inputbox}>
+        <Typography className={classes.step}>{`${props.step}. `}</Typography>
+        <TextField
+          variant="outlined"
+          required={true}
+          size="small"
+          type="text"
+          name="question"
+          label="Have a question to ask?"
+          value={question}
+          onChange={handleQuestion}
+        ></TextField>
+      </div>
+      {ansChoice.map((x, i) => {
+        return (
+          <div className={classes.Answer}>
+            <div className={classes.eachAnswer}>
+              <Checkbox
+                // icon={<CheckCircleOutline fontSize="small" />}
+                icon={<RadioButtonUnchecked fontSize="small" />}
+                name="correct"
+                // className={classes.checkbox}
+                style={{ color: "#6be17a" }}
+                checkedIcon={<CheckCircle />}
+                onChange={(e) => handleCheckbox(e, i)}
+                inputProps={{ "aria-label": "primary checkbox" }}
+              />
+              <TextField
+                variant="outlined"
+                size="small"
+                name="ans"
+                label={`Answer ${i + 1}`}
+                value={x.ans}
+                onChange={(e) => handlechoice(e, i)}
+              />
 
-                {arrAnsChoice.length !== 2 && (
-                  <Button
-                    className={classes.deleteAnswer}
-                    onClick={() => handleDeletefield(i)}
-                  >
-                    X
-                  </Button>
-                )}
-              </div>
-              <div className={classes.boxAddAnswer}>
-                {arrAnsChoice.length - 1 === i && arrAnsChoice.length <= 4 ? (
-                  <Button
-                    variant="contained"
-                    className={classes.btnaddAnswer}
-                    size="small"
-                    onClick={handleAddClick}
-                  >
-                    ADD ANSWER
-                  </Button>
-                ) : null}
-              </div>
+              {ansChoice.length !== 2 && (
+                <Button
+                  className={classes.deleteAnswer}
+                  onClick={() => handleDeletefield(i)}
+                >
+                  X
+                </Button>
+              )}
             </div>
-          );
-        })}
-        <Button
-          className={classes.btnsubmit}
-          variant="contained"
-          size="medium"
-          onClick={handlesubmit}
-        >
-          ยืนยัน
-        </Button>
-      </Paper>
-    </div>
+            <div className={classes.boxAddAnswer}>
+              {ansChoice.length - 1 === i && ansChoice.length <= 4 ? (
+                <Button
+                  variant="contained"
+                  className={classes.btnaddAnswer}
+                  size="small"
+                  onClick={handleAddClick}
+                >
+                  ADD ANSWER
+                </Button>
+              ) : null}
+            </div>
+          </div>
+        );
+      })}
+      <Button
+        className={classes.btnsubmit}
+        variant="contained"
+        size="medium"
+        onClick={handlesubmit}
+      >
+        ยืนยัน
+      </Button>
+    </Paper>
   );
 }

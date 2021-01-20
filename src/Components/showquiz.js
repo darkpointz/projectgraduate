@@ -18,6 +18,7 @@ import {
 import DialogDelete from "./dialogDelete";
 import Shortanswer from "./shortanswer";
 import Truefalse from "./truefalse";
+import Multiplechoice from "./multiplechoice";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -41,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const Showquiz = ({ list, step, deleteQuiz }) => {
+const Showquiz = ({ key, list, step, deleteQuiz, savequiz }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [selectEdit, setselectEdit] = useState("");
@@ -99,7 +100,10 @@ const Showquiz = ({ list, step, deleteQuiz }) => {
           <Typography className={classes.step}>
             {list.step}. {list.question}
           </Typography>
-          <Edit className={classes.btnEdit} />
+          <Edit
+            className={classes.btnEdit}
+            onClick={() => handleClickEdit("mc")}
+          />
         </Box>
         <Box display="flex" justifyContent="space-between">
           <Box>
@@ -137,6 +141,11 @@ const Showquiz = ({ list, step, deleteQuiz }) => {
     }
   };
 
+  const savequizEdit = (quiz) => {
+    savequiz(quiz, step - 1);
+    setselectEdit("");
+  };
+
   return (
     <div>
       {list.type === "truefalse" && selectEdit === "" ? (
@@ -149,13 +158,22 @@ const Showquiz = ({ list, step, deleteQuiz }) => {
         <Shortanswer
           questionEdit={list.question}
           step={list.step}
-          correctEdit={list.correct}
+          correctQuiz={list.correct}
+          savequiz={savequizEdit}
         />
       ) : selectEdit === "tf" ? (
         <Truefalse
           questionEdit={list.question}
           step={list.step}
-          correctEdit={list.correct}
+          correctQuiz={list.correct}
+          savequiz={savequizEdit}
+        />
+      ) : selectEdit === "mc" ? (
+        <Multiplechoice
+          questionEdit={list.question}
+          step={list.step}
+          correctQuiz={list.choice}
+          savequiz={savequizEdit}
         />
       ) : null}
       <DialogDelete open={open} onClose={handleClose} step={step} />
