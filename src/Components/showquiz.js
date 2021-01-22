@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import clsx from "clsx";
 import {
   Checkbox,
   Button,
@@ -11,7 +11,7 @@ import {
 import { display } from "@material-ui/system";
 import {
   CheckCircle,
-  CheckCircleOutline,
+  RadioButtonUnchecked,
   Delete,
   Edit,
 } from "@material-ui/icons";
@@ -29,7 +29,12 @@ const useStyles = makeStyles((theme) => ({
   step: {
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 500,
-    fontSize: "24px",
+    fontSize: "20px",
+  },
+  txtStep: {
+    fontFamily: "'Prompt', sans-serif",
+    fontWeight: 500,
+    fontSize: "16px",
   },
   btnDelete: {
     "&:hover": {
@@ -40,6 +45,28 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       cursor: "pointer",
     },
+  },
+  typoTF: {
+    fontFamily: "'Prompt', sans-serif",
+    fontWeight: 500,
+    backgroundColor: "#00FF08",
+    padding: "6px 16px",
+    borderRadius: "6px",
+    boxShadow:
+      "0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12)",
+    color: "#ffffff",
+  },
+  typoTrue: { backgroundColor: "#12f729" },
+  typoFalse: { backgroundColor: "#fc5353" },
+  typoSa: {
+    fontFamily: "'Prompt', sans-serif",
+    fontWeight: 400,
+    backgroundColor: "#77ff7c",
+    padding: "6px 10px",
+    marginRight: "8px",
+    marginBottom: "8px",
+    borderRadius: "6px",
+    color: "#ffffff",
   },
 }));
 const Showquiz = ({ key, list, step, deleteQuiz, savequiz }) => {
@@ -61,9 +88,21 @@ const Showquiz = ({ key, list, step, deleteQuiz, savequiz }) => {
         </Box>
         <Box display="flex" justifyContent="space-between">
           {list.correct === "true" ? (
-            <Typography>true</Typography>
+            <Typography
+              className={clsx(classes.typoTF, {
+                [classes.typoTrue]: list.correct === "true",
+              })}
+            >
+              True
+            </Typography>
           ) : (
-            <Typography>false</Typography>
+            <Typography
+              className={clsx(classes.typoTF, {
+                [classes.typoFalse]: list.correct === "false",
+              })}
+            >
+              False
+            </Typography>
           )}
           <Delete className={classes.btnDelete} onClick={handleClickOpenDel} />
         </Box>
@@ -83,9 +122,9 @@ const Showquiz = ({ key, list, step, deleteQuiz, savequiz }) => {
           />
         </Box>
         <Box display="flex" justifyContent="space-between">
-          <Box>
+          <Box display="flex" flexWrap="wrap">
             {list.correct.map((item) => (
-              <Typography>{item.ans}</Typography>
+              <Typography className={classes.typoSa}>{item.ans}</Typography>
             ))}
           </Box>
           <Delete className={classes.btnDelete} onClick={handleClickOpenDel} />
@@ -94,6 +133,7 @@ const Showquiz = ({ key, list, step, deleteQuiz, savequiz }) => {
     );
   };
   const showmc = () => {
+    let charStep = ["A", "B", "C", "D", "E"];
     return (
       <Box display="flex" flexDirection="column">
         <Box display="flex" justifyContent="space-between">
@@ -107,11 +147,15 @@ const Showquiz = ({ key, list, step, deleteQuiz, savequiz }) => {
         </Box>
         <Box display="flex" justifyContent="space-between">
           <Box>
-            {list.choice.map((item) => (
-              <Box display="flex">
+            {list.choice.map((item, index) => (
+              <Box display="flex" alignItems="center">
+                <Typography className={classes.txtStep}>
+                  {charStep[index]}
+                </Typography>
                 <Checkbox
-                  icon={<CheckCircleOutline fontSize="small" />}
+                  icon={<RadioButtonUnchecked fontSize="small" />}
                   name="correct"
+                  style={{ color: "#6be17a" }}
                   checked={item.correct}
                   checkedIcon={<CheckCircle />}
                   inputProps={{ "aria-label": "primary checkbox" }}
@@ -177,7 +221,7 @@ const Showquiz = ({ key, list, step, deleteQuiz, savequiz }) => {
         />
       ) : null}
       <DialogDelete open={open} onClose={handleClose} step={step} />
-      <hr />
+      <hr style={{ margin: "12px" }} />
     </div>
   );
 };

@@ -26,6 +26,7 @@ const useStyles = makeStyles({
     marginRight: "14px",
   },
   eachAnswer: {
+    display: "flex",
     marginBottom: "10px",
   },
   Answer: {
@@ -47,7 +48,7 @@ const useStyles = makeStyles({
     fontWeight: 500,
     marginLeft: "24px",
     fontSize: "16px",
-    backgroundColor: "#6be17a",
+    backgroundColor: "#12f729",
     color: "white",
   },
 });

@@ -34,12 +34,13 @@ const useStyles = makeStyles({
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 500,
     marginRight: "24px",
+    color: "#ffffff",
   },
   btnTrue: {
-    backgroundColor: "#00FF08",
+    backgroundColor: "#12f729",
   },
   btnFalse: {
-    backgroundColor: "#E93939",
+    backgroundColor: "#fc5353",
   },
   btnsubmit: {
     fontFamily: "'Prompt', sans-serif",

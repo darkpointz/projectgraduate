@@ -32,9 +32,8 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     fontSize: "16px",
     borderRadius: "10px",
-    backgroundColor: "#71F582",
-    color: "#29710e",
-    // backgroundColor: "#71F582",
+    backgroundColor: "#12f729",
+    color: "#ffffff",
   },
 
   line: {

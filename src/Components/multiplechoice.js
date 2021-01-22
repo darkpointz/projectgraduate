@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     marginLeft: "24px",
     fontSize: "16px",
-    backgroundColor: "#6be17a",
+    backgroundColor: "#12f729",
     color: "white",
   },
   deleteAnswer: {
