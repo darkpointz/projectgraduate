@@ -96,6 +96,36 @@ export default function Multiplechoice(props) {
     props.savequiz(list);
   };
 
+  const checkhandlesubmit = (e) => {
+    console.log(question)
+    console.log(ansChoice[0].correct)
+
+    if(question != undefined){
+        if(ansChoice[0].correct == false && ansChoice[1].correct == false &&
+           ansChoice[2].correct == false && ansChoice[3].correct == false && 
+           ansChoice[4].correct == false ){
+          console.log("Not Choose Answer");
+          var correctFailed = document.getElementById("textFailed");
+          correctFailed.innerHTML = "*Please Select Answer*";
+          correctFailed.style.color = "#ff0000";
+        }
+        else{
+          e.preventDefault();
+          const choice = ansChoice;
+          const type = "multiplechoice";
+          const step = props.step;
+          const list = { step, question, type, choice };
+          props.savequiz(list);
+          
+      }      
+    }else{
+      console.log("No Text In Field");
+      var textFailed = document.getElementById("textFailed");
+      textFailed.innerHTML = "*Please Enter Question*";
+      textFailed.style.color = "#ff0000";
+    }
+  };
+
   const handleDeletefield = (index) => {
     const list = [...ansChoice];
     list.splice(index, 1);
@@ -132,6 +162,7 @@ export default function Multiplechoice(props) {
           value={question}
           onChange={handleQuestion}
         ></TextField>
+        <span id="textFailed"></span>
       </div>
       {ansChoice.map((x, i) => {
         return (
@@ -185,7 +216,7 @@ export default function Multiplechoice(props) {
         className={classes.btnsubmit}
         variant="contained"
         size="medium"
-        onClick={handlesubmit}
+        onClick={checkhandlesubmit}
       >
         ยืนยัน
       </Button>

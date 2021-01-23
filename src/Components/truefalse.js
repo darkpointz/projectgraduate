@@ -8,6 +8,8 @@ import {
 import React, { useState, useEffect } from "react";
 import clsx from "clsx";
 
+var patternQuestion = /^[^ ]$/;
+
 const useStyles = makeStyles({
   root: {
     display: "flex",
@@ -62,13 +64,38 @@ const Truefalse = (props) => {
     setcorrect(props.correctQuiz);
   }, []);
 
-  const handlesubmit = (e) => {
-    e.preventDefault();
-    const type = "truefalse";
-    const step = props.step;
-    const list = { step, question, type, correct };
-    props.savequiz(list);
+  // const handlesubmit = (e) => {
+  //   e.preventDefault();
+  //   const type = "truefalse";
+  //   const step = props.step;
+  //   const list = { step, question, type, correct };
+  //   props.savequiz(list);
+  // };
+  const checkhandlesubmit = (e) => {
+    console.log(question)
+    console.log(correct)
+
+    if(question != undefined){
+      if(correct != undefined){
+        e.preventDefault();
+        const type = "truefalse";
+        const step = props.step;
+        const list = { step, question, type, correct };
+        props.savequiz(list);
+      }else{
+        console.log("Not Choose Answer");
+        var correctFailed = document.getElementById("textFailed");
+        correctFailed.innerHTML = "*Please Select Answer*";
+        correctFailed.style.color = "#ff0000";
+      }
+    }else{
+      console.log("No Text In Field");
+      var textFailed = document.getElementById("textFailed");
+      textFailed.innerHTML = "*Please Enter Question*";
+      textFailed.style.color = "#ff0000";
+    }
   };
+  
   const changecorrect = (e) => {
     const { value } = e.currentTarget;
     setcorrect(value);
@@ -77,7 +104,6 @@ const Truefalse = (props) => {
   const handlequestion = (e) => {
     setquestion(e.target.value);
   };
-
   return (
     <Paper className={classes.root} elevation={3}>
       <div className={classes.inputbox}>
@@ -89,6 +115,7 @@ const Truefalse = (props) => {
           label="Have a question to ask?"
           onChange={handlequestion}
         ></TextField>
+        <span id="textFailed"></span>
       </div>
       <div className={classes.groupbtn}>
         <Button
@@ -113,15 +140,16 @@ const Truefalse = (props) => {
         >
           False
         </Button>
+        <span id="correctFailed"></span>
       </div>
       <Button
         className={classes.btnsubmit}
         variant="contained"
         size="medium"
-        onClick={handlesubmit}
+        onClick={checkhandlesubmit}
       >
         ยืนยัน
-      </Button>
+        </Button>
       <br />
     </Paper> //this.setState({ question: e.target.value } style={{backgroundColor:bgColor.color}}  onClick={onsubmit}
   );

@@ -71,6 +71,22 @@ export default function Shortanswer(props) {
     props.savequiz(list);
   };
 
+  const checkhandlesubmit = (e) => {
+    console.log(question)
+      if(question != undefined){
+      e.preventDefault();
+      const type = "shortanswer";
+      const step = props.step;
+      const list = { step, question, type, correct };
+      props.savequiz(list);
+    }else{
+      console.log("No Text In Field");
+      var textFailed = document.getElementById("textFailed");
+      textFailed.innerHTML = "*Please Enter Question*";
+      textFailed.style.color = "#ff0000";
+    }
+  };
+
   const handlequestion = (e) => {
     setquestion(e.target.value);
   };
@@ -101,6 +117,7 @@ export default function Shortanswer(props) {
           label="Have a question to ask?"
           onChange={handlequestion}
         ></TextField>
+        <span id="textFailed"></span>
       </div>
       {correct.map((item, i) => {
         return (
@@ -142,7 +159,7 @@ export default function Shortanswer(props) {
         className={classes.btnsubmit}
         variant="contained"
         size="small"
-        onClick={handlesubmit}
+        onClick={checkhandlesubmit}
       >
         ยืนยัน
       </Button>
