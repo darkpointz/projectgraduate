@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     fontSize: "16px",
     borderRadius: "10px",
-    backgroundColor: "#12f729",
+    backgroundColor: "#42ea5e",
     color: "#ffffff",
   },
 

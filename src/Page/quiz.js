@@ -10,11 +10,12 @@ import {
   Paper,
   Button,
   Dialog,
-  InputBase,
+  InputAdornment,
   Typography,
   Box,
+  TextField,
 } from "@material-ui/core";
-import { Add } from "@material-ui/icons";
+import { Add, Search } from "@material-ui/icons";
 import DialogSelectCreate from "../Components/dialogSelectCreate";
 
 const useStyles = makeStyles((theme) => ({
@@ -27,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   btnCreate: {
     display: "flex",
     borderRadius: "20px",
-    backgroundColor: "#00FF08",
+    backgroundColor: "#42ea5e",
     color: "white",
     height: "45px",
     marginBottom: "16px",
@@ -60,6 +61,13 @@ const useStyles = makeStyles((theme) => ({
       width: "20ch",
     },
   },
+  typotitlePaper: {
+    fontFamily: "'Prompt', sans-serif",
+    fontWeight: 500,
+    fontSize: "24px",
+    color: "white",
+    marginLeft: "16px"
+  }
 }));
 
 export default function Quiz() {
@@ -107,24 +115,28 @@ export default function Quiz() {
           </Box>
           <Paper className={classes.paper}>
             <Box display="flex" flexDirection="column">
-              <Typography>Quiz</Typography>
-              <InputBase
-                placeholder="Search…"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
+              <Typography className={classes.typotitlePaper}>Quiz</Typography>
+              <TextField
+                classes={classes.inputInput}
+                id="outlined-basic" label="Search" variant="outlined"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="end">
+                      <Search />
+                    </InputAdornment>
+                  ),
                 }}
-              ></InputBase>
+              ></TextField>
             </Box>
           </Paper>
           <DialogSelectCreate open={open} onClose={handleClose} />
         </div>
       ) : (
-        <div className={classes.content}>
-          <Createquiz submit={onsumit} />
-          <hr />
-        </div>
-      )}
+          <div className={classes.content}>
+            <Createquiz submit={onsumit} />
+            <hr />
+          </div>
+        )}
     </div>
   );
 }
