@@ -15,7 +15,7 @@ import {
   Delete,
   Edit,
 } from "@material-ui/icons";
-import DialogDelete from "./dialogDelete";
+import DialogDeleteQuiz from "./dialogDeleteQuiz";
 import Shortanswer from "./shortanswer";
 import Truefalse from "./truefalse";
 import Multiplechoice from "./multiplechoice";
@@ -220,7 +220,7 @@ const Showquiz = ({ key, list, step, deleteQuiz, savequiz }) => {
           savequiz={savequizEdit}
         />
       ) : null}
-      <DialogDelete open={open} onClose={handleClose} step={step} />
+      <DialogDeleteQuiz open={open} onClose={handleClose} step={step} />
       <hr style={{ margin: "12px" }} />
     </div>
   );

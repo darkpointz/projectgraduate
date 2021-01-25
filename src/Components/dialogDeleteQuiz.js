@@ -20,7 +20,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function DialogDelete(props) {
+export default function DialogDeleteQuiz(props) {
   const classes = useStyles();
   const { onClose, open } = props;
 
