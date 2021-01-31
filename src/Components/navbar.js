@@ -21,9 +21,9 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { withRouter, Route, Switch } from "react-router-dom";
 
 import Lanunch from "../Page/lanunch";
-import Rooms from "../Page/rooms";
 import Report from "../Page/reports";
 import Quiz from "../Page/quiz";
+import Class from "../Page/class";
 
 const drawerWidth = 200;
 
@@ -182,7 +182,7 @@ function Navbar(props) {
             path="/report"
             render={(props) => <Report {...props} />}
           />
-          <Route exact path="/room" render={(props) => <Rooms {...props} />} />
+          <Route exact path="/room" render={(props) => <Class {...props} />} />
         </Switch>
       </main>
     </div>

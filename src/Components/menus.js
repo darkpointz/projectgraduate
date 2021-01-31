@@ -3,11 +3,11 @@ import React from "react";
 import AllRepairList from "../pages/AllRepairList";
 import Launch from "../Page/quiz";
 import Quiz from "../Page/quiz";
-import Rooms from "../Page/rooms";
 import Reports from "../Page/reports";
 import Results from "../Page/results";
 import History from "../pages/History";
 import ListAltIcon from '@material-ui/icons/ListAlt';
+import Class from "../Page/class";
 
 
 export const ALL_MENUS = [
@@ -30,7 +30,7 @@ export const ALL_MENUS = [
         // icon: <HistoryIcon />,
         // role: [],
         tabKey: "rooms",
-        component: Rooms
+        component: Class
     },
     {
         label: "REPORTS",

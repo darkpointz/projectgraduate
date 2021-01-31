@@ -26,7 +26,7 @@ const useStyles = makeStyles({
   closeDialog: { fontSize: "18px", width: "20%" },
 });
 
-export default function DialogSelectCreate(props) {
+export default function DialogSelectCreateQuiz(props) {
   const classes = useStyles();
   const { onClose, open } = props;
 

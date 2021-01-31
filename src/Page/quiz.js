@@ -17,7 +17,7 @@ import {
   Grid,
 } from "@material-ui/core";
 import { Add, Search } from "@material-ui/icons";
-import DialogSelectCreate from "../Components/dialogSelectCreate";
+import DialogSelectCreateQuiz from "../Components/dialogSelectCreateQuiz";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -85,6 +85,7 @@ export default function Quiz() {
   const onsumit = (quizname, quiz) => {
     clickCreate();
     setbtnCreate(!btnCreate);
+    setOpen(false);
     // firebase.firestore().collection("quiz").add({
     //   quizname: quizname,
     //   quiz: quiz,
@@ -136,14 +137,14 @@ export default function Quiz() {
             </Paper>
           </Grid>
 
-          <DialogSelectCreate open={open} onClose={handleClose} />
+          <DialogSelectCreateQuiz open={open} onClose={handleClose} />
         </Grid>
       ) : (
-        <div className={classes.content}>
-          <Createquiz submit={onsumit} />
-          <hr />
-        </div>
-      )}
+          <div className={classes.content}>
+            <Createquiz submit={onsumit} />
+            <hr />
+          </div>
+        )}
     </div>
   );
 }
