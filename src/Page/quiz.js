@@ -9,19 +9,18 @@ import {
   makeStyles,
   Paper,
   Button,
-  Dialog,
+  FormControl,
   InputAdornment,
   Typography,
   Box,
   TextField,
+  Grid,
 } from "@material-ui/core";
 import { Add, Search } from "@material-ui/icons";
 import DialogSelectCreate from "../Components/dialogSelectCreate";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex",
-    flexDirection: "column",
     flexGrow: 1,
   },
   // layotBtnCreate: { display: "flex", justifyContent: "flex-end" },
@@ -47,27 +46,30 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flexGrow: 1,
   },
-  paper: { backgroundColor: "#6DC8BE" },
+  paper: { backgroundColor: "#6DC8BE", flexGrow: 1 },
   inputRoot: {
     color: "inherit",
   },
-  inputInput: {
-    padding: theme.spacing(1, 1, 1, 0),
+  formtextfield: {
+    width: "55%",
+  },
+  textfieldSearch: {
+    // padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
-    },
+    // paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    // transition: theme.transitions.create("width"),
+    // [theme.breakpoints.up("md")]: {
+    //   width: "20ch",
+    // },
   },
   typotitlePaper: {
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 500,
     fontSize: "24px",
     color: "white",
-    marginLeft: "16px"
-  }
+    marginLeft: "16px",
+    marginBottom: "12px",
+  },
 }));
 
 export default function Quiz() {
@@ -100,8 +102,8 @@ export default function Quiz() {
     //--เดียวเปลี่ยนเป็นrouteแทน***
     <div className={classes.root}>
       {!btnCreate ? (
-        <div>
-          <Box display="flex" justifyContent="flex-end">
+        <Grid container spacing={3} direction="column">
+          <Grid container item xs={12} justify="flex-end" alignItems="center">
             <Button
               variant="contained"
               className={classes.btnCreate}
@@ -112,31 +114,36 @@ export default function Quiz() {
                 Createquiz
               </Typography>
             </Button>
-          </Box>
-          <Paper className={classes.paper}>
-            <Box display="flex" flexDirection="column">
+          </Grid>
+          <Grid container item xs={12}>
+            <Paper className={classes.paper}>
               <Typography className={classes.typotitlePaper}>Quiz</Typography>
-              <TextField
-                classes={classes.inputInput}
-                id="outlined-basic" label="Search" variant="outlined"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="end">
-                      <Search />
-                    </InputAdornment>
-                  ),
-                }}
-              ></TextField>
-            </Box>
-          </Paper>
+              <FormControl className={classes.formtextfield}>
+                <TextField
+                  classes={classes.textfieldSearch}
+                  id="outlined-basic"
+                  label="Search"
+                  variant="outlined"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="end">
+                        <Search />
+                      </InputAdornment>
+                    ),
+                  }}
+                ></TextField>
+              </FormControl>
+            </Paper>
+          </Grid>
+
           <DialogSelectCreate open={open} onClose={handleClose} />
-        </div>
+        </Grid>
       ) : (
-          <div className={classes.content}>
-            <Createquiz submit={onsumit} />
-            <hr />
-          </div>
-        )}
+        <div className={classes.content}>
+          <Createquiz submit={onsumit} />
+          <hr />
+        </div>
+      )}
     </div>
   );
 }
