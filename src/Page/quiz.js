@@ -30,9 +30,10 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#42ea5e",
     color: "white",
     height: "45px",
-    marginBottom: "16px",
+    marginBottom: "10px",
     [theme.breakpoints.down("sm")]: {
       height: "37px",
+      marginBottom: "0",
     },
   },
   iconAddQuiz: {
@@ -46,12 +47,22 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flexGrow: 1,
   },
-  paper: { backgroundColor: "#6DC8BE", flexGrow: 1 },
+  paper: {
+    backgroundColor: "#6DC8BE",
+    flexGrow: 1,
+    paddingTop: "10px",
+    [theme.breakpoints.down("sm")]: {
+      paddingTop: "6px",
+    },
+  },
   inputRoot: {
     color: "inherit",
   },
   formtextfield: {
     width: "55%",
+    [theme.breakpoints.down("sm")]: {
+      width: "70%",
+    },
   },
   textfieldSearch: {
     // padding: theme.spacing(1, 1, 1, 0),
@@ -140,11 +151,11 @@ export default function Quiz() {
           <DialogSelectCreateQuiz open={open} onClose={handleClose} />
         </Grid>
       ) : (
-          <div className={classes.content}>
-            <Createquiz submit={onsumit} />
-            <hr />
-          </div>
-        )}
+        <div className={classes.content}>
+          <Createquiz submit={onsumit} />
+          <hr />
+        </div>
+      )}
     </div>
   );
 }

@@ -23,7 +23,15 @@ const useStyles = makeStyles({
     marginRight: "16px",
     marginBottom: "40px",
   },
-  closeDialog: { fontSize: "18px", width: "20%" },
+  btnImport: {
+    backgroundColor: "#E4FBFF",
+    color: "#00b5e2",
+    marginBottom: "40px",
+  },
+  closeDialog: {
+    fontSize: "18px",
+    width: "20%",
+  },
 });
 
 export default function DialogSelectCreateQuiz(props) {
@@ -55,7 +63,7 @@ export default function DialogSelectCreateQuiz(props) {
           Create New
         </Button>
         <Button
-          className={classes.btnCreateNew}
+          className={classes.btnImport}
           variant="contained"
           size="small"
           onClick={() => handleSelect("IQ")}
