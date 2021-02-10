@@ -67,24 +67,15 @@ const useStyles = makeStyles((theme) => ({
   },
   typotitlePaper: {
     fontFamily: "'Prompt', sans-serif",
-    fontWeight: 500,
-    fontSize: "26px",
+    fontWeight: 600,
+    fontSize: "28px",
     marginLeft: "16px",
-    color: "white",
   },
 }));
 
 function createData(name, calories, fat, carbs) {
   return { name, calories, fat, carbs };
 }
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24),
-  createData("Ice cream sandwich", 237, 9.0, 37),
-  createData("Eclair", 262, 16.0, 24),
-  createData("Cupcake", 305, 3.7, 67),
-  createData("Gingerbread", 356, 16.0, 49),
-];
 
 export default function Class() {
   const classes = useStyles();
@@ -110,10 +101,23 @@ export default function Class() {
     setOpenCreateClassNew(false);
     setroom([...room, newroom]);
   };
+  const handleDeleteroom = (index) => {
+    let newroom = [...room];
+    newroom.splice(index, 1);
+    setroom(newroom);
+  };
+
   return (
     <div className={classes.root}>
       <Grid container spacing={3} direction="column">
-        <Grid item xs={12} container justify="flex-end" alignItems="center">
+        <Grid
+          container
+          item
+          xs={12}
+          alignItems="center"
+          justify="space-between"
+        >
+          <Typography className={classes.typotitlePaper}>MyClass</Typography>
           <Button
             variant="contained"
             className={classes.btnCreate}
@@ -126,7 +130,13 @@ export default function Class() {
 
         <Grid container item xs={12}>
           {room.map((room, index) => {
-            return <CardClass room={room} />;
+            return (
+              <CardClass
+                room={room}
+                index={index}
+                Deleteroom={handleDeleteroom}
+              />
+            );
           })}
         </Grid>
         <DialogCreateClass
