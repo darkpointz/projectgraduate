@@ -52,14 +52,10 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "flex-end",
   },
   btnDelete: {
-    "&:hover": {
-      cursor: "pointer",
-    },
+    color: "black"
   },
   btnAccountBox: {
-    "&:hover": {
-      cursor: "pointer",
-    },
+    color: "black"
   },
 }));
 export default function CardClass(props) {
@@ -84,26 +80,25 @@ export default function CardClass(props) {
           {room.roompublic ? (
             <Public fontSize="large" />
           ) : (
-            <Lock fontSize="large" />
-          )}
+              <Lock fontSize="large" />
+            )}
         </Paper>
       </CardContent>
       <CardActions className={classes.cardActions}>
-        {/* <Link to={`/room/ss`}>
-          <IconButton aria-label="AccountBox">
-            <AccountBox fontSize="large" />
-            
+        <Link to={`/room/ss`}>
+          <IconButton aria-label="iconAccountBox">
+            <AccountBox className={classes.btnAccountBox} fontSize="large" />
           </IconButton>
-        </Link> */}
-        <IconButton aria-label="AccountBox" onClick={() => history.push("/ss")}>
-          <AccountBox fontSize="large" />
+        </Link>
+        <IconButton aria-label="iconDelete">
+          <Delete
+            className={classes.btnDelete}
+            onClick={handledelete}
+            fontSize="large"
+          />
         </IconButton>
-        {/* <AccountBox className={classes.btnAccountBox} fontSize="large" /> */}
-        <Delete
-          className={classes.btnDelete}
-          onClick={handledelete}
-          fontSize="large"
-        />
+
+
       </CardActions>
     </Card>
   );
