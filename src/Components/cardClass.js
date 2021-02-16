@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import { useHistory, Route, Switch, Link, Redirect } from "react-router-dom";
 
 import {
   makeStyles,
   Paper,
-  Button,
+  IconButton,
   FormControl,
   Typography,
   Box,
@@ -64,6 +65,7 @@ const useStyles = makeStyles((theme) => ({
 export default function CardClass(props) {
   const classes = useStyles();
   const { room, index, Deleteroom } = props;
+  const history = useHistory();
   const handledelete = () => {
     Deleteroom(index);
   };
@@ -87,7 +89,16 @@ export default function CardClass(props) {
         </Paper>
       </CardContent>
       <CardActions className={classes.cardActions}>
-        <AccountBox className={classes.btnAccountBox} fontSize="large" />
+        {/* <Link to={`/room/ss`}>
+          <IconButton aria-label="AccountBox">
+            <AccountBox fontSize="large" />
+            
+          </IconButton>
+        </Link> */}
+        <IconButton aria-label="AccountBox" onClick={() => history.push("/ss")}>
+          <AccountBox fontSize="large" />
+        </IconButton>
+        {/* <AccountBox className={classes.btnAccountBox} fontSize="large" /> */}
         <Delete
           className={classes.btnDelete}
           onClick={handledelete}

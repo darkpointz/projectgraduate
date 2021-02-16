@@ -24,6 +24,7 @@ import Lanunch from "../Page/lanunch";
 import Report from "../Page/reports";
 import Quiz from "../Page/quiz";
 import Class from "../Page/class";
+import ClassStudent from "./classStudent";
 
 const drawerWidth = 200;
 
@@ -183,6 +184,9 @@ function Navbar(props) {
             render={(props) => <Report {...props} />}
           />
           <Route exact path="/room" render={(props) => <Class {...props} />} />
+          <Route exact path="/room/:id">
+            <ClassStudent />
+          </Route>
         </Switch>
       </main>
     </div>

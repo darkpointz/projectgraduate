@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter, Route, NavLink, Switch } from "react-router-dom";
-import "./index.css"
+import "./index.css";
 import Navbar from "./Components/navbar";
-import initialFirebase from "./Components/initialFirebase"
+import initialFirebase from "./Components/initialFirebase";
 import { makeStyles } from "@material-ui/core/styles";
 import Lanunch from "./Page/lanunch";
 import Class from "./Page/class";
@@ -11,8 +11,8 @@ import Quiz from "./Page/quiz";
 
 const useStyles = makeStyles({
   container: {
-    display: "flex"
-  }
+    display: "flex",
+  },
 });
 
 export default function App() {
@@ -29,6 +29,5 @@ export default function App() {
       <Route exact path="/room" render={props => <Class {...props} />} />
     </Switch> */}
     </div>
-
   );
 }
