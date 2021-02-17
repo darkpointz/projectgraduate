@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
+import axios from 'axios';
 
 import {
   makeStyles,
@@ -84,6 +85,15 @@ export default function Class() {
   const [openCreateClassNew, setOpenCreateClassNew] = useState(false);
   const [room, setroom] = useState([]);
   const [btnCreate, setbtnCreate] = useState(false);
+
+  useEffect(() => {
+    axios.get(`/getroom`).then(
+      res => {
+        console.log(res.data);
+        setroom(res.data)
+      }
+    )
+  }, [])
 
   const clickCreate = () => {
     setOpenCreateClass(true);

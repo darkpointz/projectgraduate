@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
 import {
   makeStyles,
@@ -69,12 +71,23 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "16px",
   },
 }));
-export default function ClassStudent() {
+export default function ClassStudent({ match }) {
+  let params = useParams();
   const [room, setroom] = useState("Math")
-  const [student, setstudent] = useState([{ stuId: "01", name: "tom" }, { stuId: "02", name: "aod" }, { stuId: "03", name: "cat" }])
+  // const [student, setstudent] = useState([{ stuId: "01", name: "tom" }, { stuId: "02", name: "aod" }, { stuId: "03", name: "cat" }])
+  const [student, setstudent] = useState([]);
+
   const classes = useStyles();
   const [openAddStudent, setOpenAddStudent] = useState(false);
 
+  useEffect(() => {
+    axios.get(`/getroom/${params.id}`).then(
+      res => {
+        console.log(res.data);
+        setstudent(res.data.student)
+      }
+    )
+  }, [])
   return (
     <div className={classes.root}>
       <Grid container spacing={3} direction="column">

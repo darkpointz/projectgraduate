@@ -8,6 +8,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "axios": "^0.21.1",
     "firebase": "^7.24.0",
     "firestore-export-import": "^0.8.0",
     "react": "^16.13.1",
@@ -35,5 +36,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "https://us-central1-project4thquiz.cloudfunctions.net/api"
 }

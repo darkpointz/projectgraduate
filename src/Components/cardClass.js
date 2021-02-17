@@ -85,7 +85,7 @@ export default function CardClass(props) {
         </Paper>
       </CardContent>
       <CardActions className={classes.cardActions}>
-        <Link to={`/room/ss`}>
+        <Link to={`/room/${room.roomId}`}>
           <IconButton aria-label="iconAccountBox">
             <AccountBox className={classes.btnAccountBox} fontSize="large" />
           </IconButton>
