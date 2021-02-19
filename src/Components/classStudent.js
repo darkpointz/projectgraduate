@@ -23,7 +23,7 @@ import { Add, Delete, Edit } from "@material-ui/icons";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: "#6DC9BE",
     color: theme.palette.common.white,
   },
   body: {
@@ -71,6 +71,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 500,
     fontSize: "18px",
+    position: 'sticky'
   },
   typotitlePaper: {
     fontFamily: "'Prompt', sans-serif",
@@ -78,6 +79,9 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "28px",
     marginLeft: "16px",
   },
+  table: {
+    position: "relative"
+  }
 }));
 export default function ClassStudent({ match }) {
   let params = useParams();
@@ -126,9 +130,9 @@ export default function ClassStudent({ match }) {
           </Button>
         </Grid>
         <TableContainer component={Paper}>
-          <Table className={classes.table} aria-label="simple table">
+          <Table className={classes.table} aria-label="simple table" stickyHeader>
             <TableHead>
-              <TableRow>
+              <TableRow className={classes.tableRow}>
                 <StyledTableCell className={classes.TableCellHead}>
                   ID Student
                 </StyledTableCell>

@@ -67,7 +67,24 @@ export default function CardClass(props) {
     Deleteroom(index);
   };
 
-  // const checkAccountBox;
+  const checkAccountBox = (type) => {
+    return (
+      <div>
+        { type
+          ? null
+          : (
+            <Link to={`/room/${room.roomId}`}>
+              <IconButton aria-label="iconAccountBox">
+                <AccountBox className={classes.btnAccountBox} fontSize="large" />
+              </IconButton>
+            </Link>
+          )
+        }
+      </div>
+
+
+    );
+  };
 
   return (
     <Card className={classes.root}>
@@ -83,16 +100,17 @@ export default function CardClass(props) {
           {room.roompublic ? (
             <Public fontSize="large" />
           ) : (
-            <Lock fontSize="large" />
-          )}
+              <Lock fontSize="large" />
+            )}
         </Paper>
       </CardContent>
       <CardActions className={classes.cardActions}>
-        <Link to={`/room/${room.roomId}`}>
+        {checkAccountBox(room.roompublic)}
+        {/* <Link to={`/room/${room.roomId}`}>
           <IconButton aria-label="iconAccountBox">
             <AccountBox className={classes.btnAccountBox} fontSize="large" />
           </IconButton>
-        </Link>
+        </Link> */}
         <IconButton aria-label="iconDelete">
           <Delete
             className={classes.btnDelete}
