@@ -37,5 +37,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://us-central1-project4thquiz.cloudfunctions.net/api"
+  "proxy": "https://asia-southeast2-project4thquiz.cloudfunctions.net/api"
 }

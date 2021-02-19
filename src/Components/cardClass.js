@@ -52,19 +52,22 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "flex-end",
   },
   btnDelete: {
-    color: "black"
+    color: "black",
   },
   btnAccountBox: {
-    color: "black"
+    color: "black",
   },
 }));
 export default function CardClass(props) {
   const classes = useStyles();
   const { room, index, Deleteroom } = props;
   const history = useHistory();
+
   const handledelete = () => {
     Deleteroom(index);
   };
+
+  // const checkAccountBox;
 
   return (
     <Card className={classes.root}>
@@ -80,8 +83,8 @@ export default function CardClass(props) {
           {room.roompublic ? (
             <Public fontSize="large" />
           ) : (
-              <Lock fontSize="large" />
-            )}
+            <Lock fontSize="large" />
+          )}
         </Paper>
       </CardContent>
       <CardActions className={classes.cardActions}>
@@ -97,8 +100,6 @@ export default function CardClass(props) {
             fontSize="large"
           />
         </IconButton>
-
-
       </CardActions>
     </Card>
   );

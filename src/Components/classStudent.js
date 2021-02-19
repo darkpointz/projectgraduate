@@ -1,17 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 import {
+  withStyles,
   makeStyles,
   IconButton,
   Button,
-  FormControl,
+  TableBody,
   Typography,
-  Box,
+  TablePagination,
   Grid,
+  Table,
+  TableCell,
+  TableRow,
+  TableHead,
+  TableContainer,
+  Paper,
 } from "@material-ui/core";
-import { Add, Search } from "@material-ui/icons";
+
+import { Add, Delete, Edit } from "@material-ui/icons";
+
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,28 +59,18 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flexGrow: 1,
   },
-  paper: {
-    backgroundColor: "#6DC8BE",
-    flexGrow: 1,
-    paddingTop: "10px",
-    [theme.breakpoints.down("sm")]: {
-      paddingTop: "6px",
-    },
+  TableCellContent: {
+    fontFamily: "'Prompt', sans-serif",
+    fontWeight: 400,
+    fontSize: "16px",
   },
-  inputRoot: {
-    color: "inherit",
+  icon: {
+    color: "black",
   },
-  formtextfield: {
-    width: "55%",
-  },
-  textfieldSearch: {
-    // padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    // paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-    // transition: theme.transitions.create("width"),
-    // [theme.breakpoints.up("md")]: {
-    //   width: "20ch",
-    // },
+  TableCellHead: {
+    fontFamily: "'Prompt', sans-serif",
+    fontWeight: 500,
+    fontSize: "18px",
   },
   typotitlePaper: {
     fontFamily: "'Prompt', sans-serif",
@@ -73,21 +81,30 @@ const useStyles = makeStyles((theme) => ({
 }));
 export default function ClassStudent({ match }) {
   let params = useParams();
-  const [room, setroom] = useState("Math")
-  // const [student, setstudent] = useState([{ stuId: "01", name: "tom" }, { stuId: "02", name: "aod" }, { stuId: "03", name: "cat" }])
+  const [room, setroom] = useState();
   const [student, setstudent] = useState([]);
+  const [openAddStudent, setOpenAddStudent] = useState(false);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const classes = useStyles();
-  const [openAddStudent, setOpenAddStudent] = useState(false);
 
   useEffect(() => {
-    axios.get(`/getroom/${params.id}`).then(
-      res => {
-        console.log(res.data);
-        setstudent(res.data.student)
-      }
-    )
-  }, [])
+    axios.get(`/getroom/${params.id}`).then((res) => {
+      setroom(res.data.roomName);
+      setstudent(res.data.student);
+    });
+  }, []);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
   return (
     <div className={classes.root}>
       <Grid container spacing={3} direction="column">
@@ -108,8 +125,75 @@ export default function ClassStudent({ match }) {
             <Typography className={classes.typoAddQuiz}>AddStudent</Typography>
           </Button>
         </Grid>
-
-
+        <TableContainer component={Paper}>
+          <Table className={classes.table} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell className={classes.TableCellHead}>
+                  ID Student
+                </StyledTableCell>
+                <StyledTableCell align="left" className={classes.TableCellHead}>
+                  Name
+                </StyledTableCell>
+                <StyledTableCell
+                  align="center"
+                  padding="checkbox"
+                  className={classes.TableCellHead}
+                >
+                  Edit
+                </StyledTableCell>
+                <StyledTableCell
+                  align="center"
+                  padding="checkbox"
+                  className={classes.TableCellHead}
+                >
+                  Delete
+                </StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {student
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((student) => (
+                  // {student.map((student) => (
+                  <TableRow key={student.id}>
+                    <TableCell
+                      component="th"
+                      scope="row"
+                      className={classes.TableCellContent}
+                    >
+                      {student.id}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.TableCellContent}
+                    >
+                      {student.name}
+                    </TableCell>
+                    <TableCell align="right">
+                      <IconButton aria-label="iconEdit">
+                        <Edit className={classes.icon} />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell align="left">
+                      <IconButton aria-label="iconDelete">
+                        <Delete className={classes.icon} />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 20]}
+          component="div"
+          count={student.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+        />
       </Grid>
     </div>
   );
