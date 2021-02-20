@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import DialogAddstudent from "../Components/dialogAddstudent";
 
 import {
   withStyles,
@@ -71,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 500,
     fontSize: "18px",
-    position: 'sticky'
+    position: "sticky",
   },
   typotitlePaper: {
     fontFamily: "'Prompt', sans-serif",
@@ -80,8 +81,8 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "16px",
   },
   table: {
-    position: "relative"
-  }
+    position: "relative",
+  },
 }));
 export default function ClassStudent({ match }) {
   let params = useParams();
@@ -109,6 +110,10 @@ export default function ClassStudent({ match }) {
     setPage(0);
   };
 
+  const handleCloseAddStudent = () => {
+    setOpenAddStudent(false);
+  };
+
   return (
     <div className={classes.root}>
       <Grid container spacing={3} direction="column">
@@ -130,7 +135,11 @@ export default function ClassStudent({ match }) {
           </Button>
         </Grid>
         <TableContainer component={Paper}>
-          <Table className={classes.table} aria-label="simple table" stickyHeader>
+          <Table
+            className={classes.table}
+            aria-label="simple table"
+            stickyHeader
+          >
             <TableHead>
               <TableRow className={classes.tableRow}>
                 <StyledTableCell className={classes.TableCellHead}>
@@ -199,6 +208,7 @@ export default function ClassStudent({ match }) {
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
       </Grid>
+      <DialogAddstudent open={openAddStudent} onClose={handleCloseAddStudent} />
     </div>
   );
 }
