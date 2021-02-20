@@ -29,7 +29,7 @@ const useStyles = makeStyles({
     marginBottom: "40px",
   },
   closeDialog: {
-    fontSize: "18px",
+    fontSize: "16px",
     width: "20%",
   },
 });

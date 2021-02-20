@@ -34,7 +34,7 @@ const useStyles = makeStyles({
     //marginLeft: "10px",
   },
   closeDialog: {
-    fontSize: "18px",
+    fontSize: "16px",
     width: "20%",
   },
   typoSwitch: {

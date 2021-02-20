@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Typography,
   makeStyles,
@@ -7,6 +7,7 @@ import {
   DialogTitle,
   Box,
 } from "@material-ui/core";
+import DialogManualAddstudent from './dialogManualAddStudent'
 
 const useStyles = makeStyles({
   root: {
@@ -29,7 +30,7 @@ const useStyles = makeStyles({
     marginBottom: "40px",
   },
   closeDialog: {
-    fontSize: "18px",
+    fontSize: "16px",
     width: "20%",
   },
 });
@@ -37,43 +38,55 @@ const useStyles = makeStyles({
 export default function DialogAddstudent(props) {
   const classes = useStyles();
   const { onClose, open } = props;
+  const [openDialog, setopenDialog] = useState(false)
 
   const handleClose = () => {
     onClose();
   };
-  const handleSelect = (value) => {
-    onClose(value);
+
+  const handleSelectManual = () => {
+    setopenDialog(true);
+    onClose()
   };
+
+  const handleCloseAddStudent = () => {
+    setopenDialog(false);
+    onClose();
+  };
+
   return (
-    <Dialog onClose={handleClose} open={open}>
-      <div className={classes.root}>
-        <Box display="flex" justifyContent="flex-end">
-          <Button className={classes.closeDialog} onClick={handleClose}>
-            X
+    <>
+      <Dialog onClose={handleClose} open={open}>
+        <div className={classes.root}>
+          <Box display="flex" justifyContent="flex-end">
+            <Button className={classes.closeDialog} onClick={handleClose}>
+              X
           </Button>
-        </Box>
-        <Box display="flex" justifyContent="center">
-          <DialogTitle id="simple-dialog-title">{`Select a add student method`}</DialogTitle>
-        </Box>
-        <Box display="flex" justifyContent="center">
-          <Button
-            className={classes.btnCreateNew}
-            variant="contained"
-            size="small"
-            onClick={() => handleSelect("CN")}
-          >
-            Manual Create
+          </Box>
+          <Box display="flex" justifyContent="center">
+            <DialogTitle id="simple-dialog-title">{`Select a add student method`}</DialogTitle>
+          </Box>
+          <Box display="flex" justifyContent="center">
+            <Button
+              className={classes.btnCreateNew}
+              variant="contained"
+              size="small"
+              onClick={handleSelectManual}
+            >
+              Manual Create
           </Button>
-          <Button
-            className={classes.btnImport}
-            variant="contained"
-            size="small"
-            onClick={() => handleSelect("IQ")}
-          >
-            Import
+            <Button
+              className={classes.btnImport}
+              variant="contained"
+              size="small"
+            // onClick={() => handleSelect("IQ")}
+            >
+              Import
           </Button>
-        </Box>
-      </div>
-    </Dialog>
+          </Box>
+        </div>
+      </Dialog>
+      <DialogManualAddstudent open={openDialog} onClose={handleCloseAddStudent} />
+    </>
   );
 }

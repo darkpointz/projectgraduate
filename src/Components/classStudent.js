@@ -114,6 +114,10 @@ export default function ClassStudent({ match }) {
     setOpenAddStudent(false);
   };
 
+  const addStudent = (newstudent) => {
+
+  }
+
   return (
     <div className={classes.root}>
       <Grid container spacing={3} direction="column">
