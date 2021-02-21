@@ -114,9 +114,7 @@ export default function ClassStudent({ match }) {
     setOpenAddStudent(false);
   };
 
-  const addStudent = (newstudent) => {
-
-  }
+  const addStudent = (newstudent) => {};
 
   return (
     <div className={classes.root}>
@@ -150,7 +148,10 @@ export default function ClassStudent({ match }) {
                   ID Student
                 </StyledTableCell>
                 <StyledTableCell align="left" className={classes.TableCellHead}>
-                  Name
+                  First Name
+                </StyledTableCell>
+                <StyledTableCell align="left" className={classes.TableCellHead}>
+                  Last Name
                 </StyledTableCell>
                 <StyledTableCell
                   align="center"
@@ -172,7 +173,6 @@ export default function ClassStudent({ match }) {
               {student
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((student) => (
-                  // {student.map((student) => (
                   <TableRow key={student.id}>
                     <TableCell
                       component="th"
@@ -185,7 +185,13 @@ export default function ClassStudent({ match }) {
                       align="left"
                       className={classes.TableCellContent}
                     >
-                      {student.name}
+                      {student.fname}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      className={classes.TableCellContent}
+                    >
+                      {student.lname}
                     </TableCell>
                     <TableCell align="right">
                       <IconButton aria-label="iconEdit">

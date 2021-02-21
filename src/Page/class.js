@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import axios from 'axios';
+import axios from "axios";
 
 import {
   makeStyles,
@@ -87,13 +87,11 @@ export default function Class() {
   const [btnCreate, setbtnCreate] = useState(false);
 
   useEffect(() => {
-    axios.get(`/getroom`).then(
-      res => {
-        console.log(res.data);
-        setroom(res.data)
-      }
-    )
-  }, [])
+    axios.get(`/getroom`).then((res) => {
+      console.log(res.data);
+      setroom(res.data);
+    });
+  }, []);
 
   const clickCreate = () => {
     setOpenCreateClass(true);
@@ -109,9 +107,29 @@ export default function Class() {
     setOpenCreateClassNew(false);
   };
   const createroom = (newroom) => {
+    const formroom = { roomName: newroom.room, roompublic: newroom.roompublic };
+    axios
+      .post("/insertroom", formroom)
+      .then((response) => (newroom.roomId = response.message));
+    // formdata.append("room_id", room_id);
+    // formdata.append("user_id", currentuser.user_id);
     setOpenCreateClassNew(false);
     setroom([...room, newroom]);
   };
+  //
+  // const formdata = new FormData()
+  // formdata.append("room_id",room_id)
+  // formdata.append("user_id",currentuser.user_id)
+  // axios.post("http://localhost/webbooking_backend/api/cancelbook.php", formdata)
+  //   .then(response => {
+  //     let newdata = [...room]
+  //     newdata.splice(index, 1)
+  //     setroom(newdata)
+  //   })
+  //   .catch(err => {
+  //     console.error("errrrr : ",err)
+  //   })
+
   const handleDeleteroom = (index) => {
     let newroom = [...room];
     newroom.splice(index, 1);
