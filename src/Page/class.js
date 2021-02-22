@@ -111,29 +111,17 @@ export default function Class() {
     axios
       .post("/insertroom", formroom)
       .then((response) => (newroom.roomId = response.message));
-    // formdata.append("room_id", room_id);
-    // formdata.append("user_id", currentuser.user_id);
     setOpenCreateClassNew(false);
     setroom([...room, newroom]);
   };
-  //
-  // const formdata = new FormData()
-  // formdata.append("room_id",room_id)
-  // formdata.append("user_id",currentuser.user_id)
-  // axios.post("http://localhost/webbooking_backend/api/cancelbook.php", formdata)
-  //   .then(response => {
-  //     let newdata = [...room]
-  //     newdata.splice(index, 1)
-  //     setroom(newdata)
-  //   })
-  //   .catch(err => {
-  //     console.error("errrrr : ",err)
-  //   })
 
-  const handleDeleteroom = (index) => {
+  const handleDeleteroom = (roomId, index) => {
     let newroom = [...room];
     newroom.splice(index, 1);
     setroom(newroom);
+    axios
+      .delete(`/deleteroom/${roomId}`)
+      .then((response) => console.log(response.status));
   };
 
   return (

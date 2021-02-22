@@ -170,53 +170,56 @@ export default function ClassStudent({ match }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {student
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((student) => (
-                  <TableRow key={student.id}>
-                    <TableCell
-                      component="th"
-                      scope="row"
-                      className={classes.TableCellContent}
-                    >
-                      {student.id}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      className={classes.TableCellContent}
-                    >
-                      {student.fname}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      className={classes.TableCellContent}
-                    >
-                      {student.lname}
-                    </TableCell>
-                    <TableCell align="right">
-                      <IconButton aria-label="iconEdit">
-                        <Edit className={classes.icon} />
-                      </IconButton>
-                    </TableCell>
-                    <TableCell align="left">
-                      <IconButton aria-label="iconDelete">
-                        <Delete className={classes.icon} />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
+              {student &&
+                student
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((student) => (
+                    <TableRow key={student.id}>
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        className={classes.TableCellContent}
+                      >
+                        {student.id}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        className={classes.TableCellContent}
+                      >
+                        {student.fname}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        className={classes.TableCellContent}
+                      >
+                        {student.lname}
+                      </TableCell>
+                      <TableCell align="right">
+                        <IconButton aria-label="iconEdit">
+                          <Edit className={classes.icon} />
+                        </IconButton>
+                      </TableCell>
+                      <TableCell align="left">
+                        <IconButton aria-label="iconDelete">
+                          <Delete className={classes.icon} />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 20]}
-          component="div"
-          count={student.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-        />
+        {student ? (
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 20]}
+            component="div"
+            count={student.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+          />
+        ) : null}
       </Grid>
       <DialogAddstudent open={openAddStudent} onClose={handleCloseAddStudent} />
     </div>

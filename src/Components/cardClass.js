@@ -14,6 +14,7 @@ import {
 } from "@material-ui/core";
 import { Public, Lock, AccountBox, Delete } from "@material-ui/icons";
 import ClassStudent from "./classStudent";
+import DialoglDeleteRoom from "./dialogDeleteRoom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,65 +62,67 @@ const useStyles = makeStyles((theme) => ({
 export default function CardClass(props) {
   const classes = useStyles();
   const { room, index, Deleteroom } = props;
-  const history = useHistory();
+  const [opendialogDel, setopendialogDel] = useState(false);
 
   const handledelete = () => {
-    Deleteroom(index);
+    Deleteroom(room.roomId, index);
+    setopendialogDel(false);
+  };
+
+  const canceldialog = () => {
+    setopendialogDel(false);
   };
 
   const checkAccountBox = (type) => {
     return (
       <div>
-        { type
-          ? null
-          : (
-            <Link to={`/room/${room.roomId}`}>
-              <IconButton aria-label="iconAccountBox">
-                <AccountBox className={classes.btnAccountBox} fontSize="large" />
-              </IconButton>
-            </Link>
-          )
-        }
+        {type ? null : (
+          <Link to={`/room/${room.roomId}`}>
+            <IconButton aria-label="iconAccountBox">
+              <AccountBox className={classes.btnAccountBox} fontSize="large" />
+            </IconButton>
+          </Link>
+        )}
       </div>
-
-
     );
   };
 
   return (
-    <Card className={classes.root}>
-      <CardContent className={classes.cardContent}>
-        <Typography
-          className={classes.title}
-          color="textSecondary"
-          gutterBottom
-        >
-          {room.room}
-        </Typography>
-        <Paper className={classes.paperIcon}>
-          {room.roompublic ? (
-            <Public fontSize="large" />
-          ) : (
+    <>
+      <Card className={classes.root}>
+        <CardContent className={classes.cardContent}>
+          <Typography
+            className={classes.title}
+            color="textSecondary"
+            gutterBottom
+          >
+            {room.room}
+          </Typography>
+          <Paper className={classes.paperIcon}>
+            {room.roompublic ? (
+              <Public fontSize="large" />
+            ) : (
               <Lock fontSize="large" />
             )}
-        </Paper>
-      </CardContent>
-      <CardActions className={classes.cardActions}>
-        {checkAccountBox(room.roompublic)}
-        {/* <Link to={`/room/${room.roomId}`}>
-          <IconButton aria-label="iconAccountBox">
-            <AccountBox className={classes.btnAccountBox} fontSize="large" />
+          </Paper>
+        </CardContent>
+        <CardActions className={classes.cardActions}>
+          {checkAccountBox(room.roompublic)}
+          <IconButton aria-label="iconDelete">
+            <Delete
+              className={classes.btnDelete}
+              onClick={() => setopendialogDel(true)}
+              fontSize="large"
+            />
           </IconButton>
-        </Link> */}
-        <IconButton aria-label="iconDelete">
-          <Delete
-            className={classes.btnDelete}
-            onClick={handledelete}
-            fontSize="large"
-          />
-        </IconButton>
-      </CardActions>
-    </Card>
+        </CardActions>
+      </Card>
+      <DialoglDeleteRoom
+        open={opendialogDel}
+        deleteroom={handledelete}
+        cancel={canceldialog}
+      ></DialoglDeleteRoom>
+    </>
   );
 }
 //---
