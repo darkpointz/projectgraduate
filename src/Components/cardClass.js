@@ -12,9 +12,15 @@ import {
   CardActions,
   CardContent,
 } from "@material-ui/core";
-import { Public, Lock, AccountBox, Delete } from "@material-ui/icons";
+import {
+  Public,
+  Lock,
+  AccountBox,
+  Delete,
+  EditTwoTone,
+} from "@material-ui/icons";
 import ClassStudent from "./classStudent";
-import DialoglDeleteRoom from "./dialogDeleteRoom";
+import DialogDelete from "./dialogDelete";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,7 +42,9 @@ const useStyles = makeStyles((theme) => ({
   paperIcon: {
     position: "absolute",
     right: "24px",
-    // borderRadius: "20px",
+    borderRadius: "50px",
+    width: "20%",
+    height: "60%",
   },
   iconPublic: {
     width: "100px",
@@ -57,6 +65,15 @@ const useStyles = makeStyles((theme) => ({
   },
   btnAccountBox: {
     color: "black",
+  },
+  iconEdit: {
+    marginLeft: "16px",
+    color: "#fff",
+    fontSize: 24,
+  },
+  iconTyperoom: {
+    marginTop: "2px",
+    color: "#494944",
   },
 }));
 export default function CardClass(props) {
@@ -91,19 +108,25 @@ export default function CardClass(props) {
     <>
       <Card className={classes.root}>
         <CardContent className={classes.cardContent}>
-          <Typography
-            className={classes.title}
-            color="textSecondary"
-            gutterBottom
-          >
-            {room.room}
-          </Typography>
+          <Box display="flex">
+            <Typography
+              className={classes.title}
+              color="textSecondary"
+              gutterBottom
+            >
+              {room.room}
+            </Typography>
+            <EditTwoTone className={classes.iconEdit} />
+          </Box>
+
           <Paper className={classes.paperIcon}>
-            {room.roompublic ? (
-              <Public fontSize="large" />
-            ) : (
-              <Lock fontSize="large" />
-            )}
+            <Box display="flex" justifyContent="center">
+              {room.roompublic ? (
+                <Public fontSize="large" className={classes.iconTyperoom} />
+              ) : (
+                <Lock fontSize="large" className={classes.iconTyperoom} />
+              )}
+            </Box>
           </Paper>
         </CardContent>
         <CardActions className={classes.cardActions}>
@@ -117,11 +140,11 @@ export default function CardClass(props) {
           </IconButton>
         </CardActions>
       </Card>
-      <DialoglDeleteRoom
+      <DialogDelete
         open={opendialogDel}
-        deleteroom={handledelete}
-        cancel={canceldialog}
-      ></DialoglDeleteRoom>
+        confirm={handledelete}
+        onClose={canceldialog}
+      ></DialogDelete>
     </>
   );
 }

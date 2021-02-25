@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, NavLink, Switch } from "react-router-dom";
 import "./index.css";
-import Navbar from "./Components/navbar";
+import Navbar from "./NavigationBar/navbar";
 import initialFirebase from "./Components/initialFirebase";
 import { makeStyles } from "@material-ui/core/styles";
 import Lanunch from "./Page/lanunch";

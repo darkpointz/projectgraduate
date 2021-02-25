@@ -24,7 +24,7 @@ import Lanunch from "../Page/lanunch";
 import Report from "../Page/reports";
 import Quiz from "../Page/quiz";
 import Class from "../Page/class";
-import ClassStudent from "./classStudent";
+import ClassStudent from "../Components/classStudent";
 
 const drawerWidth = 200;
 

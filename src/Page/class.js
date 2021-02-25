@@ -11,9 +11,8 @@ import {
   Box,
   Grid,
 } from "@material-ui/core";
-import { Add, Search } from "@material-ui/icons";
+import { Add, Search, Edit } from "@material-ui/icons";
 import DialogCreateClass from "../Components/dialogCreateClass";
-import DialogCreateClassNew from "../Components/dialogCreateClassNew";
 import CardClass from "../Components/cardClass";
 
 const useStyles = makeStyles((theme) => ({
@@ -82,9 +81,7 @@ function createData(name, calories, fat, carbs) {
 export default function Class() {
   const classes = useStyles();
   const [openCreateClass, setOpenCreateClass] = useState(false);
-  const [openCreateClassNew, setOpenCreateClassNew] = useState(false);
   const [room, setroom] = useState([]);
-  const [btnCreate, setbtnCreate] = useState(false);
 
   useEffect(() => {
     axios.get(`/getroom`).then((res) => {
@@ -93,26 +90,17 @@ export default function Class() {
     });
   }, []);
 
-  const clickCreate = () => {
-    setOpenCreateClass(true);
-    // setbtnCreate(!btnCreate);
-  };
-  const handleCloseCreateClass = (value) => {
+  const handleClose = (value) => {
     setOpenCreateClass(false);
-    if (value === "CN") {
-      setOpenCreateClassNew(true);
-    }
-  };
-  const handleCloseCreateClassNew = () => {
-    setOpenCreateClassNew(false);
   };
   const createroom = (newroom) => {
     const formroom = { roomName: newroom.room, roompublic: newroom.roompublic };
-    axios
-      .post("/insertroom", formroom)
-      .then((response) => (newroom.roomId = response.message));
-    setOpenCreateClassNew(false);
-    setroom([...room, newroom]);
+    axios.post("/insertroom", formroom).then((response) => {
+      newroom.roomId = response.data.message;
+      console.log(response.data.message);
+      setroom([...room, newroom]);
+    });
+    setOpenCreateClass(false);
   };
 
   const handleDeleteroom = (roomId, index) => {
@@ -158,21 +146,10 @@ export default function Class() {
         </Grid>
         <DialogCreateClass
           open={openCreateClass}
-          onClose={handleCloseCreateClass}
-        />
-        <DialogCreateClassNew
-          open={openCreateClassNew}
           createroom={createroom}
-          onClose={handleCloseCreateClassNew}
+          onClose={handleClose}
         />
       </Grid>
     </div>
   );
 }
-//----
-
-//   <Grid container item xs={12}>
-//   <Paper className={classes.paper}>
-//     <Typography className={classes.typotitlePaper}>Class</Typography>
-//   </Paper>
-// </Grid>

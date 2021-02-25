@@ -138,10 +138,8 @@ export default function Multiplechoice(props) {
           <div className={classes.Answer}>
             <div className={classes.eachAnswer}>
               <Checkbox
-                // icon={<CheckCircleOutline fontSize="small" />}
                 icon={<RadioButtonUnchecked fontSize="small" />}
                 name="correct"
-                // className={classes.checkbox}
                 style={{ color: "#6be17a" }}
                 checked={x.correct}
                 checkedIcon={<CheckCircle />}

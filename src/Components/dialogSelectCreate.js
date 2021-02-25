@@ -36,7 +36,7 @@ const useStyles = makeStyles({
 
 export default function DialogSelectCreateQuiz(props) {
   const classes = useStyles();
-  const { onClose, open } = props;
+  const { onClose, open, name } = props;
 
   const handleClose = () => {
     onClose("0");
@@ -52,7 +52,7 @@ export default function DialogSelectCreateQuiz(props) {
         </Button>
       </Box>
 
-      <DialogTitle id="simple-dialog-title">{`Select a create quiz method`}</DialogTitle>
+      <DialogTitle id="simple-dialog-title">{`Select a ${name} method`}</DialogTitle>
       <div className={classes.root}>
         <Button
           className={classes.btnCreateNew}
@@ -68,7 +68,7 @@ export default function DialogSelectCreateQuiz(props) {
           size="small"
           onClick={() => handleSelect("IQ")}
         >
-          Import Quiz
+          Import
         </Button>
       </div>
     </Dialog>

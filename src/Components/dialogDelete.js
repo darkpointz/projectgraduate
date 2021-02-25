@@ -20,20 +20,21 @@ const useStyles = makeStyles({
   },
 });
 
-export default function DialogDeleteQuiz(props) {
+export default function DialogDelete(props) {
   const classes = useStyles();
-  const { onClose, open } = props;
+  const { open, onClose, confirm } = props;
 
   const handleClose = () => {
-    onClose("0");
+    onClose();
   };
 
   const handlebtnconfirm = () => {
-    onClose("1");
+    confirm();
+    // ${props.step}
   };
   return (
     <Dialog onClose={handleClose} open={open}>
-      <DialogTitle id="simple-dialog-title">{`ยืนยันการลบข้อที่ ${props.step} ?`}</DialogTitle>
+      <DialogTitle id="simple-dialog-title">{`ยืนยันการลบ?`}</DialogTitle>
       <Box display="flex" justifyContent="space-evenly" marginBottom="12px">
         <Button
           className={classes.btnConfirm}

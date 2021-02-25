@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import DialogAddstudent from "../Components/dialogAddstudent";
+import DialogSelectCreate from "../Components/dialogSelectCreate";
+import DialogManualAddstudent from "./dialogManualAddStudent";
 
 import {
   withStyles,
@@ -89,6 +90,7 @@ export default function ClassStudent({ match }) {
   const [room, setroom] = useState();
   const [student, setstudent] = useState([]);
   const [openAddStudent, setOpenAddStudent] = useState(false);
+  const [openDialog, setopenDialog] = useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -110,11 +112,28 @@ export default function ClassStudent({ match }) {
     setPage(0);
   };
 
-  const handleCloseAddStudent = () => {
+  const handleCloseAddStudent = (value) => {
     setOpenAddStudent(false);
+    if (value === "CN") {
+      setopenDialog(true);
+    }
   };
 
-  const addStudent = (newstudent) => {};
+  const handleSavenewstudent = (newstudent) => {
+    setstudent(student.concat(newstudent));
+    setopenDialog(false);
+  };
+
+  const handleDeleteStudent = (index) => {
+    const list = [...student];
+    list.splice(index, 1);
+    setstudent(list);
+  };
+
+  const handleCloseManualAdd = () => {
+    setopenDialog(false);
+    setOpenAddStudent(false);
+  };
 
   return (
     <div className={classes.root}>
@@ -173,7 +192,7 @@ export default function ClassStudent({ match }) {
               {student &&
                 student
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((student) => (
+                  .map((student, i) => (
                     <TableRow key={student.id}>
                       <TableCell
                         component="th"
@@ -200,7 +219,10 @@ export default function ClassStudent({ match }) {
                         </IconButton>
                       </TableCell>
                       <TableCell align="left">
-                        <IconButton aria-label="iconDelete">
+                        <IconButton
+                          aria-label="iconDelete"
+                          onClick={() => handleDeleteStudent(i)}
+                        >
                           <Delete className={classes.icon} />
                         </IconButton>
                       </TableCell>
@@ -221,7 +243,16 @@ export default function ClassStudent({ match }) {
           />
         ) : null}
       </Grid>
-      <DialogAddstudent open={openAddStudent} onClose={handleCloseAddStudent} />
+      <DialogSelectCreate
+        open={openAddStudent}
+        onClose={handleCloseAddStudent}
+        name="add student"
+      />
+      <DialogManualAddstudent
+        open={openDialog}
+        onClose={handleCloseManualAdd}
+        saveNewstudent={handleSavenewstudent}
+      />
     </div>
   );
 }

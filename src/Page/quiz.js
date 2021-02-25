@@ -17,7 +17,7 @@ import {
   Grid,
 } from "@material-ui/core";
 import { Add, Search } from "@material-ui/icons";
-import DialogSelectCreateQuiz from "../Components/dialogSelectCreateQuiz";
+import DialogSelectCreate from "../Components/dialogSelectCreate";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -148,7 +148,11 @@ export default function Quiz() {
             </Paper>
           </Grid>
 
-          <DialogSelectCreateQuiz open={open} onClose={handleClose} />
+          <DialogSelectCreate
+            open={open}
+            onClose={handleClose}
+            name="create quiz"
+          />
         </Grid>
       ) : (
         <div className={classes.content}>
