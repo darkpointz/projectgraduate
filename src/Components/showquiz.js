@@ -178,12 +178,12 @@ const Showquiz = ({ key, list, step, deleteQuiz, savequiz }) => {
     setOpen(true);
   };
 
-  const handleConfirmdialog = (value) => {
+  const handleConfirmdelete = (value) => {
     deleteQuiz(step);
     setOpen(false);
   };
 
-  const canceldialog = () => {
+  const handleCanceldelete = () => {
     setOpen(false);
   };
 
@@ -224,8 +224,8 @@ const Showquiz = ({ key, list, step, deleteQuiz, savequiz }) => {
       ) : null}
       <DialogDelete
         open={open}
-        confirm={handleConfirmdialog}
-        onClose={canceldialog}
+        confirm={handleConfirmdelete}
+        onClose={handleCanceldelete}
       />
       <hr style={{ margin: "12px" }} />
     </div>

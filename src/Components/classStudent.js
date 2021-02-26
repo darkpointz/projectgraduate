@@ -22,6 +22,8 @@ import {
 } from "@material-ui/core";
 
 import { Add, Delete, Edit } from "@material-ui/icons";
+import DialogEditname from "./dialogEditname";
+import DialogDelete from "./dialogDelete";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -93,6 +95,9 @@ export default function ClassStudent({ match }) {
   const [openDialog, setopenDialog] = useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [openEdit, setopenEdit] = useState(false);
+  const [openDelete, setopenDelete] = useState(false);
+  const [index, setindex] = useState();
 
   const classes = useStyles();
 
@@ -124,15 +129,33 @@ export default function ClassStudent({ match }) {
     setopenDialog(false);
   };
 
-  const handleDeleteStudent = (index) => {
-    const list = [...student];
-    list.splice(index, 1);
-    setstudent(list);
-  };
-
   const handleCloseManualAdd = () => {
     setopenDialog(false);
     setOpenAddStudent(false);
+  };
+
+  const handleCloseEdit = () => {
+    setopenEdit(false);
+  };
+
+  const handleClickDelete = (i) => {
+    setindex(i);
+    setopenDelete(true);
+  };
+
+  const handleConfirmdelete = () => {
+    setopenDelete(false);
+    handleDeleteStudent();
+  };
+
+  const handleCanceldelete = () => {
+    setopenDelete(false);
+  };
+
+  const handleDeleteStudent = () => {
+    const list = [...student];
+    list.splice(index, 1);
+    setstudent(list);
   };
 
   return (
@@ -214,14 +237,17 @@ export default function ClassStudent({ match }) {
                         {student.lname}
                       </TableCell>
                       <TableCell align="right">
-                        <IconButton aria-label="iconEdit">
+                        <IconButton
+                          aria-label="iconEdit"
+                          onClick={() => setopenEdit(true)}
+                        >
                           <Edit className={classes.icon} />
                         </IconButton>
                       </TableCell>
                       <TableCell align="left">
                         <IconButton
                           aria-label="iconDelete"
-                          onClick={() => handleDeleteStudent(i)}
+                          onClick={() => handleClickDelete(i)}
                         >
                           <Delete className={classes.icon} />
                         </IconButton>
@@ -252,6 +278,16 @@ export default function ClassStudent({ match }) {
         open={openDialog}
         onClose={handleCloseManualAdd}
         saveNewstudent={handleSavenewstudent}
+      />
+      <DialogEditname
+        open={openEdit}
+        onClose={handleCloseEdit}
+        saveNewstudent={handleSavenewstudent}
+      />
+      <DialogDelete
+        open={openDelete}
+        confirm={handleConfirmdelete}
+        onClose={handleCanceldelete}
       />
     </div>
   );

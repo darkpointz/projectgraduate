@@ -4,17 +4,17 @@ import {
   makeStyles,
   Dialog,
   Button,
-  DialogTitle,
+  useMediaQuery,
   Box,
   TextField,
-  withStyles,
+  useTheme,
+  Grid,
 } from "@material-ui/core";
 import { Clear, Add } from "@material-ui/icons";
 
 const useStyles = makeStyles({
   root: {
-    display: "flex",
-    flexDirection: "column",
+    flexGrow: 1,
   },
   boxTitle: {
     marginTop: "12px",
@@ -67,6 +67,8 @@ const useStyles = makeStyles({
 
 export default function DialogManualAddstudent(props) {
   const classes = useStyles();
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const { onClose, open, saveNewstudent } = props;
   const [openDialog, setopenDialog] = useState(false);
   const [student, setstudent] = useState([{ id: "", fname: "", lname: "" }]);
@@ -103,104 +105,108 @@ export default function DialogManualAddstudent(props) {
   };
 
   return (
-    <Dialog onClose={handleClose} open={open}>
-      <div className={classes.root}>
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-          className={classes.boxTitle}
-        >
-          <Box display="flex">
-            <Typography className={classes.typoTitle}>AddStudent</Typography>
-          </Box>
-          <Box display="flex">
-            <Button className={classes.closeDialog} onClick={handleClose}>
-              <Clear />
-            </Button>
-          </Box>
-        </Box>
-        <form noValidate>
-          <Box display="flex" justifyContent="center" flexDirection="column">
-            {student.map((stu, i) => {
-              return (
-                <Box
-                  className={classes.boxTextfield}
-                  display="flex"
-                  justifyContent="center"
-                  alignContent="center"
-                >
-                  <TextField
-                    className={classes.textfield}
-                    label="IDStudent"
-                    variant="outlined"
-                    size="small"
-                    name="id"
-                    value={stu.id}
-                    onChange={(event) => handleChange(event, i)}
-                  ></TextField>
-                  <TextField
-                    className={classes.textfield}
-                    label="FirstName"
-                    variant="outlined"
-                    size="small"
-                    name="fname"
-                    value={stu.fname}
-                    onChange={(event) => handleChange(event, i)}
-                  ></TextField>
-                  <TextField
-                    className={classes.textfield}
-                    label="LastName"
-                    variant="outlined"
-                    size="small"
-                    name="lname"
-                    value={stu.lname}
-                    onChange={(event) => handleChange(event, i)}
-                  ></TextField>
-                  <Button
-                    onClick={() => handleRemove(i)}
-                    className={classes.buttonRemove}
+    <div className={classes.root}>
+      <Dialog
+        onClose={handleClose}
+        open={open}
+        fullScreen={fullScreen}
+        fullWidth
+      >
+        <Grid container spacing={3}>
+          <Grid container alignItems="center" justify="space-between">
+            <Grid item xs={11}>
+              <Typography className={classes.typoTitle}>AddStudent</Typography>
+            </Grid>
+            <Grid item xs={1}>
+              <Button className={classes.closeDialog} onClick={handleClose}>
+                <Clear />
+              </Button>
+            </Grid>
+          </Grid>
+          <form noValidate>
+            <Box display="flex" justifyContent="center" flexDirection="column">
+              {student.map((stu, i) => {
+                return (
+                  <Box
+                    className={classes.boxTextfield}
+                    display="flex"
+                    justifyContent="center"
+                    alignContent="center"
                   >
-                    <Clear />
+                    <TextField
+                      className={classes.textfield}
+                      fullWidth
+                      label="IDStudent"
+                      variant="outlined"
+                      size="small"
+                      name="id"
+                      value={stu.id}
+                      onChange={(event) => handleChange(event, i)}
+                    ></TextField>
+                    <TextField
+                      className={classes.textfield}
+                      fullWidth
+                      label="FirstName"
+                      variant="outlined"
+                      size="small"
+                      name="fname"
+                      value={stu.fname}
+                      onChange={(event) => handleChange(event, i)}
+                    ></TextField>
+                    <TextField
+                      className={classes.textfield}
+                      label="LastName"
+                      variant="outlined"
+                      size="small"
+                      name="lname"
+                      value={stu.lname}
+                      onChange={(event) => handleChange(event, i)}
+                    ></TextField>
+                    <Button
+                      onClick={() => handleRemove(i)}
+                      className={classes.buttonRemove}
+                    >
+                      <Clear />
+                    </Button>
+                  </Box>
+                );
+              })}
+              <Box display="flex" justifyContent="space-between">
+                <Button
+                  className={classes.btnAddStudent}
+                  size="large"
+                  onClick={handleAddanother}
+                >
+                  <Add />
+                  Add Another
+                </Button>
+                <Box
+                  display="flex"
+                  justifyContent="flex-end"
+                  className={classes.boxButton}
+                >
+                  <Button
+                    className={classes.btnConfirm}
+                    variant="contained"
+                    size="large"
+                    onClick={handleSave}
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    className={classes.btnCancel}
+                    variant="contained"
+                    size="medium"
+                    onClick={handleClose}
+                  >
+                    Cancel
                   </Button>
                 </Box>
-              );
-            })}
-            <Box display="flex" justifyContent="space-between">
-              <Button
-                className={classes.btnAddStudent}
-                size="large"
-                onClick={handleAddanother}
-              >
-                <Add />
-                Add Another
-              </Button>
-              <Box
-                display="flex"
-                justifyContent="flex-end"
-                className={classes.boxButton}
-              >
-                <Button
-                  className={classes.btnConfirm}
-                  variant="contained"
-                  size="large"
-                  onClick={handleSave}
-                >
-                  Save
-                </Button>
-                <Button
-                  className={classes.btnCancel}
-                  variant="contained"
-                  size="medium"
-                  onClick={handleClose}
-                >
-                  Cancel
-                </Button>
               </Box>
             </Box>
-          </Box>
-        </form>
-      </div>
-    </Dialog>
+          </form>
+        </Grid>
+      </Dialog>
+    </div>
   );
 }

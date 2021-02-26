@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import {
-  Typography,
+  DialogContent,
   makeStyles,
   Dialog,
   Button,
   DialogTitle,
   Box,
+  DialogContentText,
 } from "@material-ui/core";
 
 const useStyles = makeStyles({
@@ -34,7 +35,12 @@ export default function DialogDelete(props) {
   };
   return (
     <Dialog onClose={handleClose} open={open}>
-      <DialogTitle id="simple-dialog-title">{`ยืนยันการลบ?`}</DialogTitle>
+      <DialogTitle id="simple-dialog-title">{`Please Confirm`}</DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-slide-description">
+          Are you sure you want to delete?
+        </DialogContentText>
+      </DialogContent>
       <Box display="flex" justifyContent="space-evenly" marginBottom="12px">
         <Button
           className={classes.btnConfirm}
@@ -42,7 +48,7 @@ export default function DialogDelete(props) {
           size="medium"
           onClick={handlebtnconfirm}
         >
-          ตกลง
+          Yes
         </Button>
         <Button
           className={classes.btnCancel}
@@ -50,7 +56,7 @@ export default function DialogDelete(props) {
           size="medium"
           onClick={handleClose}
         >
-          ยกเลิก
+          No
         </Button>
       </Box>
     </Dialog>
