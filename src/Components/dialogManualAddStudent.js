@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import { Clear, Add } from "@material-ui/icons";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
@@ -35,8 +35,10 @@ const useStyles = makeStyles({
     marginLeft: "16px",
   },
   textfield: {
-    marginBottom: "10px",
-    marginRight: "10px",
+    // padding: theme.spacing(2),
+    margin: theme.spacing(2),
+    // marginBottom: "10px",
+    // marginRight: "10px",
   },
   buttonRemove: {
     padding: "0px",
@@ -63,7 +65,7 @@ const useStyles = makeStyles({
     marginRight: "16px",
     borderRadius: "9px",
   },
-});
+}));
 
 export default function DialogManualAddstudent(props) {
   const classes = useStyles();
@@ -106,14 +108,17 @@ export default function DialogManualAddstudent(props) {
 
   return (
     <div className={classes.root}>
-      <Dialog
-        onClose={handleClose}
-        open={open}
-        fullScreen={fullScreen}
-        fullWidth
-      >
-        <Grid container spacing={3}>
-          <Grid container alignItems="center" justify="space-between">
+      <Grid container spacing={7}>
+        <Dialog
+          onClose={handleClose}
+          open={open}
+          fullScreen={fullScreen}
+          fullWidth
+        >
+          <Grid
+            container
+            justify="center"
+          >
             <Grid item xs={11}>
               <Typography className={classes.typoTitle}>AddStudent</Typography>
             </Grid>
@@ -124,51 +129,64 @@ export default function DialogManualAddstudent(props) {
             </Grid>
           </Grid>
           <form noValidate>
-            <Box display="flex" justifyContent="center" flexDirection="column">
+            <Grid
+              container
+              direction="row"
+            >
               {student.map((stu, i) => {
                 return (
-                  <Box
+                  <Grid
                     className={classes.boxTextfield}
-                    display="flex"
-                    justifyContent="center"
-                    alignContent="center"
+                    container
+                  // justifyContent="center"
+                  // alignItems="center"
                   >
-                    <TextField
-                      className={classes.textfield}
-                      fullWidth
-                      label="IDStudent"
-                      variant="outlined"
-                      size="small"
-                      name="id"
-                      value={stu.id}
-                      onChange={(event) => handleChange(event, i)}
-                    ></TextField>
-                    <TextField
-                      className={classes.textfield}
-                      fullWidth
-                      label="FirstName"
-                      variant="outlined"
-                      size="small"
-                      name="fname"
-                      value={stu.fname}
-                      onChange={(event) => handleChange(event, i)}
-                    ></TextField>
-                    <TextField
-                      className={classes.textfield}
-                      label="LastName"
-                      variant="outlined"
-                      size="small"
-                      name="lname"
-                      value={stu.lname}
-                      onChange={(event) => handleChange(event, i)}
-                    ></TextField>
-                    <Button
-                      onClick={() => handleRemove(i)}
-                      className={classes.buttonRemove}
-                    >
-                      <Clear />
-                    </Button>
-                  </Box>
+                    <Grid item xs={3}>
+                      <TextField
+                        className={classes.textfield}
+                        fullWidth
+                        label="IDStudent"
+                        variant="outlined"
+                        size="small"
+                        name="id"
+                        value={stu.id}
+                        onChange={(event) => handleChange(event, i)}
+                      ></TextField>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <TextField
+                        className={classes.textfield}
+                        fullWidth
+                        label="FirstName"
+                        variant="outlined"
+                        size="small"
+                        name="fname"
+                        value={stu.fname}
+                        onChange={(event) => handleChange(event, i)}
+                      ></TextField>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <TextField
+                        className={classes.textfield}
+                        fullWidth
+                        label="LastName"
+                        variant="outlined"
+                        size="small"
+                        name="lname"
+                        value={stu.lname}
+                        onChange={(event) => handleChange(event, i)}
+                      ></TextField>
+                    </Grid>
+                    <Grid item xs={1}>
+                      <Button
+                        onClick={() => handleRemove(i)}
+                        className={classes.buttonRemove}
+                      >
+                        <Clear />
+                      </Button>
+                    </Grid>
+
+                  </Grid>
                 );
               })}
               <Box display="flex" justifyContent="space-between">
@@ -203,10 +221,11 @@ export default function DialogManualAddstudent(props) {
                   </Button>
                 </Box>
               </Box>
-            </Box>
+            </Grid>
           </form>
-        </Grid>
-      </Dialog>
+
+        </Dialog>
+      </Grid>
     </div>
   );
 }
