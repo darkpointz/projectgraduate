@@ -12,7 +12,10 @@ import {
   Paper,
   DialogContent,
   DialogContentText,
+  Divider,
+  DialogTitle
 } from "@material-ui/core";
+
 import { Clear, Add } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
@@ -29,10 +32,6 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 600,
     fontSize: "20px",
   },
-  closeDialog: {
-    fontSize: "16px",
-    width: "20%",
-  },
   boxTextfield: {
     marginRight: "16px",
     //  marginLeft: "16px",
@@ -48,8 +47,9 @@ const useStyles = makeStyles((theme) => ({
     // margin: "auto",
   },
   buttonRemove: {
-    padding: "0px",
+    //padding: "0px",
     color: "#6D9EC4",
+    fontSize: "16px",
   },
   btnAddStudent: {
     marginLeft: "16px",
@@ -57,19 +57,21 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "'Prompt', sans-serif",
     color: "#6D9EC4",
   },
-  boxButton: { marginBottom: "10px" },
+  boxButton: {
+    marginBottom: "10px"
+  },
   btnConfirm: {
     fontFamily: "'Prompt', sans-serif",
     backgroundColor: "#00b5e2",
     color: "white",
-    marginRight: "16px",
+    // marginRight: "16px",
     borderRadius: "9px",
   },
   btnCancel: {
     fontFamily: "'Prompt', sans-serif",
     backgroundColor: "#E4FBFF",
     color: "#00b5e2",
-    marginRight: "16px",
+    // marginRight: "16px",
     borderRadius: "9px",
   },
   paperTextfield: {
@@ -83,12 +85,24 @@ const useStyles = makeStyles((theme) => ({
     margin: "10px 0",
     overflow: "hidden",
   },
+  typoDialogContent: {
+    fontFamily: "'Prompt', sans-serif",
+    fontWeight: 600,
+    fontSize: "18px",
+    marginLeft: "12px",
+  },
+  gridbtnCancel: {
+    display: "flex",
+    [theme.breakpoints.down("sm")]: {
+      justify: "flex-start",
+    },
+  }
 }));
 
 export default function DialogManualAddstudent(props) {
   const classes = useStyles();
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const fullScreen = useMediaQuery(theme.breakpoints.down("xs"));
   const { onClose, open, saveNewstudent } = props;
   const [openDialog, setopenDialog] = useState(false);
   const [student, setstudent] = useState([{ id: "", fname: "", lname: "" }]);
@@ -135,7 +149,7 @@ export default function DialogManualAddstudent(props) {
       maxWidth="md"
       aria-labelledby="form-dialog-title"
     >
-      <DialogContent>
+      <DialogContent >
         <Grid spacing={1} className={classes.root} container direction="column">
           <Grid
             item
@@ -144,6 +158,7 @@ export default function DialogManualAddstudent(props) {
             className={classes.boxTitle}
             alignItems="center"
           >
+            {/* <DialogTitle className={classes.typoTitle}>AddStudent</DialogTitle> */}
             <Typography className={classes.typoTitle}>AddStudent</Typography>
           </Grid>
 
@@ -158,31 +173,60 @@ export default function DialogManualAddstudent(props) {
                   direction="column"
                   item
                   xs={12}
+                  lg={12}
                 >
-                  <Paper elevation={2} className={classes.paperTextfield}>
+                  <Paper elevation={3} className={classes.paperTextfield}>
                     <Grid
                       item
                       xs={12}
+                      lg={12}
                       container
                       alignItems="center"
                       className={classes.groupTextField}
                     >
-                      <DialogContentText>
-                        To subscribe to this website, please enter your email
-                        address here. We will send updates occasionally.
-                      </DialogContentText>
-                      <dividers />
-                      <Grid item xs={4}>
+                      <Grid
+                        item
+                        xs={11}
+                        lg={11}
+                      >
+                        <DialogContentText >
+                          <Typography component="div" className={classes.typoDialogContent}>
+                            {`Person: ${i + 1}`}
+                          </Typography>
+
+                        </DialogContentText>
+                      </Grid>
+                      <Grid
+                        item xs={1}
+                        lg={1}
+                        container
+                        justify="flex-end"
+                      >
+                        <Button
+                          className={classes.buttonRemove}
+                          onClick={() => handleRemove(i)}
+                        >
+                          <Clear />
+                        </Button>
+                      </Grid>
+                      <Grid
+                        item
+                        xs={12}
+                        lg={12}
+                        style={{ marginBottom: "12px" }}
+                      >
+                        <Divider />
+                      </Grid>
+
+                      <Grid item xs={4} lg={2}>
                         <Typography className={classes.textfield}>
                           IDStudent :
                         </Typography>
                       </Grid>
-                      <Grid item xs={8}>
+                      <Grid item xs={8} lg={10}>
                         <TextField
                           // fullWidth
                           // label="IDStudent"
-                          // autoFocus
-                          // margin="dense"
                           variant="outlined"
                           size="small"
                           name="id"
@@ -191,20 +235,20 @@ export default function DialogManualAddstudent(props) {
                         ></TextField>
                       </Grid>
                     </Grid>
-
                     <Grid
                       item
                       xs={12}
+                      lg={12}
                       container
                       alignItems="center"
                       className={classes.groupTextField}
                     >
-                      <Grid item xs={4}>
+                      <Grid item xs={4} lg={2}>
                         <Typography className={classes.textfield}>
                           FirstName :
                         </Typography>
                       </Grid>
-                      <Grid item xs={8}>
+                      <Grid item xs={8} lg={10}>
                         <TextField
                           variant="outlined"
                           size="small"
@@ -214,19 +258,21 @@ export default function DialogManualAddstudent(props) {
                         ></TextField>
                       </Grid>
                     </Grid>
+
                     <Grid
                       item
                       xs={12}
+                      lg={12}
                       container
                       alignItems="center"
                       className={classes.groupTextField}
                     >
-                      <Grid item xs={4}>
+                      <Grid item xs={4} lg={2}>
                         <Typography className={classes.textfield}>
                           LastName :
                         </Typography>
                       </Grid>
-                      <Grid item xs={8}>
+                      <Grid item xs={8} lg={10}>
                         <TextField
                           variant="outlined"
                           size="small"
@@ -236,19 +282,12 @@ export default function DialogManualAddstudent(props) {
                         ></TextField>
                       </Grid>
                     </Grid>
-                    <Grid item xs={1}>
-                      <Button
-                        onClick={() => handleRemove(i)}
-                        className={classes.buttonRemove}
-                      >
-                        <Clear />
-                      </Button>
-                    </Grid>
                   </Paper>
                 </Grid>
               );
             })}
-            <Box display="flex" justifyContent="space-between">
+
+            <Grid item xs={12} lg={12}>
               <Button
                 className={classes.btnAddStudent}
                 size="large"
@@ -257,10 +296,38 @@ export default function DialogManualAddstudent(props) {
                 <Add />
                 Add Another
               </Button>
-              <Box
-                display="flex"
-                justifyContent="flex-end"
-                className={classes.boxButton}
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              lg={12}
+              container
+              alignItems="center"
+            >
+              <Grid
+                item
+                xs={8}
+                lg={10}
+                container
+                justify="flex-end"
+                className={classes.gridbtnCancel}
+              >
+                <Button
+                  className={classes.btnCancel}
+                  variant="contained"
+                  size="medium"
+                  onClick={handleClose}
+                >
+                  Cancel
+                </Button>
+
+              </Grid>
+              <Grid
+                item
+                xs={4}
+                lg={2}
+                container
+                justify="center"
               >
                 <Button
                   className={classes.btnConfirm}
@@ -270,16 +337,8 @@ export default function DialogManualAddstudent(props) {
                 >
                   Save
                 </Button>
-                <Button
-                  className={classes.btnCancel}
-                  variant="contained"
-                  size="medium"
-                  onClick={handleClose}
-                >
-                  Cancel
-                </Button>
-              </Box>
-            </Box>
+              </Grid>
+            </Grid>
           </form>
         </Grid>
       </DialogContent>
