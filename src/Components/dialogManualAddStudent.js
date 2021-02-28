@@ -9,6 +9,9 @@ import {
   TextField,
   useTheme,
   Grid,
+  Paper,
+  DialogContent,
+  DialogContentText,
 } from "@material-ui/core";
 import { Clear, Add } from "@material-ui/icons";
 
@@ -18,13 +21,13 @@ const useStyles = makeStyles((theme) => ({
   },
   boxTitle: {
     marginTop: "12px",
-    marginLeft: "16px",
+    marginLeft: "9px",
     //marginRight: "16px",
   },
   typoTitle: {
     fontFamily: "'Prompt', sans-serif",
-    fontWeight: 500,
-    fontSize: "18px",
+    fontWeight: 600,
+    fontSize: "20px",
   },
   closeDialog: {
     fontSize: "16px",
@@ -32,13 +35,17 @@ const useStyles = makeStyles((theme) => ({
   },
   boxTextfield: {
     marginRight: "16px",
-    marginLeft: "16px",
+    //  marginLeft: "16px",
   },
   textfield: {
+    fontFamily: "'Prompt', sans-serif",
+    fontWeight: 500,
+    fontSize: "16px",
     // padding: theme.spacing(2),
-    margin: theme.spacing(2),
+    // margin: theme.spacing(2),
     // marginBottom: "10px",
-    // marginRight: "10px",
+    marginLeft: "12px",
+    // margin: "auto",
   },
   buttonRemove: {
     padding: "0px",
@@ -64,6 +71,17 @@ const useStyles = makeStyles((theme) => ({
     color: "#00b5e2",
     marginRight: "16px",
     borderRadius: "9px",
+  },
+  paperTextfield: {
+    width: "95%",
+    margin: "10px 10px 0 10px",
+    // overflow: "hidden",
+    //padding: theme.spacing(5),
+    // marginLeft: "10px",
+  },
+  groupTextField: {
+    margin: "10px 0",
+    overflow: "hidden",
   },
 }));
 
@@ -107,75 +125,116 @@ export default function DialogManualAddstudent(props) {
   };
 
   return (
-    <div className={classes.root}>
-      <Grid container spacing={7}>
-        <Dialog
-          onClose={handleClose}
-          open={open}
-          fullScreen={fullScreen}
-          fullWidth
-        >
+    // <Grid container spacing={2} className={classes.root}>
+
+    <Dialog
+      open={open}
+      fullScreen={fullScreen}
+      // fullScreen={fullScreen}
+      fullWidth
+      maxWidth="md"
+      aria-labelledby="form-dialog-title"
+    >
+      <DialogContent>
+        <Grid spacing={1} className={classes.root} container direction="column">
           <Grid
+            item
+            xs={12}
             container
-            justify="center"
+            className={classes.boxTitle}
+            alignItems="center"
           >
-            <Grid item xs={11}>
-              <Typography className={classes.typoTitle}>AddStudent</Typography>
-            </Grid>
-            <Grid item xs={1}>
-              <Button className={classes.closeDialog} onClick={handleClose}>
-                <Clear />
-              </Button>
-            </Grid>
+            <Typography className={classes.typoTitle}>AddStudent</Typography>
           </Grid>
+
           <form noValidate>
-            <Grid
-              container
-              direction="row"
-            >
-              {student.map((stu, i) => {
-                return (
-                  <Grid
-                    className={classes.boxTextfield}
-                    container
+            {student.map((stu, i) => {
+              return (
+                <Grid
+                  //className={classes.boxTextfield}
+                  container
                   // justifyContent="center"
                   // alignItems="center"
-                  >
-                    <Grid item xs={3}>
-                      <TextField
-                        className={classes.textfield}
-                        fullWidth
-                        label="IDStudent"
-                        variant="outlined"
-                        size="small"
-                        name="id"
-                        value={stu.id}
-                        onChange={(event) => handleChange(event, i)}
-                      ></TextField>
+                  direction="column"
+                  item
+                  xs={12}
+                >
+                  <Paper elevation={2} className={classes.paperTextfield}>
+                    <Grid
+                      item
+                      xs={12}
+                      container
+                      alignItems="center"
+                      className={classes.groupTextField}
+                    >
+                      <DialogContentText>
+                        To subscribe to this website, please enter your email
+                        address here. We will send updates occasionally.
+                      </DialogContentText>
+                      <dividers />
+                      <Grid item xs={4}>
+                        <Typography className={classes.textfield}>
+                          IDStudent :
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={8}>
+                        <TextField
+                          // fullWidth
+                          // label="IDStudent"
+                          // autoFocus
+                          // margin="dense"
+                          variant="outlined"
+                          size="small"
+                          name="id"
+                          value={stu.id}
+                          onChange={(event) => handleChange(event, i)}
+                        ></TextField>
+                      </Grid>
                     </Grid>
-                    <Grid item xs={4}>
-                      <TextField
-                        className={classes.textfield}
-                        fullWidth
-                        label="FirstName"
-                        variant="outlined"
-                        size="small"
-                        name="fname"
-                        value={stu.fname}
-                        onChange={(event) => handleChange(event, i)}
-                      ></TextField>
+
+                    <Grid
+                      item
+                      xs={12}
+                      container
+                      alignItems="center"
+                      className={classes.groupTextField}
+                    >
+                      <Grid item xs={4}>
+                        <Typography className={classes.textfield}>
+                          FirstName :
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={8}>
+                        <TextField
+                          variant="outlined"
+                          size="small"
+                          name="fname"
+                          value={stu.fname}
+                          onChange={(event) => handleChange(event, i)}
+                        ></TextField>
+                      </Grid>
                     </Grid>
-                    <Grid item xs={4}>
-                      <TextField
-                        className={classes.textfield}
-                        fullWidth
-                        label="LastName"
-                        variant="outlined"
-                        size="small"
-                        name="lname"
-                        value={stu.lname}
-                        onChange={(event) => handleChange(event, i)}
-                      ></TextField>
+                    <Grid
+                      item
+                      xs={12}
+                      container
+                      alignItems="center"
+                      className={classes.groupTextField}
+                    >
+                      <Grid item xs={4}>
+                        <Typography className={classes.textfield}>
+                          LastName :
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={8}>
+                        <TextField
+                          variant="outlined"
+                          size="small"
+                          name="lname"
+                          value={stu.lname}
+                          onChange={(event) => handleChange(event, i)}
+                        ></TextField>
+                      </Grid>
                     </Grid>
                     <Grid item xs={1}>
                       <Button
@@ -185,47 +244,45 @@ export default function DialogManualAddstudent(props) {
                         <Clear />
                       </Button>
                     </Grid>
-
-                  </Grid>
-                );
-              })}
-              <Box display="flex" justifyContent="space-between">
+                  </Paper>
+                </Grid>
+              );
+            })}
+            <Box display="flex" justifyContent="space-between">
+              <Button
+                className={classes.btnAddStudent}
+                size="large"
+                onClick={handleAddanother}
+              >
+                <Add />
+                Add Another
+              </Button>
+              <Box
+                display="flex"
+                justifyContent="flex-end"
+                className={classes.boxButton}
+              >
                 <Button
-                  className={classes.btnAddStudent}
+                  className={classes.btnConfirm}
+                  variant="contained"
                   size="large"
-                  onClick={handleAddanother}
+                  onClick={handleSave}
                 >
-                  <Add />
-                  Add Another
+                  Save
                 </Button>
-                <Box
-                  display="flex"
-                  justifyContent="flex-end"
-                  className={classes.boxButton}
+                <Button
+                  className={classes.btnCancel}
+                  variant="contained"
+                  size="medium"
+                  onClick={handleClose}
                 >
-                  <Button
-                    className={classes.btnConfirm}
-                    variant="contained"
-                    size="large"
-                    onClick={handleSave}
-                  >
-                    Save
-                  </Button>
-                  <Button
-                    className={classes.btnCancel}
-                    variant="contained"
-                    size="medium"
-                    onClick={handleClose}
-                  >
-                    Cancel
-                  </Button>
-                </Box>
+                  Cancel
+                </Button>
               </Box>
-            </Grid>
+            </Box>
           </form>
-
-        </Dialog>
-      </Grid>
-    </div>
+        </Grid>
+      </DialogContent>
+    </Dialog>
   );
 }
