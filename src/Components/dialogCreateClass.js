@@ -61,24 +61,24 @@ const ChangeSwitch = withStyles({
 
 export default function DialogCreateClass(props) {
   const classes = useStyles();
-  const [roompublic, setroompublic] = useState(false);
-  const [room, setroom] = useState("");
+  const [roomPublic, setroomPublic] = useState(false);
+  const [roomName, setroomName] = useState("");
   const { onClose, open, createroom } = props;
 
   const handleClose = () => {
     onClose();
   };
   const handlesubmit = () => {
-    const newroom = { room, roompublic };
+    const newroom = { roomName, roomPublic };
     createroom(newroom);
-    setroom("");
-    setroompublic(false);
+    setroomName("");
+    setroomPublic(false);
   };
   const handleChange = (event) => {
-    setroompublic(event.target.checked);
+    setroomPublic(event.target.checked);
   };
   const handletxtfield = (event) => {
-    setroom(event.target.value);
+    setroomName(event.target.value);
   };
 
   return (
@@ -102,13 +102,13 @@ export default function DialogCreateClass(props) {
           <TextField
             id="filled-required"
             label="Enter Room Name"
-            value={room}
+            value={roomName}
             onChange={handletxtfield}
             className={classes.txtfield}
           ></TextField>
           <Typography className={classes.typoSwitch}>Public</Typography>
           <ChangeSwitch
-            checked={roompublic}
+            checked={roomPublic}
             onChange={handleChange}
             color="primary"
             name="checkedB"

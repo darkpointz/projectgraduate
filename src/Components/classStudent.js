@@ -102,9 +102,9 @@ export default function ClassStudent({ match }) {
   const classes = useStyles();
 
   useEffect(() => {
-    axios.get(`/getroom/${params.id}`).then((res) => {
-      setroom(res.data.roomName);
-      setstudent(res.data.student);
+    axios.get(`/room/getRoomById/${params.id}`).then((res) => {
+      setroom(res.data.room.roomName);
+      setstudent(res.data.room.student);
     });
   }, []);
 
@@ -126,6 +126,15 @@ export default function ClassStudent({ match }) {
 
   const handleSavenewstudent = (newstudent) => {
     setstudent(student.concat(newstudent));
+    const formroom = {
+      student: newstudent,
+    };
+    console.log(formroom);
+    axios
+      .put(`/room/insertStudentByRoomId/${params.id}`, formroom)
+      .then((res) => {
+        console.log(res);
+      });
     setopenDialog(false);
   };
 

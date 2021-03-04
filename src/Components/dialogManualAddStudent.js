@@ -13,7 +13,7 @@ import {
   DialogContent,
   DialogContentText,
   Divider,
-  DialogTitle
+  DialogTitle,
 } from "@material-ui/core";
 
 import { Clear, Add } from "@material-ui/icons";
@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
     color: "#6D9EC4",
   },
   boxButton: {
-    marginBottom: "10px"
+    marginBottom: "10px",
   },
   btnConfirm: {
     fontFamily: "'Prompt', sans-serif",
@@ -96,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("sm")]: {
       justify: "flex-start",
     },
-  }
+  },
 }));
 
 export default function DialogManualAddstudent(props) {
@@ -149,7 +149,7 @@ export default function DialogManualAddstudent(props) {
       maxWidth="md"
       aria-labelledby="form-dialog-title"
     >
-      <DialogContent >
+      <DialogContent>
         <Grid spacing={1} className={classes.root} container direction="column">
           <Grid
             item
@@ -158,23 +158,13 @@ export default function DialogManualAddstudent(props) {
             className={classes.boxTitle}
             alignItems="center"
           >
-            {/* <DialogTitle className={classes.typoTitle}>AddStudent</DialogTitle> */}
             <Typography className={classes.typoTitle}>AddStudent</Typography>
           </Grid>
 
           <form noValidate>
             {student.map((stu, i) => {
               return (
-                <Grid
-                  //className={classes.boxTextfield}
-                  container
-                  // justifyContent="center"
-                  // alignItems="center"
-                  direction="column"
-                  item
-                  xs={12}
-                  lg={12}
-                >
+                <Grid container item xs={12} lg={12}>
                   <Paper elevation={3} className={classes.paperTextfield}>
                     <Grid
                       item
@@ -184,24 +174,17 @@ export default function DialogManualAddstudent(props) {
                       alignItems="center"
                       className={classes.groupTextField}
                     >
-                      <Grid
-                        item
-                        xs={11}
-                        lg={11}
-                      >
-                        <DialogContentText >
-                          <Typography component="div" className={classes.typoDialogContent}>
+                      <Grid item xs={11} lg={11}>
+                        <DialogContentText>
+                          <Typography
+                            component="div"
+                            className={classes.typoDialogContent}
+                          >
                             {`Person: ${i + 1}`}
                           </Typography>
-
                         </DialogContentText>
                       </Grid>
-                      <Grid
-                        item xs={1}
-                        lg={1}
-                        container
-                        justify="flex-end"
-                      >
+                      <Grid item xs={1} lg={1} container justify="flex-end">
                         <Button
                           className={classes.buttonRemove}
                           onClick={() => handleRemove(i)}
@@ -297,13 +280,7 @@ export default function DialogManualAddstudent(props) {
                 Add Another
               </Button>
             </Grid>
-            <Grid
-              item
-              xs={12}
-              lg={12}
-              container
-              alignItems="center"
-            >
+            <Grid item xs={12} lg={12} container alignItems="center">
               <Grid
                 item
                 xs={8}
@@ -320,15 +297,8 @@ export default function DialogManualAddstudent(props) {
                 >
                   Cancel
                 </Button>
-
               </Grid>
-              <Grid
-                item
-                xs={4}
-                lg={2}
-                container
-                justify="center"
-              >
+              <Grid item xs={4} lg={2} container justify="center">
                 <Button
                   className={classes.btnConfirm}
                   variant="contained"

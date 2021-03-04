@@ -114,14 +114,14 @@ export default function CardClass(props) {
               color="textSecondary"
               gutterBottom
             >
-              {room.room}
+              {room.roomName}
             </Typography>
             <EditTwoTone className={classes.iconEdit} />
           </Box>
 
           <Paper className={classes.paperIcon}>
             <Box display="flex" justifyContent="center">
-              {room.roompublic ? (
+              {room.roomPublic ? (
                 <Public fontSize="large" className={classes.iconTyperoom} />
               ) : (
                 <Lock fontSize="large" className={classes.iconTyperoom} />
@@ -130,7 +130,7 @@ export default function CardClass(props) {
           </Paper>
         </CardContent>
         <CardActions className={classes.cardActions}>
-          {checkAccountBox(room.roompublic)}
+          {checkAccountBox(room.roomPublic)}
           <IconButton aria-label="iconDelete">
             <Delete
               className={classes.btnDelete}

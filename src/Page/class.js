@@ -84,7 +84,7 @@ export default function Class() {
   const [room, setroom] = useState([]);
 
   useEffect(() => {
-    axios.get(`/getroom`).then((res) => {
+    axios.get(`/room/getAllRoom`).then((res) => {
       console.log(res.data);
       setroom(res.data);
     });
@@ -94,8 +94,11 @@ export default function Class() {
     setOpenCreateClass(false);
   };
   const createroom = (newroom) => {
-    const formroom = { roomName: newroom.room, roompublic: newroom.roompublic };
-    axios.post("/insertroom", formroom).then((response) => {
+    const formroom = {
+      roomName: newroom.roomName,
+      roomPublic: newroom.roomPublic,
+    };
+    axios.post("/room/insertRoom", formroom).then((response) => {
       newroom.roomId = response.data.message;
       console.log(response.data.message);
       setroom([...room, newroom]);
@@ -108,7 +111,7 @@ export default function Class() {
     newroom.splice(index, 1);
     setroom(newroom);
     axios
-      .delete(`/deleteroom/${roomId}`)
+      .delete(`/room/deleteRoomByRoomId/${roomId}`)
       .then((response) => console.log(response.status));
   };
 
