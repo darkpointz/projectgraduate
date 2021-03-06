@@ -126,12 +126,12 @@ export default function ClassStudent({ match }) {
 
   const handleSavenewstudent = (newstudent) => {
     setstudent(student.concat(newstudent));
-    const formroom = {
+    const formStudent = {
       student: newstudent,
     };
-    console.log(formroom);
+    console.log(formStudent);
     axios
-      .put(`/room/insertStudentByRoomId/${params.id}`, formroom)
+      .put(`/room/insertStudentByRoomId/${params.id}`, formStudent)
       .then((res) => {
         console.log(res);
       });
@@ -163,8 +163,18 @@ export default function ClassStudent({ match }) {
 
   const handleDeleteStudent = () => {
     const list = [...student];
-    list.splice(index, 1);
-    setstudent(list);
+    axios
+      .delete(
+        `/room/deleteStudentByRoomId/${params.id}/${student[index].stuid}`
+      )
+      .then((res) => {
+        console.log(res);
+        list.splice(index, 1);
+        setstudent(list);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -225,13 +235,13 @@ export default function ClassStudent({ match }) {
                 student
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((student, i) => (
-                    <TableRow key={student.id}>
+                    <TableRow key={student.stuid}>
                       <TableCell
                         component="th"
                         scope="row"
                         className={classes.TableCellContent}
                       >
-                        {student.id}
+                        {student.stuid}
                       </TableCell>
                       <TableCell
                         align="left"

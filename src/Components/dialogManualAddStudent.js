@@ -105,7 +105,7 @@ export default function DialogManualAddstudent(props) {
   const fullScreen = useMediaQuery(theme.breakpoints.down("xs"));
   const { onClose, open, saveNewstudent } = props;
   const [openDialog, setopenDialog] = useState(false);
-  const [student, setstudent] = useState([{ id: "", fname: "", lname: "" }]);
+  const [student, setstudent] = useState([{ stuid: "", fname: "", lname: "" }]);
 
   const handleClose = () => {
     onClose();
@@ -123,7 +123,7 @@ export default function DialogManualAddstudent(props) {
   };
 
   const handleAddanother = () => {
-    setstudent([...student, { id: "", fname: "", lname: "" }]);
+    setstudent([...student, { stuid: "", fname: "", lname: "" }]);
   };
 
   const handleRemove = (index) => {
@@ -135,7 +135,7 @@ export default function DialogManualAddstudent(props) {
   const handleSave = (e) => {
     e.preventDefault();
     saveNewstudent(student);
-    setstudent([{ id: "", fname: "", lname: "" }]);
+    setstudent([{ stuid: "", fname: "", lname: "" }]);
   };
 
   return (
@@ -212,8 +212,8 @@ export default function DialogManualAddstudent(props) {
                           // label="IDStudent"
                           variant="outlined"
                           size="small"
-                          name="id"
-                          value={stu.id}
+                          name="stuid"
+                          value={stu.stuid}
                           onChange={(event) => handleChange(event, i)}
                         ></TextField>
                       </Grid>
