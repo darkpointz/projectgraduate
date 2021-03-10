@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 
 import {
@@ -25,6 +25,7 @@ import Report from "../Page/reports";
 import Quiz from "../Page/quiz";
 import Class from "../Page/class";
 import ClassStudent from "../Components/classStudent";
+import Login from "../Page/login";
 
 const drawerWidth = 200;
 
@@ -177,6 +178,9 @@ function Navbar(props) {
         <div className={classes.toolbar} />
         <Switch>
           <Route exact from="/" render={(props) => <Lanunch {...props} />} />
+          {/* <Route exact path="/login">
+            <Login />
+          </Route> */}
           <Route exact path="/quiz" render={(props) => <Quiz {...props} />} />
           <Route
             exact

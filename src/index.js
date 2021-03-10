@@ -4,14 +4,15 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import initialFirebase from "./Components/initialFirebase";
+import { AuthProvider } from "./Auth/auth";
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      {initialFirebase()}
-      <App />
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </AuthProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

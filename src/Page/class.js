@@ -80,10 +80,18 @@ export default function Class() {
   const [room, setroom] = useState([]);
 
   useEffect(() => {
-    axios.get(`/room/getAllRoom`).then((res) => {
-      console.log(res.data);
-      setroom(res.data);
-    });
+    const FBIdToken = localStorage.getItem("FBIdToken");
+    // const FBIdToken = `Bearer ${token}`;
+    // axios.defaults.headers.common["Authorization"] = FBIdToken;
+    console.log("FBIdToken: ", FBIdToken);
+    axios
+      .get(`/room/getAllRoom`, {
+        headers: { FBIdToken: localStorage.getItem("FBIdToken") },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setroom(res.data);
+      });
   }, []);
 
   const handleClose = (value) => {
