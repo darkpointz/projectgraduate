@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import firebase from "firebase/app";
 import "firebase/firestore";
-import { AuthContext } from "../Auth/auth";
+// import { AuthContext } from "../Auth/authService";
 
 export default function Lanunch() {
   const [report, setreport] = useState([]);
   // const [currentUser, setcurrentUser] = useContext();
   // const [user, setuser] = useContext(AuthContext).currentUser;
-  const { currentUser } = useContext(AuthContext);
+  // const { currentUser } = useContext(AuthContext);
   // const logtest = () => {
   //   firebase
   //     .firestore()
@@ -21,22 +21,18 @@ export default function Lanunch() {
   //       console.log("Current cities in CA: ", report);
   //     });
   // };
-  useEffect(() => {
-    firebase
-      .auth()
-      .currentUser.getIdToken(/* forceRefresh */ true)
-      .then(function (idToken) {
-        console.log("sdfsdfL: ", idToken);
-      })
-      .catch(function (error) {
-        // Handle error
-      });
-  }, []);
-  return (
-    <div>
-      Lanunch--
-      {currentUser.displayName}
-      {console.log("currentUser: ", currentUser)}
-    </div>
-  );
+
+  // useEffect(() => {
+  //   firebase
+  //     .auth()
+  //     .currentUser.getIdToken(/* forceRefresh */ true)
+  //     .then(function (idToken) {
+  //       console.log("sdfsdfL: ", idToken);
+  //     })
+  //     .catch(function (error) {
+  //       // Handle error
+  //     });
+  // }, []);
+
+  return <div>Lanunch--</div>;
 }

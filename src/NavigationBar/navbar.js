@@ -20,12 +20,12 @@ import MenuIcon from "@material-ui/icons/Menu";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { withRouter, Route, Switch } from "react-router-dom";
 
-import Lanunch from "../Page/lanunch";
-import Report from "../Page/reports";
-import Quiz from "../Page/quiz";
-import Class from "../Page/class";
+import Lanunch from "../Pages/lanunch";
+import Report from "../Pages/reports";
+import Quiz from "../Pages/quiz";
+import Class from "../Pages/class";
 import ClassStudent from "../Components/classStudent";
-import Login from "../Page/login";
+import Login from "../Pages/login";
 
 const drawerWidth = 200;
 
@@ -103,9 +103,12 @@ function Navbar(props) {
     },
   ];
 
+  const handlelogout = () => {};
+
   const drawer = (
     <div>
       <div className={classes.toolbar} />
+      {props.displayName}
       <Divider />
       <List>
         {itemsList.map((item, index) => {
@@ -117,6 +120,11 @@ function Navbar(props) {
             </ListItem>
           );
         })}
+        <Divider />
+        {/* <ListItem button key={text} onClick={onClick}>
+          {icon && <ListItemIcon>{icon}</ListItemIcon>}
+          <ListItemText primary={text} />
+        </ListItem> */}
       </List>
     </div>
   );

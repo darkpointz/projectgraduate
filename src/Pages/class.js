@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import axios from "axios";
+import { AuthContext } from "../Auth/authService";
+import firebase from "firebase";
 
 import {
   makeStyles,
@@ -78,19 +80,27 @@ export default function Class() {
   const classes = useStyles();
   const [openCreateClass, setOpenCreateClass] = useState(false);
   const [room, setroom] = useState([]);
+  const [FBIdToken, setFBIdToken] = useState();
 
   useEffect(() => {
-    const FBIdToken = localStorage.getItem("FBIdToken");
-    // const FBIdToken = `Bearer ${token}`;
-    // axios.defaults.headers.common["Authorization"] = FBIdToken;
-    console.log("FBIdToken: ", FBIdToken);
+    const token = localStorage.getItem("FBIdToken");
+    const idToken = `Bearer ${token}`;
+
+    let header = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    axios.defaults.headers.common["Authorization"] = idToken;
+    // setFBIdToken(header);
     axios
-      .get(`/room/getAllRoom`, {
-        headers: { FBIdToken: localStorage.getItem("FBIdToken") },
-      })
+      .get(`/room/getAllRoom`)
       .then((res) => {
         console.log(res.data);
         setroom(res.data);
+      })
+      .catch((err) => {
+        console.log(err.message);
       });
   }, []);
 
@@ -102,6 +112,7 @@ export default function Class() {
       roomName: newroom.roomName,
       roomPublic: newroom.roomPublic,
     };
+
     axios.post("/room/insertRoom", formroom).then((response) => {
       newroom.roomId = response.data.message;
       console.log(response.data.message);

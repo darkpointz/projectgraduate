@@ -1,14 +1,15 @@
-import React, { useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { auth } from "./Auth/firebase";
 import { BrowserRouter, Route, NavLink, Switch } from "react-router-dom";
 import "./index.css";
 import Navbar from "./NavigationBar/navbar";
 import { makeStyles } from "@material-ui/core/styles";
-import Lanunch from "./Page/lanunch";
-import Class from "./Page/class";
-import Report from "./Page/reports";
-import Quiz from "./Page/quiz";
-import Login from "./Page/login";
-import { AuthProvider, AuthContext } from "./Auth/auth";
+import Lanunch from "./Pages/lanunch";
+import Class from "./Pages/class";
+import Report from "./Pages/reports";
+import Quiz from "./Pages/quiz";
+import Login from "./Pages/login";
+// import { AuthProvider, AuthContext } from "./Auth/authService";
 
 const useStyles = makeStyles({
   container: {
@@ -18,12 +19,24 @@ const useStyles = makeStyles({
 
 export default function App() {
   const classes = useStyles();
-  const { currentUser } = useContext(AuthContext);
+  const [currentUser, setcurrentUser] = useState(null);
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      setcurrentUser(user);
+      console.log("usesdsdr: ", user);
+      console.log("usesdsdr: ", user.displayName);
+    });
+  }, []);
 
   return (
     <div className={classes.container}>
       {/* <Login /> */}
-      <AuthProvider>{currentUser ? <Navbar /> : <Login />}</AuthProvider>
+      {/* <Navbar /> */}
+      {currentUser ? (
+        <Navbar displayName={currentUser.displayName} />
+      ) : (
+        <Login />
+      )}
 
       {/* <Switch>
       <Route exact from="/" render={props => <Lanunch {...props} />} />

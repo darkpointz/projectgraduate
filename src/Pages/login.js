@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import axios from "axios";
-// import { signInWithGoogle, logout } from "../auth/auth";
-import { AuthContext } from "../Auth/auth";
+import { authService } from "../Auth/authService";
 import { auth, provider } from "../Auth/firebase";
 import { Redirect } from "react-router-dom";
 import {
@@ -19,27 +18,24 @@ export default function Login() {
   // const [user, setuser] = useContext(AuthContext);
   // const [user, setuser] = useState(initialState);
   const handleClicklogin = async () => {
-    await auth
-      .signInWithPopup(provider)
-      .then((res) => {
-        // setuser(res.user);
-        var credential = res.credential;
-        var token = credential.idToken;
-        const FBIdToken = `Bearer ${token}`;
-        //localStorage.setItem("FBIdToken", JSON.stringify(FBIdToken));
+    // await auth
+    //   .signInWithPopup(provider)
+    //   .then((res) => {
+    //     // setuser(res.user);
+    //     var credential = res.credential;
+    //     var token = credential.idToken;
+    //     const FBIdToken = `Bearer ${token}`;
+    //     //localStorage.setItem("FBIdToken", JSON.stringify(FBIdToken));
 
-        axios.defaults.headers.common["Authorization"] = FBIdToken;
-        console.log(res.user);
-        console.log("idtoken ", FBIdToken);
-      })
-      .then((idToken) => {})
-      .catch((err) => {
-        console.log(err.message);
-      });
-    // // ------
-    // // axios.post(`/user/googleSignIn`).then((res) => {
-    // //   console.log(res.data);
-    // // });
+    //     axios.defaults.headers.common["Authorization"] = FBIdToken;
+    //     console.log(res.user);
+    //     console.log("idtoken ", FBIdToken);
+    //   })
+    //   .then((idToken) => {})
+    //   .catch((err) => {
+    //     console.log(err.message);
+    //   });
+    await authService.signInWithGoogle();
   };
 
   const logout = async () => {
