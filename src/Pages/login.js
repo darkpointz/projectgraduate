@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import axios from "axios";
 import { authService } from "../Auth/authService";
 import { auth, provider } from "../Auth/firebase";
-import { Redirect } from "react-router-dom";
+import { createBrowserHistory } from "history";
 import {
   makeStyles,
   IconButton,
@@ -15,6 +15,7 @@ import {
 // import { UserContext } from "../Contexts/user";
 
 export default function Login() {
+  const history = createBrowserHistory({ forceRefresh: true });
   // const [user, setuser] = useContext(AuthContext);
   // const [user, setuser] = useState(initialState);
   const handleClicklogin = async () => {
@@ -35,7 +36,9 @@ export default function Login() {
     //   .catch((err) => {
     //     console.log(err.message);
     //   });
-    await authService.signInWithGoogle();
+    authService.signInWithGoogle().then((res) => {
+      history.push("/");
+    });
   };
 
   const logout = async () => {

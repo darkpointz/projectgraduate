@@ -14,18 +14,21 @@ import {
   ListItemText,
   Toolbar,
   Typography,
+  ListItemAvatar,
+  Avatar,
 } from "@material-ui/core";
 
-import MenuIcon from "@material-ui/icons/Menu";
+import { Menu, ExitToApp } from "@material-ui/icons";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { withRouter, Route, Switch } from "react-router-dom";
+import swal from "sweetalert";
 
 import Lanunch from "../Pages/lanunch";
 import Report from "../Pages/reports";
 import Quiz from "../Pages/quiz";
 import Class from "../Pages/class";
 import ClassStudent from "../Components/classStudent";
-import Login from "../Pages/login";
+import { authService } from "../Auth/authService";
 
 const drawerWidth = 200;
 
@@ -84,6 +87,23 @@ function Navbar(props) {
     setMobileOpen(!mobileOpen);
   };
 
+  const handleLogout = () => {
+    swal({
+      title: "Please Confirm",
+      text: "Are you sure you want to sign out?",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        swal("Sign out success!", {
+          icon: "success",
+        });
+        authService.logout();
+      }
+    });
+  };
+
   const itemsList = [
     {
       text: "Launch",
@@ -102,29 +122,33 @@ function Navbar(props) {
       onClick: () => history.push("/report"),
     },
   ];
-
-  const handlelogout = () => {};
-
   const drawer = (
     <div>
       <div className={classes.toolbar} />
-      {props.displayName}
+      <ListItem alignItems="center">
+        <ListItemAvatar>
+          <Avatar alt="displayPic" src={props.displayPic} />
+        </ListItemAvatar>
+        <ListItemText primary={props.displayName} />
+      </ListItem>
       <Divider />
       <List>
         {itemsList.map((item, index) => {
           const { text, icon, onClick } = item;
           return (
             <ListItem button key={text} onClick={onClick}>
-              {icon && <ListItemIcon>{icon}</ListItemIcon>}
+              {/* {icon && <ListItemIcon>{icon}</ListItemIcon>} */}
               <ListItemText primary={text} />
             </ListItem>
           );
         })}
         <Divider />
-        {/* <ListItem button key={text} onClick={onClick}>
-          {icon && <ListItemIcon>{icon}</ListItemIcon>}
-          <ListItemText primary={text} />
-        </ListItem> */}
+        <ListItem button key={"logout"} onClick={handleLogout}>
+          <ListItemIcon>
+            <ExitToApp />
+          </ListItemIcon>
+          <ListItemText primary={"Logout"} />
+        </ListItem>
       </List>
     </div>
   );
@@ -144,7 +168,7 @@ function Navbar(props) {
             onClick={handleDrawerToggle}
             className={classes.menuButton}
           >
-            <MenuIcon />
+            <Menu />
           </IconButton>
           <Typography variant="h6" noWrap>
             Qton

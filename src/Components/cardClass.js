@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useHistory, Route, Switch, Link, Redirect } from "react-router-dom";
+import swal from "sweetalert";
 
 import {
   makeStyles,
@@ -82,8 +83,22 @@ export default function CardClass(props) {
   const [opendialogDel, setopendialogDel] = useState(false);
 
   const handledelete = () => {
-    Deleteroom(room.roomId, index);
-    setopendialogDel(false);
+    swal({
+      title: "Please Confirm",
+      text: "Are you sure you want to delete?",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        swal("Delete room success!", {
+          icon: "success",
+        });
+        Deleteroom(room.roomId, index);
+      }
+    });
+    //
+    // setopendialogDel(false);
   };
 
   const canceldialog = () => {
@@ -134,7 +149,8 @@ export default function CardClass(props) {
           <IconButton aria-label="iconDelete">
             <Delete
               className={classes.btnDelete}
-              onClick={() => setopendialogDel(true)}
+              onClick={handledelete}
+              // onClick={() => setopendialogDel(true)}
               fontSize="large"
             />
           </IconButton>

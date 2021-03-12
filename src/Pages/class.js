@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import axios from "axios";
-import { AuthContext } from "../Auth/authService";
-import firebase from "firebase";
 
 import {
   makeStyles,
@@ -16,6 +14,8 @@ import {
 import { Add, Search, Edit } from "@material-ui/icons";
 import DialogCreateClass from "../Components/dialogCreateClass";
 import CardClass from "../Components/cardClass";
+import { classService } from "../Services/classService";
+import swal from "sweetalert";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -83,25 +83,20 @@ export default function Class() {
   const [FBIdToken, setFBIdToken] = useState();
 
   useEffect(() => {
-    const token = localStorage.getItem("FBIdToken");
-    const idToken = `Bearer ${token}`;
-
-    let header = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    axios.defaults.headers.common["Authorization"] = idToken;
     // setFBIdToken(header);
-    axios
-      .get(`/room/getAllRoom`)
-      .then((res) => {
-        console.log(res.data);
-        setroom(res.data);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+    // axios
+    //   .get(`/room/getAllRoom`)
+    //   .then((res) => {
+    //     console.log(res.data);
+    //     setroom(res.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err.message);
+    //   });
+    classService.getAllRoom().then((res) => {
+      setroom(res);
+      console.log("res: ", res);
+    });
   }, []);
 
   const handleClose = (value) => {
@@ -113,10 +108,14 @@ export default function Class() {
       roomPublic: newroom.roomPublic,
     };
 
-    axios.post("/room/insertRoom", formroom).then((response) => {
-      newroom.roomId = response.data.message;
-      console.log(response.data.message);
+    // axios.post("/room/insertRoom", formroom).then((response) => {
+    //   newroom.roomId = response.data.message;
+    //   console.log(response.data.message);
+    //   setroom([...room, newroom]);
+    // });
+    classService.insertRoom(formroom).then((res) => {
       setroom([...room, newroom]);
+      swal("Success!", "Create room success!", "success");
     });
     setOpenCreateClass(false);
   };

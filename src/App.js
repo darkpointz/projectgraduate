@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { auth } from "./Auth/firebase";
 import { BrowserRouter, Route, NavLink, Switch } from "react-router-dom";
 import "./index.css";
@@ -9,6 +9,8 @@ import Class from "./Pages/class";
 import Report from "./Pages/reports";
 import Quiz from "./Pages/quiz";
 import Login from "./Pages/login";
+import axios from "axios";
+
 // import { AuthProvider, AuthContext } from "./Auth/authService";
 
 const useStyles = makeStyles({
@@ -24,16 +26,18 @@ export default function App() {
     auth.onAuthStateChanged((user) => {
       setcurrentUser(user);
       console.log("usesdsdr: ", user);
-      console.log("usesdsdr: ", user.displayName);
     });
+    const token = localStorage.getItem("FBIdToken");
+    axios.defaults.headers.common["Authorization"] = token;
   }, []);
 
   return (
     <div className={classes.container}>
-      {/* <Login /> */}
-      {/* <Navbar /> */}
       {currentUser ? (
-        <Navbar displayName={currentUser.displayName} />
+        <Navbar
+          displayName={currentUser.displayName}
+          displayPic={currentUser.photoURL}
+        />
       ) : (
         <Login />
       )}

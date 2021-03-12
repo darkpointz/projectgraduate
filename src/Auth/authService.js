@@ -1,8 +1,7 @@
-import React, { useState, useEffect, createContext } from "react";
+import React, { useState, useEffect } from "react";
 import { auth, provider } from "./firebase";
 import axios from "axios";
-
-export const AuthContext = createContext();
+import firebase from "firebase";
 
 export const authService = {
   signInWithGoogle,
@@ -20,12 +19,10 @@ async function signInWithGoogle() {
       const FBUserIDtoken = `Bearer ${token}`;
       currentUser = res.user;
       localStorage.setItem("user", currentUser);
-
       // axios.defaults.headers.common["Authorization"] = FBIdToken;
       // console.log(res.user);
       // console.log("idtoken ", FBIdToken);
     })
-    .then((idToken) => {})
     .catch((err) => {
       console.log(err.message);
     });
@@ -33,7 +30,9 @@ async function signInWithGoogle() {
     .getIdToken(true)
     .then((token) => {
       console.log("tokensdsdsdddd:", token);
-      localStorage.setItem("FBIdToken", token);
+      const FBUserIDtoken = `Bearer ${token}`;
+      localStorage.setItem("FBIdToken", FBUserIDtoken);
+      axios.defaults.headers.common["Authorization"] = FBUserIDtoken;
     })
     .catch((err) => {
       console.log(err.message);
@@ -44,34 +43,15 @@ async function logout() {
   await auth
     .signOut()
     .then(() => {
+      delete axios.defaults.headers.common["Authorization"];
+      localStorage.removeItem("FBIdToken");
+      localStorage.removeItem("user");
       console.log("logout_sucess");
     })
     .catch((err) => {
       console.log(err.message);
     });
 }
-
-// export const AuthProvider = ({ children }) => {
-//   const [currentUser, setcurrentUser] = useState(null);
-//   const [userToken, setuserToken] = useState(null);
-
-//   useEffect(() => {
-//     auth.onAuthStateChanged((user) => {
-//       setcurrentUser(user);
-
-//       // var credential = res.credential;
-//       // var idtoken = credential.idToken;
-//       // setcurrentUser(user);
-//       console.log("usesdsdr: ", user);
-//     });
-//   }, []);
-
-//   return (
-//     <AuthContext.Provider value={{ currentUser }}>
-//       {children}
-//     </AuthContext.Provider>
-//   );
-// };
 
 // ----old---
 // import React, { useState, useEffect, createContext } from "react";
