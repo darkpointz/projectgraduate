@@ -37,7 +37,7 @@ export default function Login() {
     //     console.log(err.message);
     //   });
     authService.signInWithGoogle().then((res) => {
-      history.push("/");
+      history.push("/launch");
     });
   };
 

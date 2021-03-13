@@ -29,6 +29,7 @@ import Quiz from "../Pages/quiz";
 import Class from "../Pages/class";
 import ClassStudent from "../Components/classStudent";
 import { authService } from "../Auth/authService";
+import Result from "../Pages/result";
 
 const drawerWidth = 200;
 
@@ -100,6 +101,7 @@ function Navbar(props) {
           icon: "success",
         });
         authService.logout();
+        history.push("/");
       }
     });
   };
@@ -107,7 +109,7 @@ function Navbar(props) {
   const itemsList = [
     {
       text: "Launch",
-      onClick: () => history.push("/"),
+      onClick: () => history.push("/launch"),
     },
     {
       text: "Quiz",
@@ -209,7 +211,11 @@ function Navbar(props) {
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <Switch>
-          <Route exact from="/" render={(props) => <Lanunch {...props} />} />
+          <Route
+            exact
+            from="/launch"
+            render={(props) => <Lanunch {...props} />}
+          />
           {/* <Route exact path="/login">
             <Login />
           </Route> */}
@@ -222,6 +228,9 @@ function Navbar(props) {
           <Route exact path="/room" render={(props) => <Class {...props} />} />
           <Route exact path="/room/:id">
             <ClassStudent />
+          </Route>
+          <Route exact path="/lanunch/:id">
+            <Result />
           </Route>
         </Switch>
       </main>

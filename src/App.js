@@ -42,6 +42,9 @@ export default function App() {
         <Login />
       )}
 
+      {/* ลองมือถือ */}
+      {/* <Navbar displayName={"ado"} displayPic={"/static/images/avatar/1.jpg"} /> */}
+
       {/* <Switch>
       <Route exact from="/" render={props => <Lanunch {...props} />} />
       <Route exact path="/quiz" render={props => <Quiz {...props} />} />

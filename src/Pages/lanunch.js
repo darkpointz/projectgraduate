@@ -8,6 +8,7 @@ import {
   Typography,
   Box,
   Grid,
+  Divider,
 } from "@material-ui/core";
 import { Person, People } from "@material-ui/icons";
 
@@ -41,24 +42,131 @@ const useStyles = makeStyles((theme) => ({
       fontSize: "26px",
     },
   },
+  divider: {
+    marginTop: "24px",
+  },
+  typoQuickQuestion: {
+    fontFamily: "'Prompt', sans-serif",
+    fontWeight: 500,
+    fontSize: "28px",
+  },
+  paperQQMC: {
+    backgroundColor: "#e2a073",
+    width: "180px",
+    [theme.breakpoints.down("sm")]: {
+      width: "110px",
+    },
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "column",
+    borderRadius: "16px",
+    cursor: "pointer",
+  },
+  paperQQTF: {
+    backgroundColor: "#19b0b8",
+    width: "180px",
+    [theme.breakpoints.down("sm")]: {
+      width: "110px",
+    },
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "column",
+    borderRadius: "16px",
+  },
+  paperQQSA: {
+    backgroundColor: "#f66a7a",
+    width: "180px",
+    [theme.breakpoints.down("sm")]: {
+      width: "110px",
+    },
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "column",
+    borderRadius: "16px",
+  },
+  typoQQicon: {
+    color: "white",
+    fontFamily: "'Prompt', sans-serif",
+    fontWeight: 600,
+    fontSize: "36px",
+    marginTop: "6px",
+  },
+  typoQQlabel: {
+    color: "white",
+    fontFamily: "'Prompt', sans-serif",
+    fontWeight: 500,
+    fontSize: "22px",
+    marginBottom: "6px",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "12px",
+    },
+  },
+  iconButton: {
+    "&:hover": {
+      borderRadius: "20px",
+    },
+    transition: "default",
+  },
 }));
 
 export default function Lanunch() {
   const classes = useStyles();
+
+  const handlClickClassic = () => {
+    console.log("handlClickClassic");
+  };
+
   return (
     <div className={classes.root}>
       <Grid container spacing={1} justify="center" alignItems="center">
         <Grid item xs={6} container justify="center">
-          <Paper className={classes.paperClassic}>
-            <Person className={classes.icon} />
-            <Typography className={classes.typolabel}>Classic</Typography>
-          </Paper>
+          <IconButton className={classes.iconButton}>
+            <Paper className={classes.paperClassic} onClick={handlClickClassic}>
+              <Person className={classes.icon} />
+              <Typography className={classes.typolabel}>Classic</Typography>
+            </Paper>
+          </IconButton>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={6} container justify="center">
           <Paper className={classes.paperClassic}>
             <People className={classes.icon} />
             <Typography className={classes.typolabel}>Group</Typography>
           </Paper>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Divider className={classes.divider} />
+        </Grid>
+
+        <Grid item xs={12} container justify="center">
+          <Typography className={classes.typoQuickQuestion}>
+            Quick Question
+          </Typography>
+        </Grid>
+
+        <Grid item xs={12} container>
+          <Grid item xs={4} container justify="center">
+            <Paper className={classes.paperQQMC}>
+              <Typography className={classes.typoQQicon}>MC</Typography>
+              <Typography className={classes.typoQQlabel}>
+                Multiplechoice
+              </Typography>
+            </Paper>
+          </Grid>
+          <Grid item xs={4} container justify="center">
+            <Paper className={classes.paperQQTF}>
+              <Typography className={classes.typoQQicon}>TF</Typography>
+              <Typography className={classes.typoQQlabel}>Truefalse</Typography>
+            </Paper>
+          </Grid>
+          <Grid item xs={4} container justify="center">
+            <Paper className={classes.paperQQSA}>
+              <Typography className={classes.typoQQicon}>SA</Typography>
+              <Typography className={classes.typoQQlabel}>
+                ShortAnswer
+              </Typography>
+            </Paper>
+          </Grid>
         </Grid>
       </Grid>
     </div>
