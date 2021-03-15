@@ -30,6 +30,7 @@ import Class from "../Pages/class";
 import ClassStudent from "../Components/classStudent";
 import { authService } from "../Auth/authService";
 import Result from "../Pages/result";
+import Createquiz from "../Components/createquiz";
 
 const drawerWidth = 200;
 
@@ -231,6 +232,9 @@ function Navbar(props) {
           </Route>
           <Route exact path="/lanunch/:id">
             <Result />
+          </Route>
+          <Route exact path="/createquiz">
+            <Createquiz />
           </Route>
         </Switch>
       </main>

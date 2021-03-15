@@ -11,6 +11,7 @@ import {
   Divider,
 } from "@material-ui/core";
 import { Person, People } from "@material-ui/icons";
+import DialogSelectSetting from "../Components/dialogSelectSetting";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,6 +25,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     flexDirection: "column",
     borderRadius: "18px",
+    [theme.breakpoints.down("sm")]: {
+      width: "150px",
+    },
   },
   icon: {
     color: "white",
@@ -111,27 +115,39 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Lanunch() {
   const classes = useStyles();
+  const [openDialogLanunch, setopenDialogLanunch] = useState(false);
 
-  const handlClickClassic = () => {
-    console.log("handlClickClassic");
+  const handleClose = () => {
+    setopenDialogLanunch(false);
+  };
+  const livequiz = () => {
+    setopenDialogLanunch(false);
+    console.log("livequiz");
   };
 
   return (
     <div className={classes.root}>
       <Grid container spacing={1} justify="center" alignItems="center">
-        <Grid item xs={6} container justify="center">
-          <IconButton className={classes.iconButton}>
-            <Paper className={classes.paperClassic} onClick={handlClickClassic}>
-              <Person className={classes.icon} />
-              <Typography className={classes.typolabel}>Classic</Typography>
-            </Paper>
-          </IconButton>
-        </Grid>
-        <Grid item xs={6} container justify="center">
-          <Paper className={classes.paperClassic}>
-            <People className={classes.icon} />
-            <Typography className={classes.typolabel}>Group</Typography>
-          </Paper>
+        <Grid item xs={12} container>
+          <Grid item xs={6} container justify="center">
+            <IconButton className={classes.iconButton}>
+              <Paper
+                className={classes.paperClassic}
+                onClick={() => setopenDialogLanunch(true)}
+              >
+                <Person className={classes.icon} />
+                <Typography className={classes.typolabel}>Classic</Typography>
+              </Paper>
+            </IconButton>
+          </Grid>
+          <Grid item xs={6} container justify="center">
+            <IconButton className={classes.iconButton}>
+              <Paper className={classes.paperClassic}>
+                <People className={classes.icon} />
+                <Typography className={classes.typolabel}>Group</Typography>
+              </Paper>
+            </IconButton>
+          </Grid>
         </Grid>
 
         <Grid item xs={12}>
@@ -168,6 +184,11 @@ export default function Lanunch() {
             </Paper>
           </Grid>
         </Grid>
+        <DialogSelectSetting
+          open={openDialogLanunch}
+          onClose={handleClose}
+          confirm={livequiz}
+        />
       </Grid>
     </div>
   );

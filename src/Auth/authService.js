@@ -19,6 +19,7 @@ async function signInWithGoogle() {
       const FBUserIDtoken = `Bearer ${token}`;
       currentUser = res.user;
       localStorage.setItem("user", currentUser);
+      localStorage.setItem("userId", currentUser.uid);
       // axios.defaults.headers.common["Authorization"] = FBIdToken;
       // console.log(res.user);
       // console.log("idtoken ", FBIdToken);
@@ -46,6 +47,7 @@ async function logout() {
       delete axios.defaults.headers.common["Authorization"];
       localStorage.removeItem("FBIdToken");
       localStorage.removeItem("user");
+      localStorage.removeItem("userId");
       console.log("logout_sucess");
     })
     .catch((err) => {

@@ -6,9 +6,9 @@ export const classService = {
   deleteRoomByRoomId,
 };
 
-function getAllRoom() {
+function getAllRoom(uId) {
   return axios
-    .get(`/room/getAllRoom`)
+    .get(`/room/getAllRoom/${uId}`)
     .then((res) => {
       return res.data;
     })
@@ -17,10 +17,11 @@ function getAllRoom() {
     });
 }
 
-function insertRoom(formroom) {
+function insertRoom(formroom, userId) {
   return axios
-    .post(`/room/insertRoom`, formroom)
+    .post(`/room/insertRoom/${userId}`, formroom)
     .then((res) => {
+      console.log("message: ", res.data.message);
       return res.data.message;
     })
     .catch((err) => {

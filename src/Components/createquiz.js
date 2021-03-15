@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { quizService } from "../Services/quizService";
+import { useHistory } from "react-router-dom";
+
 import {
   makeStyles,
   TextField,
@@ -12,6 +15,7 @@ import Multiplechoice from "./multiplechoice";
 import Truefalse from "./truefalse";
 import Shortanswer from "./shortanswer";
 import Showquiz from "./showquiz";
+import swal from "sweetalert";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -79,7 +83,8 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
   },
 }));
-export default function Createquiz({ submit }) {
+export default function Createquiz(props) {
+  let history = useHistory();
   const classes = useStyles();
   const [quizname, setquizname] = useState("");
   const [quiz, setquiz] = useState([]);
@@ -87,7 +92,16 @@ export default function Createquiz({ submit }) {
 
   const onclicksumit = (event) => {
     event.preventDefault();
-    submit(quizname, quiz);
+    const formquiz = {
+      quizName: quizname,
+      quiz: quiz,
+    };
+    const uId = localStorage.getItem("userId");
+    quizService.insertQuiz(formquiz, uId).then((res) => {
+      swal("Success!", "Create room success!", "success");
+      history.push("/quiz");
+    });
+    // submit(quizname, quiz);
   };
 
   const onClicksavequiz = (newquiz) => {

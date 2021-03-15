@@ -164,7 +164,7 @@ export default function DialogManualAddstudent(props) {
           <form noValidate>
             {student.map((stu, i) => {
               return (
-                <Grid container item xs={12} lg={12}>
+                <Grid container item xs={12} lg={12} key={i}>
                   <Paper elevation={3} className={classes.paperTextfield}>
                     <Grid
                       item

@@ -81,6 +81,7 @@ export default function Class() {
   const [openCreateClass, setOpenCreateClass] = useState(false);
   const [room, setroom] = useState([]);
   const [FBIdToken, setFBIdToken] = useState();
+  const [userId, setuserId] = useState();
 
   useEffect(() => {
     // setFBIdToken(header);
@@ -93,8 +94,11 @@ export default function Class() {
     //   .catch((err) => {
     //     console.log(err.message);
     //   });
-    classService.getAllRoom().then((res) => {
+    const uId = localStorage.getItem("userId");
+    console.log("userId: ", uId);
+    classService.getAllRoom(uId).then((res) => {
       setroom(res);
+      setuserId(uId);
       console.log("res: ", res);
     });
   }, []);
@@ -113,7 +117,8 @@ export default function Class() {
     //   console.log(response.data.message);
     //   setroom([...room, newroom]);
     // });
-    classService.insertRoom(formroom).then((res) => {
+    classService.insertRoom(formroom, userId).then((res) => {
+      newroom.roomId = res;
       setroom([...room, newroom]);
       swal("Success!", "Create room success!", "success");
     });
@@ -154,6 +159,7 @@ export default function Class() {
           {room.map((room, index) => {
             return (
               <CardClass
+                key={room.roomId}
                 room={room}
                 index={index}
                 Deleteroom={handleDeleteroom}

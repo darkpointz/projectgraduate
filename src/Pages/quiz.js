@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Createquiz from "../Components/createquiz";
+import { quizService } from "../Services/quizService";
 import Showquiz from "../Components/showquiz";
 import firebase from "firebase/app";
 
@@ -83,10 +84,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Quiz() {
+export default function Quiz(props) {
+  const { history } = props;
   const classes = useStyles();
   const [btnCreate, setbtnCreate] = useState(false);
   const [open, setOpen] = useState(false);
+  const [quiz, setquiz] = useState([]);
+  const [userId, setuserId] = useState();
+
+  useEffect(() => {
+    const uId = localStorage.getItem("userId");
+    quizService.getAllQuiz(uId).then((res) => {
+      setquiz(res);
+      setuserId(uId);
+    });
+  }, []);
 
   const clickCreate = () => {
     setOpen(true);
@@ -94,9 +106,8 @@ export default function Quiz() {
   };
 
   const onsumit = (quizname, quiz) => {
-    clickCreate();
+    // clickCreate();
     setbtnCreate(!btnCreate);
-    setOpen(false);
     // firebase.firestore().collection("quiz").add({
     //   quizname: quizname,
     //   quiz: quiz,
@@ -106,13 +117,58 @@ export default function Quiz() {
   const handleClose = (value) => {
     setOpen(false);
     if (value === "CN") {
-      setbtnCreate(true);
+      // setbtnCreate(true);
+      history.push("/createquiz");
     }
   };
 
   return (
     //--เดียวเปลี่ยนเป็นrouteแทน***
     <div className={classes.root}>
+      <Grid container spacing={3} direction="column">
+        <Grid container item xs={12} justify="flex-end" alignItems="center">
+          <Button
+            variant="contained"
+            className={classes.btnCreate}
+            onClick={() => setOpen(true)}
+          >
+            <Add className={classes.iconAddQuiz} />
+            <Typography className={classes.typoAddQuiz}>Createquiz</Typography>
+          </Button>
+        </Grid>
+        <Grid container item xs={12}>
+          <Paper className={classes.paper}>
+            <Typography className={classes.typotitlePaper}>Quiz</Typography>
+            <FormControl className={classes.formtextfield}>
+              <TextField
+                classes={classes.textfieldSearch}
+                id="outlined-basic"
+                label="Search"
+                variant="outlined"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="end">
+                      <Search />
+                    </InputAdornment>
+                  ),
+                }}
+              ></TextField>
+            </FormControl>
+          </Paper>
+        </Grid>
+
+        <DialogSelectCreate
+          open={open}
+          onClose={handleClose}
+          name="create quiz"
+        />
+      </Grid>
+    </div>
+  );
+}
+//----
+{
+  /* <div className={classes.root}>
       {!btnCreate ? (
         <Grid container spacing={3} direction="column">
           <Grid container item xs={12} justify="flex-end" alignItems="center">
@@ -160,23 +216,5 @@ export default function Quiz() {
           <hr />
         </div>
       )}
-    </div>
-  );
+    </div> */
 }
-
-// ---
-// return (
-//   <div className={classes.root}>
-//     {!btnCreate ? (
-//       <button className={classes.btn} onClick={clickCreate}>
-//         createquiz
-//       </button>
-//     ) : (
-// <div className={classes.content}>
-//   <Createquiz submit={onsumit} />
-//   <hr />
-// </div>
-//     )}
-//     <DialogSelectCreate open={open} onClose={handleClose} />
-//   </div>
-// );
