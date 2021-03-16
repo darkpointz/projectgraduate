@@ -79,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
 function Navbar(props) {
   const { history } = props;
   const { window } = props;
-  const { children } = props;
+  const { displayPic } = props;
 
   const classes = useStyles();
   const theme = useTheme();
@@ -130,7 +130,7 @@ function Navbar(props) {
       <div className={classes.toolbar} />
       <ListItem alignItems="center">
         <ListItemAvatar>
-          <Avatar alt="displayPic" src={props.displayPic} />
+          <Avatar alt="displayPic" src={displayPic} />
         </ListItemAvatar>
         <ListItemText primary={props.displayName} />
       </ListItem>

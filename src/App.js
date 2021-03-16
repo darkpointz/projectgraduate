@@ -43,7 +43,7 @@ export default function App() {
       )}
 
       {/* ลองมือถือ */}
-      {/* <Navbar displayName={"aod"} displayPic={"/static/images/avatar/1.jpg"} /> */}
+      {/* <Navbar displayName={"aod"} displayPic={"/static/images/avatar/2.jpg"} /> */}
 
       {/* <Switch>
       <Route exact from="/" render={props => <Lanunch {...props} />} />

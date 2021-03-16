@@ -24,8 +24,9 @@ import {
   ArrowForwardIos,
 } from "@material-ui/icons";
 import TableSelectQuiz from "./tableSelectQuiz";
+import SelectMethodQuiz from "./selectMethodQuiz";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     justifyContent: "center",
@@ -39,6 +40,9 @@ const useStyles = makeStyles({
     fontWeight: 600,
     fontSize: "28px",
     marginLeft: "28px",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "22px",
+    },
   },
   typoPaperTitle: {
     fontFamily: "'Prompt', sans-serif",
@@ -47,7 +51,12 @@ const useStyles = makeStyles({
     marginLeft: "12px",
     marginTop: "14px",
   },
-});
+  closeDialog: {
+    [theme.breakpoints.down("sm")]: {
+      marginLeft: "10px",
+    },
+  },
+}));
 
 export default function DialogSelectSetting(props) {
   const classes = useStyles();
@@ -55,6 +64,15 @@ export default function DialogSelectSetting(props) {
   const [activeStep, setActiveStep] = useState(0);
   const [selectClass, setselectClass] = useState();
   const [selectQuiz, setselectQuiz] = useState();
+  const [selectMethodQuiztf, setselectMethodQuiztf] = useState(false);
+  const [selectMethodQuiz, setselectMethodQuiz] = useState({
+    delivery: "",
+    SQ: false,
+    SA: false,
+    SADA: false,
+    SAAA: false,
+    // time: false,
+  });
 
   const steps = [
     "Select Class",
@@ -101,6 +119,11 @@ export default function DialogSelectSetting(props) {
     setselectQuiz(selectquiz);
   };
 
+  const handleSetMethodQuiz = (selectMethodQuiz) => {
+    setselectMethodQuiztf(true);
+    setselectMethodQuiz(selectMethodQuiz);
+  };
+
   const getContentByactiveStep = () => {
     switch (activeStep) {
       case 0:
@@ -118,7 +141,12 @@ export default function DialogSelectSetting(props) {
           />
         );
       case 2:
-        return "Setting and Choose Delivery Method";
+        return (
+          <SelectMethodQuiz
+            selectMethodQuiz={selectMethodQuiz}
+            setselectMethodQuiz={handleSetMethodQuiz}
+          />
+        );
       default:
         return "Unknown stepIndex";
     }
@@ -131,7 +159,9 @@ export default function DialogSelectSetting(props) {
       case 1:
         return selectQuiz ? false : true;
       case 2:
-        return true;
+        console.log("selectMethodQuiz.delivery: ", selectMethodQuiz.delivery);
+        console.log("selectMethodQuiz: ", activeStep);
+        return selectMethodQuiztf ? false : true;
       default:
         return true;
     }
@@ -165,7 +195,7 @@ export default function DialogSelectSetting(props) {
             </Stepper>
           </Grid>
           <Grid item xs={12} className={classes.gridPaper}>
-            <Paper>
+            <Paper elevation={2}>
               <Grid item xs={12}>
                 {/* <Typography className={classes.typoPaperTitle}>
                   {getStepContent(activeStep)}

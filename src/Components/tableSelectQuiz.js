@@ -56,7 +56,7 @@ export default function TableSelectQuiz(props) {
       <MaterialTable
         icons={tableIcons}
         //className={classes.tableMaterial}
-        title="Select Class"
+        title="Select Quiz"
         columns={[
           {
             title: "QuizName",
