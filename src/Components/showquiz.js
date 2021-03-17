@@ -156,11 +156,13 @@ const Showquiz = ({ key, list, step, deleteQuiz, savequiz }) => {
                   icon={<RadioButtonUnchecked fontSize="small" />}
                   name="correct"
                   style={{ color: "#6be17a" }}
-                  checked={item.correct}
+                  checked={list.correct.includes(item)}
+                  // checked={item.correct}
                   checkedIcon={<CheckCircle />}
                   inputProps={{ "aria-label": "primary checkbox" }}
                 />
-                <Typography>{item.ans}</Typography>
+                <Typography>{item}</Typography>
+                {/* <Typography>{item.ans}</Typography> */}
               </Box>
             ))}
           </Box>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import TableSelectClass from "./tableSelectClass";
+import { reportService } from "../Services/reportService";
 
 import {
   Typography,
@@ -103,6 +104,19 @@ export default function DialogSelectSetting(props) {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     if (activeStep === steps.length - 1) {
       //กรอกครบ
+      const uId = localStorage.getItem("userId");
+      const formReport = {
+        selectClass: selectClass.roomId,
+        selectQuiz: selectQuiz.quizId,
+        selectMethodQuiz: selectMethodQuiz,
+        quiz: selectQuiz.quiz,
+        roomPublic: selectClass.roomPublic,
+        roomName: selectClass.roomName,
+      };
+      console.log(formReport);
+      reportService.insertReport(uId, formReport).then((res) => {
+        console.log("res: ", res);
+      });
       confirm();
       setActiveStep(0);
     }
@@ -159,8 +173,6 @@ export default function DialogSelectSetting(props) {
       case 1:
         return selectQuiz ? false : true;
       case 2:
-        console.log("selectMethodQuiz.delivery: ", selectMethodQuiz.delivery);
-        console.log("selectMethodQuiz: ", activeStep);
         return selectMethodQuiztf ? false : true;
       default:
         return true;

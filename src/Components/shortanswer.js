@@ -67,7 +67,8 @@ export default function Shortanswer(props) {
     e.preventDefault();
     const type = "shortanswer";
     const step = props.step;
-    const list = { step, question, type, correct };
+    const active = false;
+    const list = { step, question, type, correct, active };
     props.savequiz(list);
   };
 
@@ -124,7 +125,7 @@ export default function Shortanswer(props) {
               )}
             </div>
             <div className={classes.boxAddAnswer}>
-              {correct.length - 1 === i && correct.length <= 4 ? (
+              {correct.length - 1 === i && correct.length <= 10 ? (
                 <Button
                   variant="contained"
                   className={classes.btnaddAnswer}

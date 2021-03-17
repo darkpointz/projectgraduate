@@ -66,7 +66,8 @@ const Truefalse = (props) => {
     e.preventDefault();
     const type = "truefalse";
     const step = props.step;
-    const list = { step, question, type, correct };
+    const active = false;
+    const list = { step, question, type, correct, active };
     props.savequiz(list);
   };
   const changecorrect = (e) => {

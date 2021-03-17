@@ -73,6 +73,7 @@ export default function Multiplechoice(props) {
     { ans: "", correct: false },
   ]);
   const [question, setquestion] = useState("");
+  const [mutiCorrect, setmutiCorrect] = useState(false);
 
   useEffect(() => {
     setquestion(props.questionEdit);
@@ -88,11 +89,21 @@ export default function Multiplechoice(props) {
 
   const handlesubmit = (e) => {
     e.preventDefault();
+    // const choice = ansChoice;
 
-    const choice = ansChoice;
+    let choice = [];
+    let correct = [];
+    ansChoice.forEach((data) => {
+      choice.push(data.ans);
+      if (data.correct) {
+        correct.push(data.ans);
+      }
+    });
     const type = "multiplechoice";
     const step = props.step;
-    const list = { step, question, type, choice };
+    const active = false;
+    // const list = { step, question, type, choice, active };
+    const list = { step, question, type, choice, active, correct };
     props.savequiz(list);
   };
 
@@ -153,6 +164,7 @@ export default function Multiplechoice(props) {
                 label={`Answer ${i + 1}`}
                 value={x.ans}
                 onChange={(e) => handlechoice(e, i)}
+                // onChange={(e) => handlechoice(e, i)}
               />
 
               {ansChoice.length !== 2 && (

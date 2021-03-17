@@ -10,6 +10,7 @@ import Report from "./Pages/reports";
 import Quiz from "./Pages/quiz";
 import Login from "./Pages/login";
 import axios from "axios";
+import LanunchStu from "./Pages/lanunchStu";
 
 // import { AuthProvider, AuthContext } from "./Auth/authService";
 
@@ -33,17 +34,19 @@ export default function App() {
 
   return (
     <div className={classes.container}>
-      {currentUser ? (
+      {/* {currentUser ? (
         <Navbar
           displayName={currentUser.displayName}
           displayPic={currentUser.photoURL}
         />
       ) : (
         <Login />
-      )}
+      )} */}
 
       {/* ลองมือถือ */}
       {/* <Navbar displayName={"aod"} displayPic={"/static/images/avatar/2.jpg"} /> */}
+
+      <LanunchStu />
 
       {/* <Switch>
       <Route exact from="/" render={props => <Lanunch {...props} />} />
