@@ -6,10 +6,12 @@ import Navbar from "./NavigationBar/navbar";
 import { makeStyles } from "@material-ui/core/styles";
 import Lanunch from "./Pages/lanunch";
 import Class from "./Pages/class";
-import Report from "./Pages/reports";
+import { authService } from "./Auth/authService";
 import Quiz from "./Pages/quiz";
 import Login from "./Pages/login";
 import axios from "axios";
+import jwtDecode from "jwt-decode";
+
 import LanunchStu from "./Pages/lanunchStu";
 
 // import { AuthProvider, AuthContext } from "./Auth/authService";
@@ -23,30 +25,43 @@ const useStyles = makeStyles({
 export default function App() {
   const classes = useStyles();
   const [currentUser, setcurrentUser] = useState(null);
+  const [userStudent, setuserStudent] = useState(null);
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       setcurrentUser(user);
       console.log("usesdsdr: ", user);
+      const token = localStorage.FBIdToken;
+      //เช็คtokenหมดอายุ
+      if (token) {
+        const decodedToken = jwtDecode(token);
+        if (decodedToken.exp * 1000 < Date.now()) {
+          authService.logout();
+          window.location.href = "/login";
+        } else {
+          axios.defaults.headers.common["Authorization"] = token;
+        }
+      }
     });
-    const token = localStorage.getItem("FBIdToken");
-    axios.defaults.headers.common["Authorization"] = token;
+    setuserStudent(localStorage.getItem("userStudent"));
+    // const token = localStorage.getItem("FBIdToken");
+    // axios.defaults.headers.common["Authorization"] = token;
   }, []);
 
   return (
     <div className={classes.container}>
-      {/* {currentUser ? (
+      {currentUser ? (
         <Navbar
           displayName={currentUser.displayName}
           displayPic={currentUser.photoURL}
         />
       ) : (
-        <Login />
-      )} */}
+        Lo(<Login />)
+      )}
 
       {/* ลองมือถือ */}
       {/* <Navbar displayName={"aod"} displayPic={"/static/images/avatar/2.jpg"} /> */}
 
-      <LanunchStu />
+      {/* <LanunchStu /> */}
 
       {/* <Switch>
       <Route exact from="/" render={props => <Lanunch {...props} />} />

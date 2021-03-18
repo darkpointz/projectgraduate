@@ -19,9 +19,9 @@ function insertReport(uId, formReport) {
 
 function getQuizByStudent(formStudent) {
   return axios
-    .get(`/report/getQuizByStudent`, formStudent)
+    .post(`/report/getQuizByStudent`, formStudent)
     .then((res) => {
-      console.log("message: ", res.data);
+      console.log("message: ", res);
       return res.data;
     })
     .catch((err) => {

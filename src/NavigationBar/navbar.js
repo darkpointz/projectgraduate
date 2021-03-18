@@ -31,6 +31,7 @@ import ClassStudent from "../Components/classStudent";
 import { authService } from "../Auth/authService";
 import Result from "../Pages/result";
 import Createquiz from "../Components/createquiz";
+import LiveResult from "../Pages/liveResult";
 
 const drawerWidth = 200;
 
@@ -145,6 +146,10 @@ function Navbar(props) {
             </ListItem>
           );
         })}
+        <ListItem button key={"result"} onClick={() => history.push("/result")}>
+          {/* {icon && <ListItemIcon>{icon}</ListItemIcon>} */}
+          <ListItemText primary={"Result"} />
+        </ListItem>
         <Divider />
         <ListItem button key={"logout"} onClick={handleLogout}>
           <ListItemIcon>
@@ -226,13 +231,27 @@ function Navbar(props) {
             path="/report"
             render={(props) => <Report {...props} />}
           />
-          <Route exact path="/room" render={(props) => <Class {...props} />} />
+          <Route exact path="/room">
+            <Class />
+          </Route>
+          {/* <Route exact path="/room" render={(props) => <Class {...props} />} /> */}
+
+          <Route exact path="/result">
+            <Result />
+          </Route>
+
+          <Route exact path="/result/:id">
+            <LiveResult />
+          </Route>
+
           <Route exact path="/room/:id">
             <ClassStudent />
           </Route>
+
           <Route exact path="/lanunch/:id">
             <Result />
           </Route>
+
           <Route exact path="/createquiz">
             <Createquiz />
           </Route>

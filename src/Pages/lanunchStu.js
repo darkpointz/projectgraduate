@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { reportService } from "../Services/reportService";
 export default function LanunchStu() {
+  const [state, setstate] = useState();
   useEffect(() => {
-    let fromStudent = {
+    const formStudent = {
       roomName: "Com",
-      stuid: "01",
+      stuid: "02",
     };
 
-    reportService.getQuizByStudent(fromStudent).then((res) => {
+    reportService.getQuizByStudent(formStudent).then((res) => {
+      setstate(res);
       console.log(res);
     });
-  }, []);
+  }, [state]);
   return <div></div>;
 }

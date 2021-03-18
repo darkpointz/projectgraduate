@@ -1,5 +1,7 @@
 import React from "react";
+import { useParams } from "react-router-dom";
 
 export default function Result() {
-  return <div></div>;
+  let params = useParams();
+  return <div>Result</div>;
 }
