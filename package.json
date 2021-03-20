@@ -11,6 +11,7 @@
     "axios": "^0.21.1",
     "firebase": "^7.24.0",
     "firestore-export-import": "^0.8.0",
+    "jwt-decode": "^3.1.2",
     "material-table": "^1.69.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

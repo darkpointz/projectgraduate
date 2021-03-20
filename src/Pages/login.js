@@ -5,107 +5,236 @@ import { auth, provider } from "../Auth/firebase";
 import { createBrowserHistory } from "history";
 import {
   makeStyles,
-  IconButton,
+  CssBaseline,
   Button,
-  FormControl,
+  createMuiTheme,
   Typography,
-  Box,
+  ThemeProvider,
   Grid,
 } from "@material-ui/core";
 // import { UserContext } from "../Contexts/user";
 
+const theme = createMuiTheme({
+  typography: {
+    fontFamily: "'Prompt', sans-serif",
+    h2: {
+      fontSize: "32px",
+      fontWeight: 600,
+    },
+  },
+  palette: {
+    primary: {
+      main: "#138086",
+    },
+    secondary: {
+      main: "#534666",
+    },
+  },
+});
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    // padding: "0",
+    // margin: "0",
+    // background: 'linear-gradient(45deg, #138086, #534666)'
+  },
+  body: {
+    background: "linear-gradient(45deg, #138086, #534666)",
+    height: "100%",
+    width: "100%",
+    position: "absolute",
+  },
+  paper: {
+    overflow: "hidden",
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    width: "500px",
+    position: "absolute",
+  },
+  textfield: {
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "column",
+    justifyContent: "center",
+    marginTop: 24,
+    [theme.breakpoints.down("sm")]: {
+      margin: "10px 10px",
+    },
+  },
+  typoLogin: {
+    fontFamily: "'Prompt', sans-serif",
+    fontSize: "32px",
+    fontWeight: 600,
+  },
+  button: {
+    margin: "10px 0",
+  },
+  gridTypo: {
+    marginTop: 24,
+  },
+}));
+
 export default function Login() {
+  const classes = useStyles();
   const history = createBrowserHistory({ forceRefresh: true });
-  // const [user, setuser] = useContext(AuthContext);
-  // const [user, setuser] = useState(initialState);
-  const handleClicklogin = async () => {
-    // await auth
-    //   .signInWithPopup(provider)
-    //   .then((res) => {
-    //     // setuser(res.user);
-    //     var credential = res.credential;
-    //     var token = credential.idToken;
-    //     const FBIdToken = `Bearer ${token}`;
-    //     //localStorage.setItem("FBIdToken", JSON.stringify(FBIdToken));
 
-    //     axios.defaults.headers.common["Authorization"] = FBIdToken;
-    //     console.log(res.user);
-    //     console.log("idtoken ", FBIdToken);
-    //   })
-    //   .then((idToken) => {})
-    //   .catch((err) => {
-    //     console.log(err.message);
-    //   });
-    authService.signInWithGoogle().then((res) => {
-      history.push("/launch");
-    });
-  };
-
-  const logout = async () => {
-    await auth
-      .signOut()
-      .then(() => {
-        console.log("logout_sucess");
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-  };
-  // const { currentUser } = useContext(AuthContext);
-  // if (currentUser) {
-  //   return <Redirect to="/" />;
-  // }
-
-  // const handleClick = async () => {
-  //   // let userBySignIn = await test();
-  //   const unsubscribe = auth.onAuthStateChanged((authUser) => {
-  //     if (authUser) {
-  //       // user has logged in...
-  //       console.log("------------------");
-  //       console.log(authUser);
-  //       // setUser(authUser);
-  //       console.log("user has logged in");
-  //     } else {
-  //       // user has logged out..
-  //       // setUser(null);
-  //       console.log("user has logged out");
-  //     }
-  //   });
-  // };
-
-  // const handlelogout = async () => {
-  //   let logout_sucess = await logout();
-  //   console.log(logout_sucess);
-  //   // let userBySignIn = await test();
-  // };
   return (
-    <div>
-      {/* {user ? (
-        <>
-          <img src={user.photoURL} />
-          <Button variant="contained" onClick={handleClick}>
-            Signin
-          </Button>
-          <Button variant="contained" onClick={handlelogout}>
-            logout
-          </Button>
-        </>
-      ) : (
-        <>
-          <Button variant="contained" onClick={handleClicklogin}>
-            Google Signin
-          </Button>
-          <Button variant="contained" onClick={handleClick}>
-            Signin
-          </Button>
-        </>
-      )} */}
-      <Button variant="contained" onClick={handleClicklogin}>
-        Google Signin Teacher
-      </Button>
-      <Button variant="contained" style={{ marginLeft: "20px" }}>
-        Login Student
-      </Button>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Grid container className={classes.root}>
+        <Grid
+          container
+          item
+          xs={12}
+          className={classes.body}
+          alignItems="center"
+          justify="center"
+        >
+          <Grid
+            className={classes.paper}
+            container
+            item
+            xs={12}
+            justify="center"
+          >
+            <Grid
+              classesName={classes.gridTypo}
+              item
+              xs={12}
+              container
+              justify="center"
+            >
+              <Typography variant="h2">LOGIN</Typography>
+              {/* classesName={classes.typoLogin} */}
+            </Grid>
+
+            <Grid container item xs={12} justify="space-evenly">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => history.push("/login/teacher")}
+                className={classes.button}
+              >
+                Login Teacher
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => history.push("/login/student/room")}
+                className={classes.button}
+              >
+                Login Student
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+    </ThemeProvider>
   );
 }
+
+//------เก่า
+// import React, { useState, useContext } from "react";
+// import axios from "axios";
+// import { authService } from "../Auth/authService";
+// import { auth, provider } from "../Auth/firebase";
+// import { createBrowserHistory } from "history";
+// import {
+//   makeStyles,
+//   IconButton,
+//   Button,
+//   FormControl,
+//   Typography,
+//   Box,
+//   Grid,
+// } from "@material-ui/core";
+// // import { UserContext } from "../Contexts/user";
+
+// const useStyles = makeStyles((theme) => ({
+//   root: {
+//     display: "flex",
+//     flexGrow: 1,
+//     m: 0,
+//     p: 0,
+//     // padding: "0",
+//     // margin: "0",
+//     // background: 'linear-gradient(45deg, #138086, #534666)'
+//   },
+//   body: {
+//     display: "flex",
+//     flexWrap: "wrap",
+//     justifyContent: "center",
+//     alignItems: "center",
+//     flexGrow: 1,
+//     background: "linear-gradient(45deg, #138086, #534666)",
+//     height: "100%",
+//     width: "100%",
+//     position: "absolute",
+//   },
+//   paper: {
+//     display: "flex",
+//     overflow: "hidden",
+//     alignItems: "center",
+//     flexDirection: "column",
+//     backgroundColor: "#fff",
+//     borderRadius: 10,
+//     flexGrow: 1,
+//     width: "500px",
+//     position: "absolute",
+//   },
+//   textfield: {
+//     display: "flex",
+//     alignItems: "center",
+//     flexDirection: "column",
+//     justifyContent: "center",
+//     marginTop: 24,
+//     [theme.breakpoints.down("sm")]: {
+//       margin: "10px 10px",
+//     },
+//   },
+//   l: {
+//     fontFamily: "'Poppins', sans-serif",
+//     fontSize: 39,
+//     fontWeight: 400,
+//     marginTop: 24,
+//   },
+//   button: {
+//     marginTop: 24,
+//     marginBottom: 15,
+//   },
+// }));
+
+// export default function Login() {
+//   const history = createBrowserHistory({ forceRefresh: true });
+//   const handleClicklogin = async () => {
+//     authService.signInWithGoogle().then((res) => {
+//       history.push("/launch");
+//     });
+//   };
+
+//   const logout = async () => {
+//     await auth
+//       .signOut()
+//       .then(() => {
+//         console.log("logout_sucess");
+//       })
+//       .catch((err) => {
+//         console.log(err.message);
+//       });
+//   };
+//   return (
+//     <div>
+//       <Button variant="contained" onClick={handleClicklogin}>
+//         Google Signin Teacher
+//       </Button>
+//       <Button
+//         variant="contained"
+//         style={{ marginLeft: "20px" }}
+//         onClick={() => history.push("/login/student/room")}
+//       >
+//         Login Student
+//       </Button>
+//     </div>
+//   );
+// }
