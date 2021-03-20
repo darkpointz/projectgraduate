@@ -9,6 +9,7 @@ import Class from "./Pages/class";
 import Report from "./Pages/reports";
 import Quiz from "./Pages/quiz";
 import Login from "./Pages/login";
+import LoginNew from "./Pages/loginNew";
 import axios from "axios";
 import LanunchStu from "./Pages/lanunchStu";
 
@@ -33,27 +34,29 @@ export default function App() {
   }, []);
 
   return (
-    <div className={classes.container}>
-      {/* {currentUser ? (
-        <Navbar
-          displayName={currentUser.displayName}
-          displayPic={currentUser.photoURL}
-        />
-      ) : (
-        <Login />
-      )} */}
+    // <div className={classes.container}>
+    //   {/* {currentUser ? (
+    //     <Navbar
+    //       displayName={currentUser.displayName}
+    //       displayPic={currentUser.photoURL}
+    //     />
+    //   ) : (
+    //     <Login />
+    //   )} */}
 
-      {/* ลองมือถือ */}
-      {/* <Navbar displayName={"aod"} displayPic={"/static/images/avatar/2.jpg"} /> */}
+    //   {/* ลองมือถือ */}
+    //   {/* <Navbar displayName={"aod"} displayPic={"/static/images/avatar/2.jpg"} /> */}
 
-      <LanunchStu />
+    //   {/* <LanunchStu /> */}
+      
 
-      {/* <Switch>
-      <Route exact from="/" render={props => <Lanunch {...props} />} />
-      <Route exact path="/quiz" render={props => <Quiz {...props} />} />
-      <Route exact path="/report" render={props => <Report {...props} />} />
-      <Route exact path="/room" render={props => <Class {...props} />} />
-    </Switch> */}
-    </div>
+    //   {/* <Switch>
+    //   <Route exact from="/" render={props => <Lanunch {...props} />} />
+    //   <Route exact path="/quiz" render={props => <Quiz {...props} />} />
+    //   <Route exact path="/report" render={props => <Report {...props} />} />
+    //   <Route exact path="/room" render={props => <Class {...props} />} />
+    // </Switch> */}
+    // </div>
+    <LoginNew />
   );
 }
