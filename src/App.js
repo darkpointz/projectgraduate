@@ -51,7 +51,6 @@ export default function App() {
   }, []);
 
   return (
-<<<<<<< HEAD
     // <div className={classes.container}>
     //   {/* {currentUser ? (
     //     <Navbar
@@ -61,30 +60,12 @@ export default function App() {
     //   ) : (
     //     <Login />
     //   )} */}
-=======
-    <div className={classes.container}>
-      {/* {currentUser ? (
-        <Navbar
-          displayName={currentUser.displayName}
-          displayPic={currentUser.photoURL}
-        />
-      ) : userStudent ? (
-        <LanunchStu />
-      ) : (
-        <Login />
-      )} */}
-      <ProtectedRoute currentUser={currentUser} userStudent={userStudent} />
->>>>>>> 051d7af25d62a229fff5b0315382e3fa56aaa888
-
+    
     //   {/* ลองมือถือ */}
     //   {/* <Navbar displayName={"aod"} displayPic={"/static/images/avatar/2.jpg"} /> */}
 
-<<<<<<< HEAD
     //   {/* <LanunchStu /> */}
       
-=======
-      {/* <LanunchStu /> */}
->>>>>>> 051d7af25d62a229fff5b0315382e3fa56aaa888
 
     //   {/* <Switch>
     //   <Route exact from="/" render={props => <Lanunch {...props} />} />
@@ -93,6 +74,6 @@ export default function App() {
     //   <Route exact path="/room" render={props => <Class {...props} />} />
     // </Switch> */}
     // </div>
-    <LoginNew />
+    
   );
 }
