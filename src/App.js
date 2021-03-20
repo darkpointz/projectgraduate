@@ -12,7 +12,9 @@ import Login from "./Pages/login";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 
-import LanunchStu from "./Pages/lanunchStu";
+import LanunchStuCBS from "./Pages/lanunchStuCBS";
+import LiveResult from "./Pages/liveResult";
+import ProtectedRoute from "./Routes/ProtectedRoute";
 
 // import { AuthProvider, AuthContext } from "./Auth/authService";
 
@@ -49,14 +51,17 @@ export default function App() {
 
   return (
     <div className={classes.container}>
-      {currentUser ? (
+      {/* {currentUser ? (
         <Navbar
           displayName={currentUser.displayName}
           displayPic={currentUser.photoURL}
         />
+      ) : userStudent ? (
+        <LanunchStu />
       ) : (
-        Lo(<Login />)
-      )}
+        <Login />
+      )} */}
+      <ProtectedRoute currentUser={currentUser} userStudent={userStudent} />
 
       {/* ลองมือถือ */}
       {/* <Navbar displayName={"aod"} displayPic={"/static/images/avatar/2.jpg"} /> */}

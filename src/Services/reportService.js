@@ -3,6 +3,8 @@ import axios from "axios";
 export const reportService = {
   insertReport,
   getQuizByStudent,
+  getRoomTypeByStudent,
+  getQuizPrivateRoomByStudent,
 };
 
 function insertReport(uId, formReport) {
@@ -25,6 +27,28 @@ function getQuizByStudent(formStudent) {
       return res.data;
     })
     .catch((err) => {
-      console.log(err.message);
+      console.log(err);
+    });
+}
+
+function getRoomTypeByStudent(room) {
+  return axios
+    .get(`/report/getRoomTypeByStudent/${room}`)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.log("err, ", err);
+    });
+}
+
+function getQuizPrivateRoomByStudent(formStudent) {
+  return axios
+    .post(`/report/getQuizPrivateRoomByStudent`, formStudent)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.log("err, ", err);
     });
 }
