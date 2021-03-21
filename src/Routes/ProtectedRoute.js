@@ -18,6 +18,9 @@ export default function ProtectedRoute({ currentUser, userStudent }) {
           />
         ) : (
           <>
+            {/* <Route path="/LanunchStuCBS/:reportId/:name">
+              <LanunchStuCBS />
+            </Route> */}
             <Route path="/LanunchStuCBS/:reportId/:stuid">
               <LanunchStuCBS />
             </Route>

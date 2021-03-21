@@ -38,7 +38,7 @@ export default function App() {
         const decodedToken = jwtDecode(token);
         if (decodedToken.exp * 1000 < Date.now()) {
           authService.logout();
-          window.location.href = "/login";
+          window.location.href = "/login/teacher";
         } else {
           axios.defaults.headers.common["Authorization"] = token;
         }

@@ -54,7 +54,7 @@ const useStyles = makeStyles({
 
 const Truefalse = (props) => {
   const classes = useStyles();
-  const [correct, setcorrect] = useState("");
+  const [correct, setcorrect] = useState();
   const [question, setquestion] = useState("");
 
   useEffect(() => {
