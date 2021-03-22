@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../NavigationBar/navbar";
 import Login from "../Pages/login";
 import LoginByroomName from "../Pages/loginByUserRoomName";
-import LanunchStuCBS from "../Pages/lanunchStuCBS";
+import LanunchStu from "../Pages/lanunchStu";
 import { withRouter, Route, Switch } from "react-router-dom";
 import NavbarStudent from "../NavigationBar/navbarStudent";
 import LoginTeacher from "../Pages/loginTeacher";
@@ -18,11 +18,8 @@ export default function ProtectedRoute({ currentUser, userStudent }) {
           />
         ) : (
           <>
-            {/* <Route path="/LanunchStuCBS/:reportId/:name">
-              <LanunchStuCBS />
-            </Route> */}
-            <Route path="/LanunchStuCBS/:reportId/:stuid">
-              <LanunchStuCBS />
+            <Route path="/lanunchStu/:reportId/:stuid">
+              <LanunchStu />
             </Route>
             <Route path="/login/student">
               <NavbarStudent />

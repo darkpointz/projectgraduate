@@ -45,6 +45,9 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 500,
     fontSize: "22px",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "16px",
+    },
   },
   typotitle: {
     fontFamily: "'Prompt', sans-serif",

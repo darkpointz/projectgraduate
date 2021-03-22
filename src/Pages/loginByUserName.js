@@ -8,7 +8,7 @@ import { reportService } from "../Services/reportService";
 
 export default function LoginByUserName({ roomPublic, reportId }) {
   const [name, setname] = useState();
-  const [stuId, setstuId] = useState();
+  const [stuid, setstuid] = useState();
   const [quiz, setquiz] = useState();
   const history = createBrowserHistory({ forceRefresh: true });
 
@@ -18,23 +18,40 @@ export default function LoginByUserName({ roomPublic, reportId }) {
         name: name,
         reportId: reportId,
       };
-      // reportService.getQuizPrivateRoomByStudent;
+      reportService
+        .insertStudentByPublicRoom(formStudent, reportId)
+        .then((res) => {
+          console.log(res);
+          if (res.succes === "succes") {
+            history.push(`/LanunchStu/${reportId}/${res.stuid}`);
+          } else {
+            swal("Error!", "Check your Student ID!", "error");
+          }
+        })
+        .catch((err) => {
+          console.log(err.json);
+          swal("Error!", "Check your room name!", "error");
+        });
     } else {
       let formStudent = {
         reportId: reportId,
-        stuid: stuId,
+        stuid: stuid,
       };
-      console.log(formStudent);
-      history.push(`/LanunchStuCBS/${reportId}/${stuId}`);
-      // reportService
-      //   .getQuizPrivateRoomByStudent(formStudent)
-      //   .then((res) => {
-      //     console.log(res);
-      //   })
-      //   .catch((err) => {
-      //     console.log(err.json);
-      //     swal("Error!", "Check your room name!", "error");
-      //   });
+
+      reportService
+        .manageStudentByPrivateRoom(formStudent, reportId)
+        .then((res) => {
+          console.log(res);
+          if (res.succes === "succes") {
+            history.push(`/LanunchStu/${reportId}/${stuid}`);
+          } else {
+            swal("Error!", "Check your Student ID!", "error");
+          }
+        })
+        .catch((err) => {
+          console.log(err.json);
+          swal("Error!", "Check your Student ID!", "error");
+        });
     }
   };
 
@@ -42,7 +59,7 @@ export default function LoginByUserName({ roomPublic, reportId }) {
     if (roomPublic) {
       setname(value);
     } else {
-      setstuId(value);
+      setstuid(value);
     }
   };
 
@@ -54,7 +71,7 @@ export default function LoginByUserName({ roomPublic, reportId }) {
           <TextField
             id="outlined-basic"
             variant="outlined"
-            value={roomPublic ? name : stuId}
+            value={roomPublic ? name : stuid}
             onChange={(e) => handleChangeTextField(e.target.value)}
           ></TextField>
           <Button onClick={handleClickJoin}>Join</Button>

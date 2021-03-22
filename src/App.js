@@ -12,7 +12,7 @@ import Login from "./Pages/login";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 
-import LanunchStuCBS from "./Pages/lanunchStuCBS";
+import LanunchStu from "./Pages/lanunchStu";
 import LiveResult from "./Pages/liveResult";
 import ProtectedRoute from "./Routes/ProtectedRoute";
 

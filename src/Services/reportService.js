@@ -2,9 +2,11 @@ import axios from "axios";
 
 export const reportService = {
   insertReport,
-  getQuizByStudent,
   getRoomTypeByStudent,
-  getQuizPrivateRoomByStudent,
+  insertStudentByPublicRoom,
+  manageStudentByPrivateRoom,
+  getQuizByStudent,
+  answerByStudent,
 };
 
 function insertReport(uId, formReport) {
@@ -19,18 +21,6 @@ function insertReport(uId, formReport) {
     });
 }
 
-function getQuizByStudent(formStudent) {
-  return axios
-    .post(`/report/getQuizByStudent`, formStudent)
-    .then((res) => {
-      console.log("message: ", res);
-      return res.data;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-}
-
 function getRoomTypeByStudent(room) {
   return axios
     .get(`/report/getRoomTypeByStudent/${room}`)
@@ -42,9 +32,42 @@ function getRoomTypeByStudent(room) {
     });
 }
 
-function getQuizPrivateRoomByStudent(formStudent) {
+function insertStudentByPublicRoom(formStudent, reportId) {
   return axios
-    .post(`/report/getQuizPrivateRoomByStudent`, formStudent)
+    .post(`/report/insertStudentByPrivateRoom/${reportId}`, formStudent)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.log("err, ", err);
+    });
+}
+
+function manageStudentByPrivateRoom(formStudent, reportId) {
+  return axios
+    .post(`/report/manageStudentByPrivateRoom/${reportId}`, formStudent)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.log("err, ", err);
+    });
+}
+
+function getQuizByStudent(formStudent) {
+  return axios
+    .post(`/report/getQuizByStudent`, formStudent)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.log("err, ", err);
+    });
+}
+
+function answerByStudent(formStudent, reportId) {
+  return axios
+    .post(`/report/answerByStudent/${reportId}`, formStudent)
     .then((res) => {
       return res.data;
     })
