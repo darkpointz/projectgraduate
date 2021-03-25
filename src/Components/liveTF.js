@@ -1,5 +1,5 @@
 import { makeStyles, Typography, Grid, Button, Paper } from "@material-ui/core";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { teal, red } from "@material-ui/core/colors";
 import clsx from "clsx";
 import { reportService } from "../Services/reportService";
@@ -36,14 +36,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function LiveTF({ quiz, saveAnswerCBS }) {
+export default function LiveTF({
+  quiz,
+  saveAnswerCBS,
+  quizzingStudent,
+  indexQuizzing,
+}) {
   const classes = useStyles();
   const [correct, setcorrect] = useState();
+
+  useEffect(() => {
+    setcorrect(quizzingStudent?.answer);
+  });
 
   const changecorrect = (e) => {
     const { value } = e.currentTarget;
     setcorrect(value);
-    saveAnswerCBS(quiz.step, value);
+    saveAnswerCBS(quiz.step, value, indexQuizzing);
   };
 
   return (

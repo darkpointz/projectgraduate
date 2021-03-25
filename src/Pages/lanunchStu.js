@@ -3,6 +3,8 @@ import { reportService } from "../Services/reportService";
 import { useParams } from "react-router-dom";
 import firebase from "firebase/app";
 import { createBrowserHistory } from "history";
+import { teal } from "@material-ui/core/colors";
+import clsx from "clsx";
 
 import {
   NavigateNext,
@@ -146,6 +148,17 @@ const useStyles = makeStyles((theme) => ({
       padding: theme.spacing(2),
     },
   },
+  btnStep: {
+    fontFamily: "'Prompt', sans-serif",
+    fontWeight: 500,
+    fontSize: "14px",
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(1),
+    },
+  },
+  btnTrue: {
+    backgroundColor: "#1de9b6",
+  },
 }));
 
 export default function LanunchStu() {
@@ -153,8 +166,8 @@ export default function LanunchStu() {
   const [quiz, setquiz] = useState([]);
   const [current, setcurrent] = useState(0);
   const [roomName, setroomName] = useState();
-  const [question, setquestion] = useState();
   const [typeDelivery, settypeDelivery] = useState();
+  const [quizzingStudent, setquizzingStudent] = useState([]);
 
   const [stepMax, setstepMax] = useState();
   const [page, setpage] = useState(0);
@@ -171,7 +184,7 @@ export default function LanunchStu() {
       reportId: params.reportId,
       stuid: params.stuid,
     };
-    console.log(formStudent);
+
     reportService.getQuizByStudent(formStudent).then((res) => {
       if (res === "CBT") {
         firebase
@@ -180,16 +193,26 @@ export default function LanunchStu() {
           .doc(params.reportId)
           .onSnapshot((doc) => {
             let newQuiz = [];
+            //--quiz
             doc.data().quiz.forEach((data) => {
               if (data.active === true) {
-                console.log(data.question);
-                setquestion(data.question);
-                newQuiz.push(data);
+                newQuiz.push({
+                  step: data.step,
+                  type: data.type,
+                  choice: data.choice,
+                  question: data.question,
+                });
                 setquiz(newQuiz);
               } else if (data.active === false) {
                 setquiz(newQuiz);
               }
             });
+            //--quizzingStudent
+            console.log("data: ", doc.data());
+            let indexStu = doc.data().student.findIndex((e) => {
+              return e.stuid === params.stuid;
+            });
+            setquizzingStudent(doc.data().student[indexStu].quizzing);
           });
         settypeDelivery("CBT");
       } else {
@@ -197,20 +220,48 @@ export default function LanunchStu() {
         setroomName(res.roomName);
         setstepMax(res.stepMax);
         settypeDelivery("CBS");
+        setquizzingStudent(res.quizzingStudent);
       }
     });
   }, []);
 
+  const handleFetchAnswer = () => {
+    let index;
+    index = quizzingStudent.findIndex((e) => {
+      return e.step == quiz[current]?.step;
+    });
+    return index;
+    // setindexQuizzing(index);
+  };
+
   const handleShowQuiz = () => {
     return (
       <>
-        {/* {console.log(quiz[current])} */}
         {quiz[current]?.type === "multiplechoice" ? (
-          <LiveMC quiz={quiz[current]} saveAnswerCBS={saveAnswerCBS} />
+          <LiveMC
+            quiz={quiz[current]}
+            type={typeDelivery}
+            // quiz={quiz[current]}
+            saveAnswerCBS={saveAnswerCBS}
+            quizzingStudent={quizzingStudent[handleFetchAnswer()]}
+            indexQuizzing={handleFetchAnswer()}
+          />
         ) : quiz[current]?.type === "truefalse" ? (
-          <LiveTF quiz={quiz[current]} saveAnswerCBS={saveAnswerCBS} />
+          <>
+            <LiveTF
+              quiz={quiz[current]}
+              saveAnswerCBS={saveAnswerCBS}
+              quizzingStudent={quizzingStudent[handleFetchAnswer()]}
+              indexQuizzing={handleFetchAnswer()}
+            />
+          </>
         ) : quiz[current]?.type === "shortanswer" ? (
-          <LiveSA quiz={quiz[current]} saveAnswerCBS={saveAnswerCBS} />
+          <LiveSA
+            quiz={quiz[current]}
+            saveAnswerCBS={saveAnswerCBS}
+            quizzingStudent={quizzingStudent[handleFetchAnswer()]}
+            indexQuizzing={handleFetchAnswer()}
+          />
         ) : null}
       </>
     );
@@ -219,7 +270,7 @@ export default function LanunchStu() {
   const handleFirstPage = () => {
     //ส่งข้อสอบ
     if (answer) {
-      submitAnswerCBS();
+      submitAnswer();
     }
 
     setcurrent(0);
@@ -231,7 +282,7 @@ export default function LanunchStu() {
   const handleLastPage = () => {
     //ส่งข้อสอบ
     if (answer) {
-      submitAnswerCBS();
+      submitAnswer();
     }
 
     setcurrent(stepMax - 1);
@@ -243,7 +294,7 @@ export default function LanunchStu() {
   const handleNavigateNext = () => {
     //ส่งข้อสอบ
     if (answer) {
-      submitAnswerCBS();
+      submitAnswer();
     }
 
     if (current !== stepMax - 1) {
@@ -258,7 +309,6 @@ export default function LanunchStu() {
 
     //setmid
     if (current + 1 >= 3 && current < stepMax - 3) {
-      console.log("cuure: ", current);
       setmid(current + 1);
     }
   };
@@ -266,7 +316,7 @@ export default function LanunchStu() {
   const handleNavigateBefore = () => {
     //ส่งข้อสอบ
     if (answer) {
-      submitAnswerCBS();
+      submitAnswer();
     }
 
     if (current !== 0) {
@@ -293,7 +343,7 @@ export default function LanunchStu() {
   const handleSelectPage = (index) => {
     //ส่งข้อสอบ
     if (answer) {
-      submitAnswerCBS();
+      submitAnswer();
     }
 
     setcurrent(index);
@@ -333,35 +383,56 @@ export default function LanunchStu() {
     }
   };
 
+  const handleCheckStyleStep = (index) => {
+    let tf;
+    quizzingStudent.find((e) => {
+      if (e.step === index) {
+        tf = true;
+      }
+    });
+    if (!tf) {
+      tf = false;
+    }
+    return tf;
+  };
+
   const btnNavigateStepCBS = () => {
     return (
       <>
         <Grid container item xs={12} justify="center">
-          <Button variant="outlined" onClick={handleFirstPage}>
-            <FirstPage className={classes.iconNavigate} />
-          </Button>
-          <Button variant="outlined" onClick={handleNavigateBefore}>
-            <NavigateBefore className={classes.iconNavigate} />
-          </Button>
+          <div style={{ marginRight: "8px" }}>
+            <Button variant="outlined" onClick={handleFirstPage}>
+              <FirstPage className={classes.iconNavigate} />
+            </Button>
+            <Button variant="outlined" onClick={handleNavigateBefore}>
+              <NavigateBefore className={classes.iconNavigate} />
+            </Button>
+          </div>
 
           {quiz.slice(page, maxPage).map((item, index) => (
             <Button
               variant="outlined"
+              // className={classes.btnStep}
+              className={clsx(classes.btnStep, {
+                [classes.btnTrue]: handleCheckStyleStep(item.step),
+              })}
               onClick={() => handleSelectPage(item.step - 1)}
             >
               {item.step}
             </Button>
           ))}
 
-          <Button variant="outlined" onClick={handleNavigateNext}>
-            <NavigateNext className={classes.iconNavigate} />
-          </Button>
-          <Button variant="outlined">
-            <LastPage
-              className={classes.iconNavigate}
-              onClick={handleLastPage}
-            />
-          </Button>
+          <div style={{ marginLeft: "8px" }}>
+            <Button variant="outlined" onClick={handleNavigateNext}>
+              <NavigateNext className={classes.iconNavigate} />
+            </Button>
+            <Button variant="outlined">
+              <LastPage
+                className={classes.iconNavigate}
+                onClick={handleLastPage}
+              />
+            </Button>
+          </div>
         </Grid>
       </>
     );
@@ -378,7 +449,11 @@ export default function LanunchStu() {
     return (
       <>
         <Grid container item xs={6} justify="center">
-          <Button variant="contained" className={classes.btnSubmit}>
+          <Button
+            variant="contained"
+            className={classes.btnSubmit}
+            onClick={() => submitAnswer()}
+          >
             Submit answer
           </Button>
         </Grid>
@@ -386,23 +461,31 @@ export default function LanunchStu() {
     );
   };
 
-  const saveAnswerCBS = (step, answer) => {
-    console.log("answer: ", answer);
+  const saveAnswerCBS = (step, answer, indexQuizzing) => {
     setanswer(answer);
     setoldCurrent(step);
+
+    let newQuizzing = quizzingStudent;
+    if (indexQuizzing >= 0) {
+      newQuizzing[indexQuizzing] = { answer: answer, step: step };
+    } else {
+      newQuizzing.push({ answer: answer, step: step });
+    }
+    setquizzingStudent(newQuizzing);
   };
 
-  const submitAnswerCBS = () => {
+  const submitAnswer = () => {
     const formStudent = {
       stuid: params.stuid,
       step: oldCurrent,
       answer: answer,
     };
-    console.log("answersdfsdfsdf: ", formStudent);
     reportService.answerByStudent(formStudent, params.reportId).then((res) => {
-      console.log("resresres: ", res);
       setanswer();
       setoldCurrent();
+      // if(typeDelivery==="CBT"){
+
+      // }
     });
   };
 
@@ -445,7 +528,13 @@ export default function LanunchStu() {
           >
             <Grid container item xs={5} justify="center">
               <Typography className={classes.typoStep}>
-                {current + 1} / {stepMax}
+                {typeDelivery === "CBS" ? (
+                  <>
+                    {current + 1}/{stepMax}{" "}
+                  </>
+                ) : (
+                  quiz[current]?.step
+                )}
               </Typography>
             </Grid>
             <Grid container item xs={7} justify="center">
@@ -455,9 +544,11 @@ export default function LanunchStu() {
           <Grid container item xs={12} justify="center" alignItems="center">
             <Paper className={classes.paperQuestion}>
               <Typography className={classes.typoQuestion}>
-                {/* {
-                  "เช้าวันที่ 24 มี.ค. ชาวบ้านที่หมู่บ้านแม่สามแลบ แจ้งมาว่า เมื่อคืนประมาณเที่ยงคืน ได้มีรถบรรทุก 4 คัน เข้ามาในหมู่บ้านแม่สามแลบ จากนั้นมีรถกระบะพร้อมคนกลุ่มหนึ่งลงไปขนข้าว 700 กระสอบและเสบียง รวมถึงน้ำมัน ของทหารเมียนมาที่กองไว้ท่าเรือแม่สามแลบ ริมแม่น้ำสาละวิน อ.สบเมย จ.แม่ฮ่องสอน ย้ายมาใส่รถบรรทุกโดยใช้เวลาเกือบ 4 ชั่วโมง จึงเสร็จสิ้น คาดว่านำกลับเข้าเมียนมาทางด่าน อ.แม่สอด จ.ตาก"
-                } */}
+                {/* {typeDelivery === "CBS"
+                  ? quiz[current]?.question
+                  : typeDelivery === "CBT"
+                  ? question
+                  : null} */}
                 {quiz[current]?.question}
               </Typography>
             </Paper>

@@ -1,5 +1,5 @@
 import { makeStyles, Grid, TextField } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,13 +19,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function LiveSA({ quiz }) {
+export default function LiveSA({
+  quiz,
+  saveAnswerCBS,
+  quizzingStudent,
+  indexQuizzing,
+}) {
   const classes = useStyles();
   const [answer, setanswer] = useState();
+
+  useEffect(() => {
+    setanswer(quizzingStudent?.answer);
+  });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setanswer(value);
+    saveAnswerCBS(quiz.step, value, indexQuizzing);
   };
 
   return (
