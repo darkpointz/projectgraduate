@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function ResultMC() {
+export default function ResultSA() {
     return (
         <div>
-            ResultMC
+            resultSA
         </div>
     )
 }

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { httpClient } from '../Auth/axiosInterceptor'
 
 export const reportService = {
   insertReport,
@@ -14,7 +15,7 @@ function resultTeacher(reportId) {
   console.log("resultTeacher: ,", reportId);
   console.log("resultTeacher: ,", reportId);
 
-  return axios
+  return httpClient
     .post(`/report/checkMethodDelivery/${reportId}`)
     .then((res) => {
       return res.data;
@@ -25,7 +26,7 @@ function resultTeacher(reportId) {
 }
 
 function insertReport(uId, formReport) {
-  return axios
+  return httpClient
     .post(`/report/insertReport/${uId}`, formReport)
     .then((res) => {
       console.log("message: ", res.data.message);

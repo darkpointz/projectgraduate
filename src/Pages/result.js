@@ -6,15 +6,19 @@ import {
   makeStyles,
   CssBaseline,
   Button,
-  createMuiTheme,
+  LinearProgress,
   Typography,
   ThemeProvider,
   Grid,
   Divider,
+
 } from "@material-ui/core";
 
-import { NavigateNext, NavigateBefore } from "@material-ui/icons";
+import { NavigateNext, NavigateBefore, GroupTwoTone } from "@material-ui/icons";
 import axios from "axios";
+import ResultMC from "../Components/resultMC";
+import ResultTF from "../Components/resultTF";
+import ResultSA from "../Components/resultSA";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,11 +29,11 @@ const useStyles = makeStyles((theme) => ({
 export default function Result() {
   const classes = useStyles();
   const [reportId, setreportId] = useState();
-  const [quiz, setquiz] = useState();
+  const [quiz, setquiz] = useState([]);
   const [roomName, setroomName] = useState();
-  const [score, setscore] = useState();
+  const [score, setscore] = useState([]);
   const [student, setstudent] = useState();
-  const [current, setcurrent] = useState(1);
+  const [current, setcurrent] = useState(0);
   const [stepMax, setstepMax] = useState();
 
   useEffect(() => {
@@ -52,38 +56,33 @@ export default function Result() {
     });
   }, []);
 
-  const handleShowQuiz = () => {
+  const handleShowResultCBT = () => {
     return (
       <>
-        {/* {quiz[current]?.type === "multiplechoice" ? (
-          <LiveMC
+        {quiz[current]?.type === "multiplechoice" ? (
+          <ResultMC
             quiz={quiz[current]}
-            type={typeDelivery}
-            // quiz={quiz[current]}
-            saveAnswerCBS={saveAnswerCBS}
-            quizzingStudent={quizzingStudent[handleFetchAnswer()]}
-            indexQuizzing={handleFetchAnswer()}
           />
         ) : quiz[current]?.type === "truefalse" ? (
           <>
-            <LiveTF
+            <ResultTF
               quiz={quiz[current]}
-              saveAnswerCBS={saveAnswerCBS}
-              quizzingStudent={quizzingStudent[handleFetchAnswer()]}
-              indexQuizzing={handleFetchAnswer()}
             />
           </>
         ) : quiz[current]?.type === "shortanswer" ? (
-          <LiveSA
+          <ResultSA
             quiz={quiz[current]}
-            saveAnswerCBS={saveAnswerCBS}
-            quizzingStudent={quizzingStudent[handleFetchAnswer()]}
-            indexQuizzing={handleFetchAnswer()}
           />
-        ) : null} */}
+        ) : null}
       </>
     );
   };
+
+  const countStundent = () => {
+    let count;
+    count = score[current]?.countCorrect + score[current]?.countFail
+    return count;
+  }
 
   return (
     <div className={classes.root}>
@@ -100,24 +99,34 @@ export default function Result() {
         <Grid item xs={12}>
           <Divider />
         </Grid>
-        <Grid item xs={12} container justify="center">
-          <Button variant="outlined">
-            <NavigateBefore />
-          </Button>
 
-          <Typography className={classes.typoQuestion}>
-            {current} / {stepMax}
-          </Typography>
+        <Grid item xs={12} container justify="center" alignItems="center">
+          <Grid item xs={1} container>
+            <GroupTwoTone />
+            <Typography className={classes.typoQuestion}>
+              {countStundent()} / {stepMax}
+            </Typography>
+          </Grid>
+          <Grid item xs={11} container justify="center" >
+            <Button variant="outlined">
+              <NavigateBefore />
+            </Button>
 
-          <Button variant="outlined">
-            <NavigateNext />
-          </Button>
+            <Typography className={classes.typoQuestion}>
+              {quiz[current]?.step} / {stepMax}
+            </Typography>
+
+            <Button variant="outlined">
+              <NavigateNext />
+            </Button>
+          </Grid>
         </Grid>
+
         <Grid item xs={12}>
           <Divider />
         </Grid>
         <Grid item xs={12} justify="center">
-          {handleShowQuiz()}
+          {handleShowResultCBT()}
         </Grid>
       </Grid>
     </div>

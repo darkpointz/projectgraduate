@@ -15,6 +15,7 @@ import jwtDecode from "jwt-decode";
 import LanunchStu from "./Pages/lanunchStu";
 import LiveResult from "./Pages/liveResult";
 import ProtectedRoute from "./Routes/ProtectedRoute";
+import AxiosInterceptor from './Auth/axiosInterceptor'
 
 // import { AuthProvider, AuthContext } from "./Auth/authService";
 
@@ -39,9 +40,10 @@ export default function App() {
         if (decodedToken.exp * 1000 < Date.now()) {
           authService.logout();
           window.location.href = "/login/teacher";
-        } else {
-          axios.defaults.headers.common["Authorization"] = token;
         }
+        // else {
+        //   axios.defaults.headers.common["Authorization"] = token;
+        // }
       }
     });
     setuserStudent(localStorage.getItem("userStudent"));
@@ -68,12 +70,6 @@ export default function App() {
 
       {/* <LanunchStu /> */}
 
-      {/* <Switch>
-      <Route exact from="/" render={props => <Lanunch {...props} />} />
-      <Route exact path="/quiz" render={props => <Quiz {...props} />} />
-      <Route exact path="/report" render={props => <Report {...props} />} />
-      <Route exact path="/room" render={props => <Class {...props} />} />
-    </Switch> */}
     </div>
   );
 }
