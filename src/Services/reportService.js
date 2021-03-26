@@ -7,7 +7,22 @@ export const reportService = {
   manageStudentByPrivateRoom,
   getQuizByStudent,
   answerByStudent,
+  resultTeacher,
 };
+
+function resultTeacher(reportId) {
+  console.log("resultTeacher: ,", reportId);
+  console.log("resultTeacher: ,", reportId);
+
+  return axios
+    .post(`/report/checkMethodDelivery/${reportId}`)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+}
 
 function insertReport(uId, formReport) {
   return axios

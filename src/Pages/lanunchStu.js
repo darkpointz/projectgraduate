@@ -208,7 +208,6 @@ export default function LanunchStu() {
               }
             });
             //--quizzingStudent
-            console.log("data: ", doc.data());
             let indexStu = doc.data().student.findIndex((e) => {
               return e.stuid === params.stuid;
             });
