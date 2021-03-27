@@ -36,6 +36,7 @@ import { ExitToApp } from "@material-ui/icons";
 import LiveMC from "../Components/liveMC";
 import LiveTF from "../Components/liveTF";
 import LiveSA from "../Components/liveSA";
+import WaitingForActivity from "../Components/waitingForActivity";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -168,6 +169,7 @@ export default function LanunchStu() {
   const [roomName, setroomName] = useState();
   const [typeDelivery, settypeDelivery] = useState();
   const [quizzingStudent, setquizzingStudent] = useState([]);
+  const [waiting, setwaiting] = useState(true);
 
   const [stepMax, setstepMax] = useState();
   const [page, setpage] = useState(0);
@@ -193,25 +195,33 @@ export default function LanunchStu() {
           .doc(params.reportId)
           .onSnapshot((doc) => {
             let newQuiz = [];
-            //--quiz
-            doc.data().quiz.forEach((data) => {
-              if (data.active === true) {
-                newQuiz.push({
-                  step: data.step,
-                  type: data.type,
-                  choice: data.choice,
-                  question: data.question,
-                });
-                setquiz(newQuiz);
-              } else if (data.active === false) {
-                setquiz(newQuiz);
-              }
-            });
-            //--quizzingStudent
-            let indexStu = doc.data().student.findIndex((e) => {
-              return e.stuid === params.stuid;
-            });
-            setquizzingStudent(doc.data().student[indexStu].quizzing);
+            console.log("doc", doc.data());
+
+            if (doc.data().start) {
+              setwaiting(false);
+              let indexStu = doc.data().student.findIndex((e) => {
+                return e.stuid === params.stuid;
+              });
+              setquizzingStudent(doc.data().student[indexStu].quizzing);
+
+              //--quiz
+              doc.data().quiz.forEach((data) => {
+                if (data.active === true) {
+                  newQuiz.push({
+                    step: data.step,
+                    type: data.type,
+                    choice: data.choice,
+                    question: data.question,
+                  });
+                  setquiz(newQuiz);
+                } else if (data.active === false) {
+                  setquiz(newQuiz);
+                }
+              });
+              //--quizzingStudent
+            } else {
+              setwaiting(true);
+            }
           });
         settypeDelivery("CBT");
       } else {
@@ -488,6 +498,52 @@ export default function LanunchStu() {
     });
   };
 
+  const showContent = () => {
+    return (
+      <Grid container item xs={12} className={classes.content}>
+        <Grid
+          container
+          item
+          xs={12}
+          alignItems="center"
+          className={classes.gridRowStep}
+        >
+          <Grid container item xs={5} justify="center">
+            <Typography className={classes.typoStep}>
+              {typeDelivery === "CBS" ? (
+                <>
+                  {current + 1}/{stepMax}{" "}
+                </>
+              ) : (
+                quiz[current]?.step
+              )}
+            </Typography>
+          </Grid>
+          <Grid container item xs={7} justify="center">
+            {typeDelivery === "CBS" ? btnFinishQuizCBS() : null}
+          </Grid>
+        </Grid>
+        <Grid container item xs={12} justify="center" alignItems="center">
+          <Paper className={classes.paperQuestion}>
+            <Typography className={classes.typoQuestion}>
+              {/* {typeDelivery === "CBS"
+                  ? quiz[current]?.question
+                  : typeDelivery === "CBT"
+                  ? question
+                  : null} */}
+              {quiz[current]?.question}
+            </Typography>
+          </Paper>
+        </Grid>
+
+        <Grid container item xs={12} justify="center">
+          {handleShowQuiz()}
+        </Grid>
+        {typeDelivery === "CBS" ? btnNavigateStepCBS() : btnSubmitCBT()}
+      </Grid>
+    );
+  };
+
   return (
     // <div className={classes.root}>
     <>
@@ -516,48 +572,11 @@ export default function LanunchStu() {
             </Toolbar>
           </AppBar>
         </Grid>
+        {waiting ? <WaitingForActivity /> : showContent()}
 
-        <Grid container item xs={12} className={classes.content}>
-          <Grid
-            container
-            item
-            xs={12}
-            alignItems="center"
-            className={classes.gridRowStep}
-          >
-            <Grid container item xs={5} justify="center">
-              <Typography className={classes.typoStep}>
-                {typeDelivery === "CBS" ? (
-                  <>
-                    {current + 1}/{stepMax}{" "}
-                  </>
-                ) : (
-                  quiz[current]?.step
-                )}
-              </Typography>
-            </Grid>
-            <Grid container item xs={7} justify="center">
-              {typeDelivery === "CBS" ? btnFinishQuizCBS() : null}
-            </Grid>
-          </Grid>
-          <Grid container item xs={12} justify="center" alignItems="center">
-            <Paper className={classes.paperQuestion}>
-              <Typography className={classes.typoQuestion}>
-                {/* {typeDelivery === "CBS"
-                  ? quiz[current]?.question
-                  : typeDelivery === "CBT"
-                  ? question
-                  : null} */}
-                {quiz[current]?.question}
-              </Typography>
-            </Paper>
-          </Grid>
-
-          <Grid container item xs={12} justify="center">
-            {handleShowQuiz()}
-          </Grid>
-          {typeDelivery === "CBS" ? btnNavigateStepCBS() : btnSubmitCBT()}
-        </Grid>
+        {/* <Grid container item xs={12} className={classes.content}>
+          
+        </Grid> */}
       </Grid>
     </>
     // </div>

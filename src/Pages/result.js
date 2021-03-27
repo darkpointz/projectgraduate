@@ -11,7 +11,6 @@ import {
   ThemeProvider,
   Grid,
   Divider,
-
 } from "@material-ui/core";
 
 import { NavigateNext, NavigateBefore, GroupTwoTone } from "@material-ui/icons";
@@ -35,6 +34,7 @@ export default function Result() {
   const [student, setstudent] = useState();
   const [current, setcurrent] = useState(0);
   const [stepMax, setstepMax] = useState();
+  const [start, setstart] = useState();
 
   useEffect(() => {
     reportService.resultTeacher(localStorage.getItem("liveId")).then((res) => {
@@ -51,6 +51,7 @@ export default function Result() {
             setroomName(doc.data().roomName);
             setscore(doc.data().score);
             setstudent(doc.data().student);
+            setstart(doc.data().start);
           });
       }
     });
@@ -60,19 +61,13 @@ export default function Result() {
     return (
       <>
         {quiz[current]?.type === "multiplechoice" ? (
-          <ResultMC
-            quiz={quiz[current]}
-          />
+          <ResultMC quiz={quiz[current]} />
         ) : quiz[current]?.type === "truefalse" ? (
           <>
-            <ResultTF
-              quiz={quiz[current]}
-            />
+            <ResultTF quiz={quiz[current]} />
           </>
         ) : quiz[current]?.type === "shortanswer" ? (
-          <ResultSA
-            quiz={quiz[current]}
-          />
+          <ResultSA quiz={quiz[current]} />
         ) : null}
       </>
     );
@@ -80,9 +75,25 @@ export default function Result() {
 
   const countStundent = () => {
     let count;
-    count = score[current]?.countCorrect + score[current]?.countFail
+    count = score[current]?.countCorrect + score[current]?.countFail;
     return count;
-  }
+  };
+
+  const handleteacherNextStep = (newStep) => {
+    const formStep = {
+      oldStep: current + 1,
+      newStep: newStep,
+    };
+    reportService.teacherNextStepCBT(reportId, formStep).then((res) => {
+      if (newStep > formStep.oldStep) {
+        setcurrent(current + 1);
+      } else {
+        setcurrent(current - 1);
+      }
+    });
+
+    console.log(formStep);
+  };
 
   return (
     <div className={classes.root}>
@@ -107,8 +118,11 @@ export default function Result() {
               {countStundent()} / {stepMax}
             </Typography>
           </Grid>
-          <Grid item xs={11} container justify="center" >
-            <Button variant="outlined">
+          <Grid item xs={11} container justify="center">
+            <Button
+              variant="outlined"
+              onClick={() => handleteacherNextStep(current)}
+            >
               <NavigateBefore />
             </Button>
 
@@ -116,7 +130,10 @@ export default function Result() {
               {quiz[current]?.step} / {stepMax}
             </Typography>
 
-            <Button variant="outlined">
+            <Button
+              variant="outlined"
+              onClick={() => handleteacherNextStep(current + 2)}
+            >
               <NavigateNext />
             </Button>
           </Grid>

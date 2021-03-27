@@ -1,5 +1,5 @@
 import axios from "axios";
-import { httpClient } from '../Auth/axiosInterceptor'
+import { httpClient } from "../Auth/axiosInterceptor";
 
 export const reportService = {
   insertReport,
@@ -9,12 +9,21 @@ export const reportService = {
   getQuizByStudent,
   answerByStudent,
   resultTeacher,
+  teacherNextStepCBT,
 };
 
-function resultTeacher(reportId) {
-  console.log("resultTeacher: ,", reportId);
-  console.log("resultTeacher: ,", reportId);
+function teacherNextStepCBT(reportId, formStep) {
+  return httpClient
+    .post(`/report/teacherNextStepCBT/${reportId}`, formStep)
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+}
 
+function resultTeacher(reportId) {
   return httpClient
     .post(`/report/checkMethodDelivery/${reportId}`)
     .then((res) => {
