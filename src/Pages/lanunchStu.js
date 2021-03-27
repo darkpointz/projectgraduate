@@ -170,6 +170,7 @@ export default function LanunchStu() {
   const [typeDelivery, settypeDelivery] = useState();
   const [quizzingStudent, setquizzingStudent] = useState([]);
   const [waiting, setwaiting] = useState(true);
+  const [step, setstep] = useState();
 
   const [stepMax, setstepMax] = useState();
   const [page, setpage] = useState(0);
@@ -203,7 +204,6 @@ export default function LanunchStu() {
                 return e.stuid === params.stuid;
               });
               setquizzingStudent(doc.data().student[indexStu].quizzing);
-
               //--quiz
               doc.data().quiz.forEach((data) => {
                 if (data.active === true) {
@@ -213,7 +213,17 @@ export default function LanunchStu() {
                     choice: data.choice,
                     question: data.question,
                   });
-                  setquiz(newQuiz);
+                  setstep(data.step)
+                  let done = doc.data().student[indexStu].quizzing.find((e) => { return e.step === data.step })
+                  console.log("quizzingStudent: ", done);
+                  if (done?.done) {
+                    setwaiting(true)
+                    // setquiz([]);
+                  }
+                  else {
+                    setwaiting(false)
+                    setquiz(newQuiz);
+                  }
                 } else if (data.active === false) {
                   setquiz(newQuiz);
                 }

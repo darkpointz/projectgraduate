@@ -27,6 +27,7 @@ async function signInWithGoogle() {
     .catch((err) => {
       console.log(err.message);
     });
+
   await auth.currentUser
     .getIdToken(true)
     .then((token) => {
