@@ -213,15 +213,16 @@ export default function LanunchStu() {
                     choice: data.choice,
                     question: data.question,
                   });
-                  setstep(data.step)
-                  let done = doc.data().student[indexStu].quizzing.find((e) => { return e.step === data.step })
+                  setstep(data.step);
+                  let done = doc.data().student[indexStu].quizzing.find((e) => {
+                    return e.step === data.step;
+                  });
                   console.log("quizzingStudent: ", done);
                   if (done?.done) {
-                    setwaiting(true)
+                    setwaiting(true);
                     // setquiz([]);
-                  }
-                  else {
-                    setwaiting(false)
+                  } else {
+                    setwaiting(false);
                     setquiz(newQuiz);
                   }
                 } else if (data.active === false) {
@@ -238,6 +239,7 @@ export default function LanunchStu() {
         setquiz(res.quizStudent);
         setroomName(res.roomName);
         setstepMax(res.stepMax);
+        setwaiting(false);
         settypeDelivery("CBS");
         setquizzingStudent(res.quizzingStudent);
       }
