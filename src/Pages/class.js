@@ -84,16 +84,6 @@ export default function Class() {
   const [userId, setuserId] = useState();
 
   useEffect(() => {
-    // setFBIdToken(header);
-    // axios
-    //   .get(`/room/getAllRoom`)
-    //   .then((res) => {
-    //     console.log(res.data);
-    //     setroom(res.data);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err.message);
-    //   });
     const uId = localStorage.getItem("userId");
     console.log("userId: ", uId);
     classService.getAllRoom(uId).then((res) => {

@@ -13,9 +13,10 @@ import LoginNew from "./Pages/loginNew";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 
-import LanunchStuCBS from "./Pages/lanunchStuCBS";
+import LanunchStu from "./Pages/lanunchStu";
 import LiveResult from "./Pages/liveResult";
 import ProtectedRoute from "./Routes/ProtectedRoute";
+import AxiosInterceptor from './Auth/axiosInterceptor'
 
 // import { AuthProvider, AuthContext } from "./Auth/authService";
 
@@ -39,10 +40,11 @@ export default function App() {
         const decodedToken = jwtDecode(token);
         if (decodedToken.exp * 1000 < Date.now()) {
           authService.logout();
-          window.location.href = "/login";
-        } else {
-          axios.defaults.headers.common["Authorization"] = token;
+          window.location.href = "/login/teacher";
         }
+        // else {
+        //   axios.defaults.headers.common["Authorization"] = token;
+        // }
       }
     });
     setuserStudent(localStorage.getItem("userStudent"));
@@ -74,5 +76,7 @@ export default function App() {
     //   <Route exact path="/room" render={props => <Class {...props} />} />
     // </Switch> */}
     // </div>
+
+    
   );
 }

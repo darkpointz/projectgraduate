@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from "react";
 import TableSelectClass from "./tableSelectClass";
 import { reportService } from "../Services/reportService";
+import { createBrowserHistory } from "history";
+import {
+  useHistory,
+  Route,
+  Switch,
+  Link,
+  Redirect,
+  withRouter,
+} from "react-router-dom";
 
 import {
   Typography,
@@ -17,13 +26,7 @@ import {
   DialogActions,
   DialogContent,
 } from "@material-ui/core";
-import {
-  Close,
-  NoteAdd,
-  Settings,
-  ArrowBackIos,
-  ArrowForwardIos,
-} from "@material-ui/icons";
+import { Close, ArrowBackIos, ArrowForwardIos } from "@material-ui/icons";
 import TableSelectQuiz from "./tableSelectQuiz";
 import SelectMethodQuiz from "./selectMethodQuiz";
 
@@ -74,6 +77,7 @@ export default function DialogSelectSetting(props) {
     SAAA: false,
     // time: false,
   });
+  let history = useHistory();
 
   const steps = [
     "Select Class",
@@ -115,7 +119,13 @@ export default function DialogSelectSetting(props) {
       };
       console.log(formReport);
       reportService.insertReport(uId, formReport).then((res) => {
-        console.log("res: ", res);
+        console.log("resss: ", res);
+        history.push("/result");
+        // if (res) {
+        //   <Link to={`/result`} />;
+        // }
+
+        localStorage.setItem("liveId", res);
       });
       confirm();
       setActiveStep(0);

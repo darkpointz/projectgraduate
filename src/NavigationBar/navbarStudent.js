@@ -45,11 +45,21 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 500,
     fontSize: "22px",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "16px",
+    },
   },
   typotitle: {
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 500,
     fontSize: "32px",
+    padding: theme.spacing(3, 5),
+  },
+  content: {
+    padding: theme.spacing(12, 5),
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(8, 2),
+    },
   },
 }));
 
@@ -67,7 +77,7 @@ export default function NavbarStudent() {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <Grid container spacing={5}>
+      <Grid container>
         <Grid container item xs={12}>
           <AppBar position="sticky" className={classes.appBar}>
             <Toolbar>
@@ -84,15 +94,18 @@ export default function NavbarStudent() {
             </Toolbar>
           </AppBar>
         </Grid>
-        <Grid container item xs={12} justify="center" alignItems="center">
-          <Typography className={classes.typotitle}>Student Login</Typography>
-        </Grid>
-        <Grid container item xs={12} justify="center" alignItems="center">
-          {!report ? (
-            <LoginByUserRoomName handleSetRoom={handleSetRoom} />
-          ) : (
-            <LoginByUserName reportId={report} roomPublic={roomPublic} />
-          )}
+
+        <Grid container item xs={12} className={classes.content}>
+          <Grid container item xs={12} justify="center" alignItems="center">
+            <Typography className={classes.typotitle}>Student Login</Typography>
+          </Grid>
+          <Grid container item xs={12} justify="center" alignItems="center">
+            {!report ? (
+              <LoginByUserRoomName handleSetRoom={handleSetRoom} />
+            ) : (
+              <LoginByUserName reportId={report} roomPublic={roomPublic} />
+            )}
+          </Grid>
         </Grid>
       </Grid>
     </div>
