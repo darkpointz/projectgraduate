@@ -69,18 +69,29 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#E7F6EA",
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 500,
-    fontSize: "18px",
+    fontSize: "16px",
+    borderRadius: "14px",
+    textAlign: "justify",
     padding: theme.spacing(1),
   },
   typoRowIncorrect: {
     backgroundColor: "#FCE5E5",
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 500,
-    fontSize: "18px",
+    fontSize: "16px",
+    borderRadius: "14px",
+
     padding: theme.spacing(1),
+    textAlign: "justify",
+  },
+  typoRowClassScore: {
+    fontFamily: "'Prompt', sans-serif",
+    fontWeight: 500,
+    fontSize: "15px",
+    textAlign: "justify",
   },
   tableCBS: {
-    padding: theme.spacing(1),
+    // padding: theme.spacing(8),
   },
 }));
 
@@ -229,10 +240,18 @@ export default function Result() {
       {
         title: "NAME",
         field: "fname",
+        headerStyle: {
+          padding: 20,
+        },
       },
       {
         title: "SCORE",
         field: "score",
+        headerStyle: {
+          width: 10,
+          maxWidth: 20,
+          padding: 10,
+        },
       },
     ];
     quiz.map((item, i) => {
@@ -316,9 +335,15 @@ export default function Result() {
       let test = `answer${i}`;
       if (countCorrect > 0) {
         percent = parseInt((countCorrect / studentMax) * 100);
-        row[indexObject][test] = `${percent}%`;
+        row[indexObject][test] = (
+          <Typography className={classes.typoRowClassScore}>
+            {percent}%
+          </Typography>
+        );
       } else {
-        row[indexObject][test] = `${0}%`;
+        row[indexObject][test] = (
+          <Typography className={classes.typoRowClassScore}>0%</Typography>
+        );
       }
     }
     return row;
@@ -354,7 +379,9 @@ export default function Result() {
                 selectedRow === rowData.tableData.id ? "#F5F7F8" : "#FFF",
               fontFamily: "'Prompt', sans-serif",
               fontWeight: 500,
-              fontSize: "16px",
+              fontSize: "15px",
+
+              textAlign: "center",
               // color: checkColorRow(rowData) ? "#19A999" : "F5F7F8",
               // color: colorRow === rowData.tableData.id ? "#19A999" : "F5F7F8",
             }),
