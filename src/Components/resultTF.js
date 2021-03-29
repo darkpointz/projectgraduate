@@ -19,8 +19,10 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "24px",
   },
   paperAnswer: { backgroundColor: "#19A999" },
-  btnFalse: {
-    backgroundColor: red[400],
+  paperTrue: {
+    backgroundColor: "#fc5353",
+  },
+  paperFalse: {
     backgroundColor: "#fc5353",
   },
 }));
@@ -36,10 +38,17 @@ export default function ResultTF({ quiz }) {
       </Grid>
 
       <Grid container item xs={12}>
-        <Paper className={classes.paperAnswer}>True</Paper>
+        <Paper className={clsx(classes.paperAnswer, {
+          [classes.paperTrue]: quiz.correct === "true",
+        })}
+        >True</Paper>
       </Grid>
       <Grid container item xs={12}>
-        <Paper className={classes.paperAnswer}>False</Paper>
+        <Paper className={clsx(classes.paperAnswer, {
+          [classes.paperFalse]: quiz.correct === "false",
+        })}>
+          False
+          </Paper>
       </Grid>
     </div>
   );
