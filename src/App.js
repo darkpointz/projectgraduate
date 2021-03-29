@@ -60,12 +60,12 @@ export default function App() {
     //   ) : (
     //     <Login />
     //   )} */}
-    
+
     //   {/* ลองมือถือ */}
     //   {/* <Navbar displayName={"aod"} displayPic={"/static/images/avatar/2.jpg"} /> */}
-
+    <ProtectedRoute currentUser={currentUser} userStudent={userStudent} />
+    // <LoginNew />
     //   {/* <LanunchStu /> */}
-      
 
     //   {/* <Switch>
     //   <Route exact from="/" render={props => <Lanunch {...props} />} />
@@ -74,6 +74,5 @@ export default function App() {
     //   <Route exact path="/room" render={props => <Class {...props} />} />
     // </Switch> */}
     // </div>
-    
   );
 }
