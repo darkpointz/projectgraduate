@@ -2,14 +2,7 @@ import React, { useState, useEffect } from "react";
 import TableSelectClass from "./tableSelectClass";
 import { reportService } from "../Services/reportService";
 import { createBrowserHistory } from "history";
-import {
-  useHistory,
-  Route,
-  Switch,
-  Link,
-  Redirect,
-  withRouter,
-} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import {
   Typography,
