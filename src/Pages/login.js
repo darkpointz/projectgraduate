@@ -3,86 +3,35 @@ import axios from "axios";
 import { authService } from "../Auth/authService";
 import { auth, provider } from "../Auth/firebase";
 import { createBrowserHistory } from "history";
+import { useStyles } from "./styles.js";
+import { useTheme } from "./theme.js";
 import {
-  makeStyles,
   CssBaseline,
   Button,
-  createMuiTheme,
   Typography,
   ThemeProvider,
   Grid,
+  AppBar,
+  Toolbar,
 } from "@material-ui/core";
-// import { UserContext } from "../Contexts/user";
-
-const theme = createMuiTheme({
-  typography: {
-    fontFamily: "'Prompt', sans-serif",
-    h2: {
-      fontSize: "32px",
-      fontWeight: 600,
-    },
-  },
-  palette: {
-    primary: {
-      main: "#138086",
-    },
-    secondary: {
-      main: "#534666",
-    },
-  },
-});
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    // padding: "0",
-    // margin: "0",
-    // background: 'linear-gradient(45deg, #138086, #534666)'
-  },
-  body: {
-    background: "linear-gradient(45deg, #138086, #534666)",
-    height: "100%",
-    width: "100%",
-    position: "absolute",
-  },
-  paper: {
-    overflow: "hidden",
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    width: "500px",
-    position: "absolute",
-  },
-  textfield: {
-    display: "flex",
-    alignItems: "center",
-    flexDirection: "column",
-    justifyContent: "center",
-    marginTop: 24,
-    [theme.breakpoints.down("sm")]: {
-      margin: "10px 10px",
-    },
-  },
-  typoLogin: {
-    fontFamily: "'Prompt', sans-serif",
-    fontSize: "32px",
-    fontWeight: 600,
-  },
-  button: {
-    margin: "10px 0",
-  },
-  gridTypo: {
-    marginTop: 24,
-  },
-}));
 
 export default function Login() {
   const classes = useStyles();
   const history = createBrowserHistory({ forceRefresh: true });
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={useTheme}>
       <CssBaseline />
       <Grid container className={classes.root}>
+        <Grid container item xs={12} className={classes.GridAppBar}>
+          <AppBar position="sticky" elevation={0} className={classes.appBar}>
+            <Toolbar>
+              <Typography variant="h6" className={classes.title}>
+                Qton
+              </Typography>
+            </Toolbar>
+          </AppBar>
+        </Grid>
         <Grid
           container
           item

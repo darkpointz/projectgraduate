@@ -3,8 +3,10 @@ import axios from "axios";
 import { authService } from "../Auth/authService";
 import { auth, provider } from "../Auth/firebase";
 import { createBrowserHistory } from "history";
+import { useStyles } from "./styles.js";
+import { useTheme } from "./theme.js";
 import {
-  makeStyles,
+  ThemeProvider,
   CssBaseline,
   Button,
   Toolbar,
@@ -13,34 +15,34 @@ import {
   Grid,
 } from "@material-ui/core";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    width: "100%",
-  },
-  appBar: {
-    backgroundColor: "#19A999",
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-    fontFamily: "'Prompt', sans-serif",
-    fontWeight: 600,
-    fontSize: "34px",
-  },
-  btn: {
-    fontFamily: "'Prompt', sans-serif",
-    fontWeight: 500,
-    fontSize: "22px",
-  },
-  typotitle: {
-    fontFamily: "'Prompt', sans-serif",
-    fontWeight: 500,
-    fontSize: "28px",
-  },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   root: {
+//     flexGrow: 1,
+//     width: "100%",
+//   },
+//   appBar: {
+//     backgroundColor: "#19A999",
+//   },
+//   menuButton: {
+//     marginRight: theme.spacing(2),
+//   },
+//   title: {
+//     flexGrow: 1,
+//     fontFamily: "'Prompt', sans-serif",
+//     fontWeight: 600,
+//     fontSize: "34px",
+//   },
+//   btn: {
+//     fontFamily: "'Prompt', sans-serif",
+//     fontWeight: 500,
+//     fontSize: "22px",
+//   },
+//   typotitle: {
+//     fontFamily: "'Prompt', sans-serif",
+//     fontWeight: 500,
+//     fontSize: "28px",
+//   },
+// }));
 
 export default function LoginTeacher() {
   const classes = useStyles();
@@ -64,28 +66,95 @@ export default function LoginTeacher() {
   };
 
   return (
-    <div className={classes.root}>
+    <ThemeProvider theme={useTheme}>
       <CssBaseline />
-      <AppBar position="sticky" className={classes.appBar}>
-        <Toolbar>
-          <Typography variant="h6" className={classes.title}>
-            Qton
-          </Typography>
-          <Button
-            color="inherit"
-            className={classes.btn}
-            onClick={() => history.push("/login/student")}
+      <Grid container className={classes.root}>
+        <Grid container item xs={12} className={classes.GridAppBar}>
+          <AppBar position="sticky" elevation={0} className={classes.appBar}>
+            <Toolbar>
+              <Typography variant="h6" className={classes.title}>
+                Qton
+              </Typography>
+              <Button
+                color="inherit"
+                className={classes.btn}
+                onClick={() => history.push("/login/student")}
+              >
+                Student Login
+              </Button>
+            </Toolbar>
+          </AppBar>
+        </Grid>
+        <Grid
+          container
+          item
+          xs={12}
+          className={classes.body}
+          alignItems="center"
+          justify="center"
+        >
+          <Grid
+            className={classes.paper}
+            container
+            item
+            xs={12}
+            justify="center"
           >
-            Student Login
-          </Button>
-        </Toolbar>
-      </AppBar>
-      <Button variant="contained" onClick={handleClicklogin}>
-        Google Signin Teacher
-      </Button>
-      <Button variant="contained" onClick={handleClicklogin}>
-        Signin Teacher
-      </Button>
-    </div>
+            <Grid
+              classesName={classes.gridTypo}
+              item
+              xs={12}
+              container
+              justify="center"
+            >
+              <Typography variant="h2">Teacher</Typography>
+            </Grid>
+
+            <Grid container item xs={12} justify="space-evenly">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleClicklogin}
+                className={classes.button}
+              >
+                LogIn with Google
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleClicklogin}
+                className={classes.button}
+              >
+                Login with Email
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+    </ThemeProvider>
+
+    // <div className={classes.root}>
+    //   <CssBaseline />
+    //   <AppBar position="sticky" className={classes.appBar}>
+    //     <Toolbar>
+    //       <Typography variant="h6" className={classes.title}>
+    //         Qton
+    //       </Typography>
+    //       <Button
+    //         color="inherit"
+    //         className={classes.btn}
+    //         onClick={() => history.push("/login/student")}
+    //       >
+    //         Student Login
+    //       </Button>
+    //     </Toolbar>
+    //   </AppBar>
+    //   <Button variant="contained" onClick={handleClicklogin}>
+    //     Google Signin Teacher
+    //   </Button>
+    //   <Button variant="contained" onClick={handleClicklogin}>
+    //     Signin Teacher
+    //   </Button>
+    // </div>
   );
 }
