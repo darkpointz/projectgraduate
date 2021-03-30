@@ -1,39 +1,24 @@
-import React, { useState, useEffect, forwardRef } from "react";
+import React, { useState, useEffect } from "react";
 import { reportService } from "../Services/reportService";
 import firebase from "firebase/app";
+import { useHistory } from "react-router-dom";
 
 import {
   makeStyles,
   CssBaseline,
   Button,
-  LinearProgress,
   Typography,
-  ThemeProvider,
   Grid,
   Divider,
-  Box,
 } from "@material-ui/core";
-import MaterialTable from "material-table";
 
-import {
-  NavigateNext,
-  NavigateBefore,
-  GroupTwoTone,
-  Search,
-  FirstPage,
-  LastPage,
-  ChevronLeft,
-  ChevronRight,
-  Clear,
-  ArrowDownward,
-  Check,
-  SaveAlt,
-  Close,
-} from "@material-ui/icons";
-import axios from "axios";
+import { NavigateNext, NavigateBefore, GroupTwoTone } from "@material-ui/icons";
+
 import ResultMC from "../Components/resultMC";
 import ResultTF from "../Components/resultTF";
 import ResultSA from "../Components/resultSA";
+import TableResult from "../Components/tableResult";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -65,33 +50,28 @@ const useStyles = makeStyles((theme) => ({
   iconNavigate: {
     fontSize: "28px",
   },
-  typoRowCorrect: {
-    backgroundColor: "#E7F6EA",
+  typoTitleShowNoResult: {
+    marginTop: "20px",
+    fontFamily: "'Prompt', sans-serif",
+    fontWeight: 600,
+    fontSize: "26px",
+  },
+  typoShowNoResult: {
+    marginTop: "16px",
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 500,
-    fontSize: "16px",
+    fontSize: "20px",
+    textAlign: "center",
+  },
+  btnShowNoResult: {
+    backgroundColor: "#e0f2f1",
+    fontFamily: "'Prompt', sans-serif",
+    fontWeight: 500,
+    fontSize: "24px",
+    color: "#19A999",
     borderRadius: "14px",
-    textAlign: "justify",
-    padding: theme.spacing(1),
-  },
-  typoRowIncorrect: {
-    backgroundColor: "#FCE5E5",
-    fontFamily: "'Prompt', sans-serif",
-    fontWeight: 500,
-    fontSize: "16px",
-    borderRadius: "14px",
-
-    padding: theme.spacing(1),
-    textAlign: "justify",
-  },
-  typoRowClassScore: {
-    fontFamily: "'Prompt', sans-serif",
-    fontWeight: 500,
-    fontSize: "15px",
-    textAlign: "justify",
-  },
-  tableCBS: {
-    // padding: theme.spacing(8),
+    marginTop: "28px",
+    boxShadow: "none",
   },
 }));
 
@@ -107,50 +87,89 @@ export default function Result() {
   const [current, setcurrent] = useState(0);
   const [stepMax, setstepMax] = useState();
   const [start, setstart] = useState();
-  const [selectedRow, setSelectedRow] = useState(null);
-  const [colorRow, setcolorRow] = useState([]);
+  let history = useHistory();
 
   useEffect(() => {
     reportService.resultTeacher(localStorage.getItem("liveId")).then((res) => {
       setreportId(localStorage.getItem("liveId"));
       settypeDelivery(res);
-      // if (res === "CBT") {
-
-      firebase
-        .firestore()
-        .collection("Report")
-        .doc(localStorage.getItem("liveId"))
-        .onSnapshot((doc) => {
-          console.log(doc.data());
-          setquiz(doc.data().quiz);
-          setstepMax(doc.data().quiz.length);
-          setroomName(doc.data().roomName);
-          setscore(doc.data().score);
-          setstudent(doc.data().student);
-          setstudentMax(doc.data().student.length);
-          setstart(doc.data().start);
-        });
-      // } else if (res === "CBT") {
-      //   firebase
-      //     .firestore()
-      //     .collection("Report")
-      //     .doc(localStorage.getItem("liveId"))
-      //     .onSnapshot((doc) => {});
-      // }
+      console.log(res);
+      if (res) {
+        firebase
+          .firestore()
+          .collection("Report")
+          .doc(localStorage.getItem("liveId"))
+          .onSnapshot((doc) => {
+            console.log(doc.data());
+            //--setข้อปัจจุบัน
+            doc.data().quiz.find((e) => {
+              if (e.active === true) {
+                setcurrent(e.step - 1);
+              }
+            });
+            //--setโจทย์
+            setquiz(doc.data().quiz);
+            //--setข้อทั้งหมด
+            setstepMax(doc.data().quiz.length);
+            setroomName(doc.data().roomName);
+            //--setผลคำตอบทั้งหมด
+            setscore(doc.data().score);
+            //--setนร.
+            setstudent(doc.data().student);
+            //--setนร.ทั้งหมด
+            setstudentMax(doc.data().student.length);
+            //--setว่าเริ่มทำยัง
+            setstart(doc.data().start);
+          });
+      }
     });
   }, []);
+
+  const calculatorPercent = (count) => {
+    let percent = Math.round((count / studentMax) * 100);
+    return percent;
+  };
+
+  const studentAnswer = () => {
+    let answer = [];
+    student.map((item) => {
+      let stuQuiz = item.quizzing.find((e) => e.step === current + 1);
+      answer.push(stuQuiz?.answer);
+    });
+    return answer;
+  };
 
   const handleShowResultCBT = () => {
     return (
       <>
         {quiz[current]?.type === "multiplechoice" ? (
-          <ResultMC quiz={quiz[current]} />
+          <ResultMC
+            quiz={quiz[current]}
+            score={score[current]}
+            studentMax={studentMax}
+            studentAnswer={studentAnswer()}
+            scoreCountCorrect={calculatorPercent(score[current]?.countCorrect)}
+            scoreCountFail={calculatorPercent(score[current]?.countFail)}
+          />
         ) : quiz[current]?.type === "truefalse" ? (
           <>
-            <ResultTF quiz={quiz[current]} />
+            <ResultTF
+              quiz={quiz[current]}
+              correct={quiz[current]?.correct}
+              scoreCountCorrect={calculatorPercent(
+                score[current]?.countCorrect
+              )}
+              scoreCountFail={calculatorPercent(score[current]?.countFail)}
+              studentMax={studentMax}
+            />
           </>
         ) : quiz[current]?.type === "shortanswer" ? (
-          <ResultSA quiz={quiz[current]} />
+          <ResultSA
+            quiz={quiz[current]}
+            score={score[current]?.countCorrect}
+            student={student}
+            studentMax={studentMax}
+          />
         ) : null}
       </>
     );
@@ -181,8 +200,6 @@ export default function Result() {
         setcurrent(current - 1);
       }
     });
-
-    console.log(formStep);
   };
 
   const handleBtnStart = () => {
@@ -219,183 +236,48 @@ export default function Result() {
     );
   };
 
-  const tableIcons = {
-    Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
-    LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
-    NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-    PreviousPage: forwardRef((props, ref) => (
-      <ChevronLeft {...props} ref={ref} />
-    )),
-    ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
-    SortArrow: forwardRef((props, ref) => (
-      <ArrowDownward {...props} ref={ref} />
-    )),
-    Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
-  };
-
-  const columnsTable = () => {
-    let columnName = [
-      {
-        title: "NAME",
-        field: "fname",
-        headerStyle: {
-          padding: 20,
-        },
-      },
-      {
-        title: "SCORE",
-        field: "score",
-        headerStyle: {
-          width: 10,
-          maxWidth: 20,
-          padding: 10,
-        },
-      },
-    ];
-    quiz.map((item, i) => {
-      let step = item.step;
-      columnName.push({
-        title: step,
-        field: "answer" + i,
-        headerStyle: {
-          backgroundColor: "#039be5",
-        },
-      });
-    });
-    return columnName;
-  };
-
-  const rowsTable = () => {
-    let row = [];
-    if (student?.length) {
-      student.forEach((data) => {
-        if (data.quizzing?.length) {
-          row.push({
-            fname: data.fname,
-            score: `${data.countScore}/${stepMax}`,
-          });
-          let indexObject = row.findIndex((value) => value.fname == data.fname);
-          for (let i = 0; i <= stepMax; i++) {
-            // let indexObject = row.findIndex(
-            //   (valueFind) => valueFind.fname == data.fname
-            // );
-            let obj = {
-              id: data.stuid,
-            };
-            let newcolorRow;
-
-            let result = data.quizzing.find((e) => e.step === i);
-            if (result && result.result) {
-              let test = `answer${i - 1}`;
-              row[indexObject][test] = (
-                <Typography className={classes.typoRowCorrect}>
-                  {result.answer}
-                </Typography>
-              );
-              // row[indexObject][test] = `correct`;
-
-              newcolorRow = colorRow;
-              // newcolorRow.push({ obj });
-              // row[indexObject][test] = `${(<Check />)} correct`;
-            } else if (result && !result.result) {
-              let test = `answer${i - 1}`;
-              row[indexObject][test] = (
-                <Box display="flex" justify="center">
-                  <Typography className={classes.typoRowIncorrect}>
-                    {result.answer}
-                  </Typography>
-                </Box>
-              );
-              // row[indexObject][test] = "incorrect";
-            }
-
-            // if (data.quizzing.some((checkStep) => checkStep.step == i)) {
-            //   let test = `answer${i - 1}`;
-            //   row[indexObject][test] = data.quizzing[0].result;
-            //   console.log(row);
-            // }
-          }
-        } else {
-          row.push({
-            fname: data.fname,
-            answer: "",
-          });
-        }
-      });
-    }
-
-    //--rowScore--
-    row.push({ fname: "Class Total" });
-    let indexObject = row.findIndex((value) => value.fname == "Class Total");
-    for (let i = 0; i <= stepMax; i++) {
-      let countCorrect = score[i]?.countCorrect;
-      let percent;
-      let test = `answer${i}`;
-      if (countCorrect > 0) {
-        percent = parseInt((countCorrect / studentMax) * 100);
-        row[indexObject][test] = (
-          <Typography className={classes.typoRowClassScore}>
-            {percent}%
-          </Typography>
-        );
-      } else {
-        row[indexObject][test] = (
-          <Typography className={classes.typoRowClassScore}>0%</Typography>
-        );
-      }
-    }
-    return row;
-  };
-
   const handleShowResultCBS = () => {
     return (
-      <>
-        <MaterialTable
-          icons={tableIcons}
-          title="Score"
-          // style={{ padding: "0 8px" }}
-          className={classes.tableCBS}
-          columns={columnsTable()}
-          // data={student}
-          data={rowsTable()}
-          onRowClick={(evt, selectedRow) =>
-            setSelectedRow(selectedRow.tableData.id)
-          }
-          options={{
-            search: false,
-            exportButton: true,
-            headerStyle: {
-              backgroundColor: "#19A999",
-              color: "#FFF",
-              fontFamily: "'Prompt', sans-serif",
-              fontWeight: 500,
-              fontSize: "18px",
-              textAlign: "center",
-            },
-            rowStyle: (rowData) => ({
-              backgroundColor:
-                selectedRow === rowData.tableData.id ? "#F5F7F8" : "#FFF",
-              fontFamily: "'Prompt', sans-serif",
-              fontWeight: 500,
-              fontSize: "15px",
-
-              textAlign: "center",
-              // color: checkColorRow(rowData) ? "#19A999" : "F5F7F8",
-              // color: colorRow === rowData.tableData.id ? "#19A999" : "F5F7F8",
-            }),
-          }}
-        />
-      </>
+      //--ตารางคะแนน
+      <TableResult
+        quiz={quiz}
+        stepMax={stepMax}
+        student={student}
+        score={score}
+        studentMax={studentMax}
+      />
     );
   };
 
-  const checkColorRow = (rowData) => {
-    let result;
-    console.log("rowData: ", rowData.tableData);
-    result = colorRow.find((e) => e.id === rowData.tableData.id);
-    // return;
+  const clickLaunchActivity = () => {
+    history.push("/launch");
+  };
+
+  const handleShowNoResult = () => {
+    return (
+      <>
+        <Grid item xs={12} container justify="center">
+          <Typography className={classes.typoTitleShowNoResult}>
+            Live Result
+          </Typography>
+        </Grid>
+        <Grid item xs={12} container justify="center">
+          <Typography className={classes.typoShowNoResult}>
+            You'll see live results for your room's current activity here.
+            Launch a new activity to get started!
+          </Typography>
+        </Grid>
+        <Grid item xs={12} container justify="center">
+          <Button
+            variant="contained"
+            className={classes.btnShowNoResult}
+            onClick={() => clickLaunchActivity()}
+          >
+            Launch Activity
+          </Button>
+        </Grid>
+      </>
+    );
   };
 
   return (
@@ -406,7 +288,7 @@ export default function Result() {
           <Typography className={classes.typoRoomName}>{roomName}</Typography>
         </Grid>
         <Grid container item xs={6} justify="flex-end">
-          {!start ? (
+          {!start && typeDelivery ? (
             <Button
               variant="contained"
               className={classes.btnStart}
@@ -414,42 +296,47 @@ export default function Result() {
             >
               Start Quiz
             </Button>
-          ) : (
+          ) : start && typeDelivery ? (
             <Button variant="contained" className={classes.btnStart}>
               Finish Quiz
             </Button>
-          )}
+          ) : null}
         </Grid>
-        <Grid item xs={12}>
-          <Divider />
-        </Grid>
+        {typeDelivery ? (
+          <>
+            <Grid item xs={12}>
+              <Divider />
+            </Grid>
+            <Grid item xs={12} container justify="center" alignItems="center">
+              <Grid item xs={3} container>
+                <Typography className={classes.typoCountStudent}>
+                  Students Answered {countStundent()} / {studentMax}
+                </Typography>
+              </Grid>
 
-        <Grid item xs={12} container justify="center" alignItems="center">
-          <Grid item xs={3} container>
-            <Typography className={classes.typoCountStudent}>
-              Students Answered {countStundent()} / {studentMax}
-            </Typography>
-          </Grid>
+              <Grid item xs={8} container justify="center" alignItems="center">
+                {typeDelivery === "CBT" ? showNavigateStep() : null}
+              </Grid>
 
-          <Grid item xs={8} container justify="center" alignItems="center">
-            {typeDelivery === "CBT" ? showNavigateStep() : null}
-          </Grid>
+              <Grid item xs={1} container>
+                <GroupTwoTone />
+                <Typography className={classes.typoCountStudent}>
+                  {countStundentJoin()} / {studentMax}
+                </Typography>
+              </Grid>
+            </Grid>
 
-          <Grid item xs={1} container>
-            <GroupTwoTone />
-            <Typography className={classes.typoCountStudent}>
-              {countStundentJoin()} / {studentMax}
-            </Typography>
-          </Grid>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Divider />
-        </Grid>
+            <Grid item xs={12}>
+              <Divider />
+            </Grid>
+          </>
+        ) : null}
         <Grid item xs={12} justify="center">
           {typeDelivery === "CBT"
             ? handleShowResultCBT()
-            : handleShowResultCBS()}
+            : typeDelivery === "CBS"
+            ? handleShowResultCBS()
+            : handleShowNoResult()}
         </Grid>
       </Grid>
     </div>
