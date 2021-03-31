@@ -10,7 +10,7 @@ import {
   SaveAlt,
 } from "@material-ui/icons";
 import MaterialTable from "material-table";
-import { makeStyles, Typography, Box } from "@material-ui/core";
+import { makeStyles, Typography, Box, Button } from "@material-ui/core";
 import { CsvBuilder } from "filefy";
 
 const useStyles = makeStyles((theme) => ({
@@ -102,8 +102,9 @@ export default function TableResult({
     return columnName;
   };
 
-  const rowsTable = () => {
+  const rowsTable = (type) => {
     let row = [];
+    let rowcsv = [];
     if (student?.length) {
       student.forEach((data) => {
         if (data.quizzing?.length) {
@@ -111,6 +112,8 @@ export default function TableResult({
             fname: data.fname,
             score: `${data.countScore}/${stepMax}`,
           });
+          rowcsv.push(data.fname, `${data.countScore}/${stepMax}`);
+
           let indexObject = row.findIndex((value) => value.fname == data.fname);
           for (let i = 0; i <= stepMax; i++) {
             // let indexObject = row.findIndex(
@@ -125,6 +128,7 @@ export default function TableResult({
                   {result.answer}
                 </Typography>
               );
+              rowcsv.push(result.answer);
               // row[indexObject][test] = `correct`;
 
               // newcolorRow.push({ obj });
@@ -138,6 +142,7 @@ export default function TableResult({
                   </Typography>
                 </Box>
               );
+              rowcsv.push(result.answer);
               // row[indexObject][test] = "incorrect";
             }
 
@@ -176,15 +181,29 @@ export default function TableResult({
         );
       }
     }
+    if (type === "csv") {
+      return rowcsv;
+    }
     return row;
   };
 
   const handleExportCsv = () => {
+    // const data = row.map((rowData) =>
+    //   csvColumns.map((columnDef) => rowData[columnDef.field])
+    // );
+
     const builder = new CsvBuilder("Report.csv");
-    let row = rowsTable();
+    let row = rowsTable("csv");
     let columns = columnsTable();
     console.log(row);
-    builder.setColumns(columns).addRows(row).exportFile();
+    builder
+      .setColumns(row)
+      .addRow(["Eve", "Holt"])
+      .addRows([
+        ["Charles", "Morris"],
+        ["Tracey", "Ramos"],
+      ])
+      .exportFile();
   };
 
   return (
@@ -204,7 +223,7 @@ export default function TableResult({
           search: false,
           exportButton: true,
           exportAllData: true,
-          //   exportCsv: handleExportCsv,
+          // exportCsv: handleExportCsv(),
           headerStyle: {
             backgroundColor: "#19A999",
             color: "#FFF",
@@ -226,6 +245,7 @@ export default function TableResult({
           }),
         }}
       />
+      <Button onClick={handleExportCsv}>handleExportCsv</Button>
     </>
   );
 }

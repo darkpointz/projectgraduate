@@ -331,7 +331,7 @@ export default function Result() {
             </Grid>
           </>
         ) : null}
-        <Grid item xs={12} justify="center">
+        <Grid item xs={12} container justify="center">
           {typeDelivery === "CBT"
             ? handleShowResultCBT()
             : typeDelivery === "CBS"

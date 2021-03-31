@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { reportService } from "../Services/reportService";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import firebase from "firebase/app";
 import { createBrowserHistory } from "history";
-import { teal } from "@material-ui/core/colors";
 import clsx from "clsx";
 
 import {
@@ -16,19 +15,11 @@ import {
 import {
   AppBar,
   CssBaseline,
-  Divider,
-  Drawer,
-  Hidden,
   IconButton,
   Grid,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   Toolbar,
   Typography,
   Button,
-  Avatar,
-  Box,
   Paper,
 } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -170,7 +161,6 @@ export default function LanunchStu() {
   const [typeDelivery, settypeDelivery] = useState();
   const [quizzingStudent, setquizzingStudent] = useState([]);
   const [waiting, setwaiting] = useState(true);
-  const [step, setstep] = useState();
 
   const [stepMax, setstepMax] = useState();
   const [page, setpage] = useState(0);
@@ -181,7 +171,8 @@ export default function LanunchStu() {
   const [oldCurrent, setoldCurrent] = useState();
 
   let params = useParams();
-  const history = createBrowserHistory({ forceRefresh: true });
+
+  let history = useHistory();
   useEffect(() => {
     const formStudent = {
       reportId: params.reportId,
@@ -213,7 +204,6 @@ export default function LanunchStu() {
                     choice: data.choice,
                     question: data.question,
                   });
-                  setstep(data.step);
                   let done = doc.data().student[indexStu].quizzing.find((e) => {
                     return e.step === data.step;
                   });
@@ -235,13 +225,50 @@ export default function LanunchStu() {
             }
           });
         settypeDelivery("CBT");
-      } else {
-        setquiz(res.quizStudent);
-        setroomName(res.roomName);
-        setstepMax(res.stepMax);
-        setwaiting(false);
-        settypeDelivery("CBS");
-        setquizzingStudent(res.quizzingStudent);
+      } else if (res === "CBS") {
+        firebase
+          .firestore()
+          .collection("Report")
+          .doc(params.reportId)
+          .onSnapshot((doc) => {
+            let quizStudent = [];
+
+            if (doc.data().start && doc.data().finish === false) {
+              //--setโจทย์โดนไม่มีresult
+              doc.data().quiz.forEach((data) => {
+                let form = {
+                  question: data.question,
+                  type: data.type,
+                  step: data.step,
+                };
+                if (data.type === "multiplechoice") {
+                  form.choice = data.choice;
+                }
+                quizStudent.push(form);
+              });
+              setquiz(quizStudent);
+              let indexStudent = doc
+                .data()
+                .student.findIndex((e) => e.stuid === params.stuid);
+              //--setคำตอบนร.
+              doc.data().student[indexStudent].quizzing.forEach((data) => {
+                let form = {
+                  answer: data.answer,
+                  step: data.step,
+                  done: false,
+                };
+                quizzingStudent.push(form);
+              });
+              setquizzingStudent(quizzingStudent);
+
+              setroomName(doc.data().roomName);
+              setstepMax(doc.data().quiz.length);
+              setwaiting(false);
+              settypeDelivery("CBS");
+            } else if (doc.data().finish) {
+              history.push("/login/student");
+            }
+          });
       }
     });
   }, []);
@@ -433,7 +460,6 @@ export default function LanunchStu() {
           {quiz.slice(page, maxPage).map((item, index) => (
             <Button
               variant="outlined"
-              // className={classes.btnStep}
               className={clsx(classes.btnStep, {
                 [classes.btnTrue]: handleCheckStyleStep(item.step),
               })}
@@ -504,9 +530,6 @@ export default function LanunchStu() {
     reportService.answerByStudent(formStudent, params.reportId).then((res) => {
       setanswer();
       setoldCurrent();
-      // if(typeDelivery==="CBT"){
-
-      // }
     });
   };
 
@@ -538,11 +561,6 @@ export default function LanunchStu() {
         <Grid container item xs={12} justify="center" alignItems="center">
           <Paper className={classes.paperQuestion}>
             <Typography className={classes.typoQuestion}>
-              {/* {typeDelivery === "CBS"
-                  ? quiz[current]?.question
-                  : typeDelivery === "CBT"
-                  ? question
-                  : null} */}
               {quiz[current]?.question}
             </Typography>
           </Paper>
@@ -585,10 +603,6 @@ export default function LanunchStu() {
           </AppBar>
         </Grid>
         {waiting ? <WaitingForActivity /> : showContent()}
-
-        {/* <Grid container item xs={12} className={classes.content}>
-          
-        </Grid> */}
       </Grid>
     </>
     // </div>

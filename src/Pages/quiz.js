@@ -182,15 +182,20 @@ export default function Quiz(props) {
             <Typography className={classes.typotitlePaper}>Quiz</Typography>
 
             <Grid container item xs={12}>
-              <Grid container item xs={4} direction="column">
+              <Grid container item xs={2} direction="column">
                 <Button variant="contained">ss</Button>
               </Grid>
-              <Grid container item xs={8}>
+              <Grid container item xs={10}>
                 <MaterialTable
                   icons={tableIcons}
                   title="Score"
                   // className={classes.tableCBS}
-                  style={{ width: "100%", backgroundColor: "#A8DCD7" }}
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#A8DCD7",
+                    marginRight: "10px",
+                    marginBottom: "10px",
+                  }}
                   columns={columnsTable()}
                   data={rowsTable()}
                   options={{
