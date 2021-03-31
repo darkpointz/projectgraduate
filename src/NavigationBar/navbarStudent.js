@@ -78,44 +78,11 @@ export default function NavbarStudent() {
   };
 
   return (
-    <ThemeProvider theme={useTheme}>
-      <CssBaseline />
-      <Grid container className={classes.root}>
-        <Grid container item xs={12} className={classes.GridAppBar}>
-          <AppBar position="sticky" elevation={0} className={classes.appBar}>
-            <Toolbar>
-              <Typography variant="h6" className={classes.title}>
-                Qton
-              </Typography>
-              <Button
-                color="inherit"
-                className={classes.btn}
-                onClick={() => history.push("/login/teacher")}
-              >
-                Teacher Login
-              </Button>
-            </Toolbar>
-          </AppBar>
-        </Grid>
-        <Grid container item xs={12} className={classes.content}>
-          <Grid container item xs={12} justify="center" alignItems="center">
-            <Typography className={classes.typotitle}>Student Login</Typography>
-          </Grid>
-          <Grid container item xs={12} justify="center" alignItems="center">
-            {!report ? (
-              <LoginByUserRoomName handleSetRoom={handleSetRoom} />
-            ) : (
-              <LoginByUserName reportId={report} roomPublic={roomPublic} />
-            )}
-          </Grid>
-        </Grid>
-      </Grid>
-    </ThemeProvider>
-    // <div className={classes.root}>
+    // <ThemeProvider theme={useTheme}>
     //   <CssBaseline />
-    //   <Grid container>
-    //     <Grid container item xs={12}>
-    //       <AppBar position="sticky" className={classes.appBar}>
+    //   <Grid container className={classes.root}>
+    //     <Grid container item xs={12} className={classes.GridAppBar}>
+    //       <AppBar position="sticky" elevation={0} className={classes.appBar}>
     //         <Toolbar>
     //           <Typography variant="h6" className={classes.title}>
     //             Qton
@@ -130,7 +97,6 @@ export default function NavbarStudent() {
     //         </Toolbar>
     //       </AppBar>
     //     </Grid>
-
     //     <Grid container item xs={12} className={classes.content}>
     //       <Grid container item xs={12} justify="center" alignItems="center">
     //         <Typography className={classes.typotitle}>Student Login</Typography>
@@ -144,6 +110,40 @@ export default function NavbarStudent() {
     //       </Grid>
     //     </Grid>
     //   </Grid>
-    // </div>
+    // </ThemeProvider>
+    <div className={classes.root}>
+      <CssBaseline />
+      <Grid container>
+        <Grid container item xs={12}>
+          <AppBar position="sticky" className={classes.appBar}>
+            <Toolbar>
+              <Typography variant="h6" className={classes.title}>
+                Qton
+              </Typography>
+              <Button
+                color="inherit"
+                className={classes.btn}
+                onClick={() => history.push("/login/teacher")}
+              >
+                Teacher Login
+              </Button>
+            </Toolbar>
+          </AppBar>
+        </Grid>
+
+        <Grid container item xs={12} className={classes.content}>
+          <Grid container item xs={12} justify="center" alignItems="center">
+            <Typography className={classes.typotitle}>Student Login</Typography>
+          </Grid>
+          <Grid container item xs={12} justify="center" alignItems="center">
+            {!report ? (
+              <LoginByUserRoomName handleSetRoom={handleSetRoom} />
+            ) : (
+              <LoginByUserName reportId={report} roomPublic={roomPublic} />
+            )}
+          </Grid>
+        </Grid>
+      </Grid>
+    </div>
   );
 }

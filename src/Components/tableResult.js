@@ -121,9 +121,11 @@ export default function TableResult({
             if (result && result.result) {
               let test = `answer${i - 1}`;
               row[indexObject][test] = (
-                <Typography className={classes.typoRowCorrect}>
-                  {result.answer}
-                </Typography>
+                <Box display="flex" justify="center">
+                  <Typography className={classes.typoRowCorrect}>
+                    {result.answer}
+                  </Typography>
+                </Box>
               );
               // row[indexObject][test] = `correct`;
 
@@ -176,6 +178,7 @@ export default function TableResult({
         );
       }
     }
+    console.log(row);
     return row;
   };
 
@@ -204,7 +207,7 @@ export default function TableResult({
           search: false,
           exportButton: true,
           exportAllData: true,
-          //   exportCsv: handleExportCsv,
+          // exportCsv: (columnsTable,rowsTable),
           headerStyle: {
             backgroundColor: "#19A999",
             color: "#FFF",
