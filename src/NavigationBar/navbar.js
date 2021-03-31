@@ -252,7 +252,7 @@ function Navbar(props) {
             <Result />
           </Route>
 
-          <Route exact path="/createquiz">
+          <Route exact path="/createquiz/:quizId">
             <Createquiz />
           </Route>
         </Switch>

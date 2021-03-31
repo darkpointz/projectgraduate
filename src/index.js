@@ -7,13 +7,9 @@ import * as serviceWorker from "./serviceWorker";
 // import { AuthProvider } from "./Auth/authService";
 
 ReactDOM.render(
-  <React.StrictMode>
-    {/* <AuthProvider> */}
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-    {/* </AuthProvider> */}
-  </React.StrictMode>,
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
   document.getElementById("root")
 );
 

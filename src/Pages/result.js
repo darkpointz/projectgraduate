@@ -216,7 +216,7 @@ export default function Result() {
           variant="outlined"
           className={classes.typoCountStudent}
           className={classes.iconNavigate}
-          onClick={() => handleteacherNextStep(current)}
+          onClick={(e) => handleteacherNextStep(current)}
         >
           <NavigateBefore />
         </Button>
@@ -228,7 +228,7 @@ export default function Result() {
         <Button
           variant="outlined"
           className={classes.iconNavigate}
-          onClick={() => handleteacherNextStep(current + 2)}
+          onClick={(e) => handleteacherNextStep(current + 2)}
         >
           <NavigateNext />
         </Button>
@@ -271,13 +271,20 @@ export default function Result() {
           <Button
             variant="contained"
             className={classes.btnShowNoResult}
-            onClick={() => clickLaunchActivity()}
+            onClick={(e) => clickLaunchActivity()}
           >
             Launch Activity
           </Button>
         </Grid>
       </>
     );
+  };
+
+  const handleBtnFinish = () => {
+    reportService.teacherFinishQuiz(reportId).then((res) => {
+      localStorage.removeItem("liveId");
+      history.push("/launch");
+    });
   };
 
   return (
@@ -297,7 +304,11 @@ export default function Result() {
               Start Quiz
             </Button>
           ) : start && typeDelivery ? (
-            <Button variant="contained" className={classes.btnStart}>
+            <Button
+              variant="contained"
+              className={classes.btnStart}
+              onClick={handleBtnFinish}
+            >
               Finish Quiz
             </Button>
           ) : null}
@@ -308,11 +319,15 @@ export default function Result() {
               <Divider />
             </Grid>
             <Grid item xs={12} container justify="center" alignItems="center">
-              <Grid item xs={3} container>
-                <Typography className={classes.typoCountStudent}>
-                  Students Answered {countStundent()} / {studentMax}
-                </Typography>
-              </Grid>
+              {typeDelivery === "CBT" ? (
+                <Grid item xs={3} container>
+                  <Typography className={classes.typoCountStudent}>
+                    Students Answered {countStundent()} / {studentMax}
+                  </Typography>
+                </Grid>
+              ) : (
+                <Grid item xs={3} container />
+              )}
 
               <Grid item xs={8} container justify="center" alignItems="center">
                 {typeDelivery === "CBT" ? showNavigateStep() : null}

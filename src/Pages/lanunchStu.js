@@ -189,7 +189,7 @@ export default function LanunchStu() {
             let newQuiz = [];
             console.log("doc", doc.data());
 
-            if (doc.data().start) {
+            if (doc.data().start && doc.data().finish === false) {
               setwaiting(false);
               let indexStu = doc.data().student.findIndex((e) => {
                 return e.stuid === params.stuid;
@@ -220,8 +220,8 @@ export default function LanunchStu() {
                 }
               });
               //--quizzingStudent
-            } else {
-              setwaiting(true);
+            } else if (doc.data().finish) {
+              history.push("/login/student");
             }
           });
         settypeDelivery("CBT");

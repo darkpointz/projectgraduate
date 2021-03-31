@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { quizService } from "../Services/quizService";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 import {
   makeStyles,
@@ -85,22 +85,43 @@ const useStyles = makeStyles((theme) => ({
 }));
 export default function Createquiz(props) {
   let history = useHistory();
+  let params = useParams();
   const classes = useStyles();
   const [quizname, setquizname] = useState("");
   const [quiz, setquiz] = useState([]);
   const [selectchoice, setselectchoice] = useState(0);
+  const [editQuiz, seteditQuiz] = useState(false);
+
+  useEffect(() => {
+    if (params.quizId != 0) {
+      quizService.getQuizByQuizId(params.quizId).then((res) => {
+        console.log(res);
+        setquiz(res.quiz);
+        setquizname(res.quizName);
+        seteditQuiz(true);
+      });
+    }
+  }, []);
 
   const onclicksumit = (event) => {
     event.preventDefault();
     const formquiz = {
       quizName: quizname,
       quiz: quiz,
+      path: "Quizzes",
     };
     const uId = localStorage.getItem("userId");
-    quizService.insertQuiz(formquiz, uId).then((res) => {
-      swal("Success!", "Create room success!", "success");
-      history.push("/quiz");
-    });
+    if (editQuiz) {
+      quizService.editQuiz(formquiz, params.quizId, uId).then((res) => {
+        swal("Success!", "Edit Quiz Success!", "success");
+        history.push("/quiz");
+      });
+    } else {
+      quizService.insertQuiz(formquiz, uId).then((res) => {
+        swal("Success!", "Create Quiz Success!", "success");
+        history.push("/quiz");
+      });
+    }
     // submit(quizname, quiz);
   };
 

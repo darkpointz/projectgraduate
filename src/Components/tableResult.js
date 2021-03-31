@@ -211,7 +211,7 @@ export default function TableResult({
       <MaterialTable
         icons={tableIcons}
         title="Score"
-        // style={{ padding: "0 8px" }}
+        style={{ width: "100%" }}
         className={classes.tableCBS}
         columns={columnsTable()}
         // data={student}

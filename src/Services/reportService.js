@@ -11,6 +11,7 @@ export const reportService = {
   resultTeacher,
   teacherNextStepCBT,
   teacherStartQuiz,
+  teacherFinishQuiz,
 };
 
 function teacherNextStepCBT(reportId, formStep) {
@@ -105,6 +106,17 @@ function answerByStudent(formStudent, reportId) {
 function teacherStartQuiz(reportId) {
   return axios
     .post(`/report/teacherStartQuiz/${reportId}`)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.log("err, ", err);
+    });
+}
+
+function teacherFinishQuiz(reportId) {
+  return axios
+    .post(`/report/teacherFinishQuiz/${reportId}`)
     .then((res) => {
       return res.data;
     })
