@@ -49,7 +49,7 @@ function insertReport(uId, formReport) {
 }
 
 function getRoomTypeByStudent(room) {
-  return axios
+  return httpClient
     .get(`/report/getRoomTypeByStudent/${room}`)
     .then((res) => {
       return res.data;
@@ -60,7 +60,7 @@ function getRoomTypeByStudent(room) {
 }
 
 function insertStudentByPublicRoom(formStudent, reportId) {
-  return axios
+  return httpClient
     .post(`/report/insertStudentByPrivateRoom/${reportId}`, formStudent)
     .then((res) => {
       return res.data;
@@ -71,7 +71,7 @@ function insertStudentByPublicRoom(formStudent, reportId) {
 }
 
 function manageStudentByPrivateRoom(formStudent, reportId) {
-  return axios
+  return httpClient
     .post(`/report/manageStudentByPrivateRoom/${reportId}`, formStudent)
     .then((res) => {
       return res.data;
@@ -82,7 +82,7 @@ function manageStudentByPrivateRoom(formStudent, reportId) {
 }
 
 function getQuizByStudent(formStudent) {
-  return axios
+  return httpClient
     .post(`/report/getQuizByStudent`, formStudent)
     .then((res) => {
       return res.data;
@@ -93,7 +93,7 @@ function getQuizByStudent(formStudent) {
 }
 
 function answerByStudent(formStudent, reportId) {
-  return axios
+  return httpClient
     .post(`/report/answerByStudent/${reportId}`, formStudent)
     .then((res) => {
       return res.data;
@@ -104,7 +104,7 @@ function answerByStudent(formStudent, reportId) {
 }
 
 function teacherStartQuiz(reportId) {
-  return axios
+  return httpClient
     .post(`/report/teacherStartQuiz/${reportId}`)
     .then((res) => {
       return res.data;
@@ -115,7 +115,7 @@ function teacherStartQuiz(reportId) {
 }
 
 function teacherFinishQuiz(reportId) {
-  return axios
+  return httpClient
     .post(`/report/teacherFinishQuiz/${reportId}`)
     .then((res) => {
       return res.data;

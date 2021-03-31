@@ -2,11 +2,10 @@ import React, { useState, useEffect, forwardRef } from "react";
 import Createquiz from "../Components/createquiz";
 import { quizService } from "../Services/quizService";
 import Showquiz from "../Components/showquiz";
-import firebase from "firebase/app";
 import MaterialTable from "material-table";
 import swal from "sweetalert";
-
-import "firebase/firestore";
+import DialogSelectCreate from "../Components/dialogSelectCreate";
+import TableQuiz from "../Components/tableQuiz";
 
 import {
   makeStyles,
@@ -20,8 +19,6 @@ import {
   Grid,
 } from "@material-ui/core";
 import { Add, Folder } from "@material-ui/icons";
-import DialogSelectCreate from "../Components/dialogSelectCreate";
-import TableQuiz from "../Components/tableQuiz";
 
 const useStyles = makeStyles((theme) => ({
   root: {
