@@ -133,7 +133,7 @@ export default function Lanunch() {
             <IconButton className={classes.iconButton}>
               <Paper
                 className={classes.paperClassic}
-                onClick={() => setopenDialogLanunch(true)}
+                onClick={(e) => setopenDialogLanunch(true)}
               >
                 <Person className={classes.icon} />
                 <Typography className={classes.typolabel}>Classic</Typography>

@@ -82,7 +82,7 @@ export default function CardClass(props) {
   const { room, index, Deleteroom } = props;
   const [opendialogDel, setopendialogDel] = useState(false);
 
-  const handledelete = () => {
+  const handleDelete = () => {
     swal({
       title: "Please Confirm",
       text: "Are you sure you want to delete?",
@@ -149,7 +149,7 @@ export default function CardClass(props) {
           <IconButton aria-label="iconDelete">
             <Delete
               className={classes.btnDelete}
-              onClick={handledelete}
+              onClick={handleDelete}
               // onClick={() => setopendialogDel(true)}
               fontSize="large"
             />
@@ -158,35 +158,9 @@ export default function CardClass(props) {
       </Card>
       <DialogDelete
         open={opendialogDel}
-        confirm={handledelete}
+        confirm={handleDelete}
         onClose={canceldialog}
       ></DialogDelete>
     </>
   );
-}
-//---
-{
-  /* <Card className={classes.root}>
-      <CardContent>
-        <Typography
-          className={classes.title}
-          color="textSecondary"
-          gutterBottom
-        >
-          {room.room}
-        </Typography>
-        <Typography variant="h5" component="h2"></Typography>
-        <Typography className={classes.pos} color="textSecondary">
-          adjective
-        </Typography>
-        <Typography variant="body2" component="p">
-          well meaning and kindly.
-          <br />
-          {'"a benevolent smile"'}
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small">Learn More</Button>
-      </CardActions>
-    </Card> */
 }

@@ -75,6 +75,11 @@ const useStyles = makeStyles((theme) => ({
       padding: theme.spacing(10, 2),
     },
   },
+  typoLogo: {
+    fontFamily: "'Prompt', sans-serif",
+    fontWeight: 600,
+    fontSize: "34px",
+  },
 }));
 
 function Navbar(props) {
@@ -178,7 +183,7 @@ function Navbar(props) {
           >
             <Menu />
           </IconButton>
-          <Typography variant="h6" noWrap>
+          <Typography className={classes.typoLogo} noWrap>
             Qton
           </Typography>
         </Toolbar>
@@ -252,7 +257,7 @@ function Navbar(props) {
             <Result />
           </Route>
 
-          <Route exact path="/createquiz">
+          <Route exact path="/createquiz/:quizId">
             <Createquiz />
           </Route>
         </Switch>

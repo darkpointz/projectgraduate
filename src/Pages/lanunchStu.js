@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { reportService } from "../Services/reportService";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import firebase from "firebase/app";
-import { createBrowserHistory } from "history";
-import { teal } from "@material-ui/core/colors";
-import clsx from "clsx";
+import swal from "sweetalert";
 
 import {
   NavigateNext,
@@ -16,19 +14,11 @@ import {
 import {
   AppBar,
   CssBaseline,
-  Divider,
-  Drawer,
-  Hidden,
   IconButton,
   Grid,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   Toolbar,
   Typography,
   Button,
-  Avatar,
-  Box,
   Paper,
 } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -37,6 +27,7 @@ import LiveMC from "../Components/liveMC";
 import LiveTF from "../Components/liveTF";
 import LiveSA from "../Components/liveSA";
 import WaitingForActivity from "../Components/waitingForActivity";
+import PaginationLanunchStu from "../Components/paginationLanunchStu";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -134,9 +125,6 @@ const useStyles = makeStyles((theme) => ({
   btnNavigate: {
     backgroundColor: "#19A999",
   },
-  iconNavigate: {
-    fontSize: "28px",
-  },
   content: {
     padding: theme.spacing(10, 5),
     [theme.breakpoints.down("sm")]: {
@@ -149,17 +137,6 @@ const useStyles = makeStyles((theme) => ({
       padding: theme.spacing(2),
     },
   },
-  btnStep: {
-    fontFamily: "'Prompt', sans-serif",
-    fontWeight: 500,
-    fontSize: "14px",
-    [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing(1),
-    },
-  },
-  btnTrue: {
-    backgroundColor: "#1de9b6",
-  },
 }));
 
 export default function LanunchStu() {
@@ -170,18 +147,15 @@ export default function LanunchStu() {
   const [typeDelivery, settypeDelivery] = useState();
   const [quizzingStudent, setquizzingStudent] = useState([]);
   const [waiting, setwaiting] = useState(true);
-  const [step, setstep] = useState();
 
   const [stepMax, setstepMax] = useState();
-  const [page, setpage] = useState(0);
-  const [maxPage, setmaxPage] = useState(5);
-  const [mid, setmid] = useState(2);
 
   const [answer, setanswer] = useState();
   const [oldCurrent, setoldCurrent] = useState();
 
   let params = useParams();
-  const history = createBrowserHistory({ forceRefresh: true });
+
+  let history = useHistory();
   useEffect(() => {
     const formStudent = {
       reportId: params.reportId,
@@ -198,12 +172,13 @@ export default function LanunchStu() {
             let newQuiz = [];
             console.log("doc", doc.data());
 
-            if (doc.data().start) {
+            if (doc.data().start && doc.data().finish === false) {
               setwaiting(false);
               let indexStu = doc.data().student.findIndex((e) => {
                 return e.stuid === params.stuid;
               });
               setquizzingStudent(doc.data().student[indexStu].quizzing);
+              console.log(doc.data().student[indexStu].quizzing);
               //--quiz
               doc.data().quiz.forEach((data) => {
                 if (data.active === true) {
@@ -213,35 +188,73 @@ export default function LanunchStu() {
                     choice: data.choice,
                     question: data.question,
                   });
-                  setstep(data.step);
                   let done = doc.data().student[indexStu].quizzing.find((e) => {
                     return e.step === data.step;
                   });
-                  console.log("quizzingStudent: ", done);
+
                   if (done?.done) {
                     setwaiting(true);
                     // setquiz([]);
                   } else {
                     setwaiting(false);
+                    setquiz([]);
                     setquiz(newQuiz);
                   }
+                  console.log("quiz: ", quiz);
                 } else if (data.active === false) {
                   setquiz(newQuiz);
                 }
               });
               //--quizzingStudent
-            } else {
-              setwaiting(true);
+            } else if (doc.data().finish) {
+              history.push("/login/student");
             }
           });
         settypeDelivery("CBT");
-      } else {
-        setquiz(res.quizStudent);
-        setroomName(res.roomName);
-        setstepMax(res.stepMax);
-        setwaiting(false);
-        settypeDelivery("CBS");
-        setquizzingStudent(res.quizzingStudent);
+      } else if (res === "CBS") {
+        firebase
+          .firestore()
+          .collection("Report")
+          .doc(params.reportId)
+          .onSnapshot((doc) => {
+            let quizStudent = [];
+
+            if (doc.data().start && doc.data().finish === false) {
+              //--setโจทย์โดนไม่มีresult
+              doc.data().quiz.forEach((data) => {
+                let form = {
+                  question: data.question,
+                  type: data.type,
+                  step: data.step,
+                };
+                if (data.type === "multiplechoice") {
+                  form.choice = data.choice;
+                }
+                quizStudent.push(form);
+              });
+              setquiz(quizStudent);
+              let indexStudent = doc
+                .data()
+                .student.findIndex((e) => e.stuid === params.stuid);
+              //--setคำตอบนร.
+              doc.data().student[indexStudent].quizzing.forEach((data) => {
+                let form = {
+                  answer: data.answer,
+                  step: data.step,
+                  done: false,
+                };
+                quizzingStudent.push(form);
+              });
+              setquizzingStudent(quizzingStudent);
+
+              setroomName(doc.data().roomName);
+              setstepMax(doc.data().quiz.length);
+              setwaiting(false);
+              settypeDelivery("CBS");
+            } else if (doc.data().finish) {
+              history.push("/login/student");
+            }
+          });
       }
     });
   }, []);
@@ -256,17 +269,22 @@ export default function LanunchStu() {
   };
 
   const handleShowQuiz = () => {
+    {
+      console.log("quiz[current]?.type: ", quiz);
+    }
     return (
       <>
         {quiz[current]?.type === "multiplechoice" ? (
-          <LiveMC
-            quiz={quiz[current]}
-            type={typeDelivery}
-            // quiz={quiz[current]}
-            saveAnswerCBS={saveAnswerCBS}
-            quizzingStudent={quizzingStudent[handleFetchAnswer()]}
-            indexQuizzing={handleFetchAnswer()}
-          />
+          <>
+            {console.log("---------------------------")}
+            <LiveMC
+              quiz={quiz[current]}
+              type={typeDelivery}
+              saveAnswerCBS={saveAnswerCBS}
+              quizzingStudent={quizzingStudent[handleFetchAnswer()]}
+              indexQuizzing={handleFetchAnswer()}
+            />
+          </>
         ) : quiz[current]?.type === "truefalse" ? (
           <>
             <LiveTF
@@ -288,179 +306,41 @@ export default function LanunchStu() {
     );
   };
 
-  const handleFirstPage = () => {
-    //ส่งข้อสอบ
-    if (answer) {
-      submitAnswer();
-    }
-
-    setcurrent(0);
-    setpage(0);
-    setmaxPage(5);
-    setmid(2);
-  };
-
-  const handleLastPage = () => {
-    //ส่งข้อสอบ
-    if (answer) {
-      submitAnswer();
-    }
-
-    setcurrent(stepMax - 1);
-    setpage(stepMax - 5);
-    setmaxPage(stepMax);
-    setmid(stepMax - 3);
-  };
-
-  const handleNavigateNext = () => {
-    //ส่งข้อสอบ
-    if (answer) {
-      submitAnswer();
-    }
-
-    if (current !== stepMax - 1) {
-      setcurrent(current + 1);
-    }
-
-    if (maxPage === stepMax) {
-    } else if (maxPage - current === 3) {
-      setpage(page + 1);
-      setmaxPage(maxPage + 1);
-    }
-
-    //setmid
-    if (current + 1 >= 3 && current < stepMax - 3) {
-      setmid(current + 1);
-    }
-  };
-
-  const handleNavigateBefore = () => {
-    //ส่งข้อสอบ
-    if (answer) {
-      submitAnswer();
-    }
-
-    if (current !== 0) {
-      setcurrent(current - 1);
-    }
-
-    if (page === 0) {
-    } else if (maxPage - current === 3) {
-      setpage(page - 1);
-      setmaxPage(maxPage - 1);
-    }
-
-    //setmid
-    if (current <= 3) {
-      setmid(2);
-    } else if (current > stepMax - 3) {
-      setmid(stepMax - 3);
-    } else if (current - 1 >= 3 && current > 3) {
-      console.log("cuure: ", current);
-      setmid(current - 1);
-    }
-  };
-
-  const handleSelectPage = (index) => {
-    //ส่งข้อสอบ
-    if (answer) {
-      submitAnswer();
-    }
-
-    setcurrent(index);
-    //กรณีกดขึ้นหน้า
-    if (index > mid) {
-      let increase = index - mid;
-      //--ชนขอบไม่ต้องทำอะไร
-      if (maxPage === stepMax) {
-      }
-      //กัน+2ไม่ให้เกินขอบเลย+แค่1
-      else if (maxPage + increase === stepMax + 1) {
-        setmaxPage(maxPage + 1);
-        setpage(page + 1);
-        setmid(mid + 1);
-      } else {
-        setmaxPage(maxPage + increase);
-        setpage(page + increase);
-        setmid(index);
-      }
-    }
-    //กรณีกดถอยหลัง
-    else if (mid > index) {
-      let decrease = mid - index;
-      //--ชนขอบไม่ต้องทำอะไร
-      if (page === 0) {
-      }
-      //กัน-2แล้วเกินขอบเลย-1แค่1
-      else if (page - decrease < 0) {
-        setpage(page - 1);
-        setmaxPage(maxPage - 1);
-        setmid(mid - 1);
-      } else {
-        setmaxPage(maxPage - decrease);
-        setpage(page - decrease);
-        setmid(index);
-      }
-    }
-  };
-
-  const handleCheckStyleStep = (index) => {
-    let tf;
-    quizzingStudent.find((e) => {
-      if (e.step === index) {
-        tf = true;
+  const handlebtnFinishQuizCBS = () => {
+    swal({
+      title: "Please Confirm?",
+      text: "Are you sure you want to finish the quiz?",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        history.push("/login/student");
       }
     });
-    if (!tf) {
-      tf = false;
-    }
-    return tf;
   };
 
-  const btnNavigateStepCBS = () => {
-    return (
-      <>
-        <Grid container item xs={12} justify="center">
-          <div style={{ marginRight: "8px" }}>
-            <Button variant="outlined" onClick={handleFirstPage}>
-              <FirstPage className={classes.iconNavigate} />
-            </Button>
-            <Button variant="outlined" onClick={handleNavigateBefore}>
-              <NavigateBefore className={classes.iconNavigate} />
-            </Button>
-          </div>
-
-          {quiz.slice(page, maxPage).map((item, index) => (
-            <Button
-              variant="outlined"
-              // className={classes.btnStep}
-              className={clsx(classes.btnStep, {
-                [classes.btnTrue]: handleCheckStyleStep(item.step),
-              })}
-              onClick={() => handleSelectPage(item.step - 1)}
-            >
-              {item.step}
-            </Button>
-          ))}
-
-          <div style={{ marginLeft: "8px" }}>
-            <Button variant="outlined" onClick={handleNavigateNext}>
-              <NavigateNext className={classes.iconNavigate} />
-            </Button>
-            <Button variant="outlined">
-              <LastPage
-                className={classes.iconNavigate}
-                onClick={handleLastPage}
-              />
-            </Button>
-          </div>
-        </Grid>
-      </>
-    );
+  const handleLogout = () => {
+    swal({
+      title: "Please Confirm?",
+      text: "Are you sure you want to log out?",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        history.push("/login/student");
+      }
+    });
   };
+
   const btnFinishQuizCBS = () => {
     return (
-      <Button variant="contained" className={classes.btnSubmit}>
+      <Button
+        variant="contained"
+        className={classes.btnSubmit}
+        onClick={handlebtnFinishQuizCBS}
+      >
         Finish Quiz
       </Button>
     );
@@ -504,9 +384,6 @@ export default function LanunchStu() {
     reportService.answerByStudent(formStudent, params.reportId).then((res) => {
       setanswer();
       setoldCurrent();
-      // if(typeDelivery==="CBT"){
-
-      // }
     });
   };
 
@@ -538,11 +415,6 @@ export default function LanunchStu() {
         <Grid container item xs={12} justify="center" alignItems="center">
           <Paper className={classes.paperQuestion}>
             <Typography className={classes.typoQuestion}>
-              {/* {typeDelivery === "CBS"
-                  ? quiz[current]?.question
-                  : typeDelivery === "CBT"
-                  ? question
-                  : null} */}
               {quiz[current]?.question}
             </Typography>
           </Paper>
@@ -551,7 +423,19 @@ export default function LanunchStu() {
         <Grid container item xs={12} justify="center">
           {handleShowQuiz()}
         </Grid>
-        {typeDelivery === "CBS" ? btnNavigateStepCBS() : btnSubmitCBT()}
+        {typeDelivery === "CBS" ? (
+          <PaginationLanunchStu
+            current={current}
+            setcurrent={setcurrent}
+            stepMax={stepMax}
+            submitAnswer={submitAnswer}
+            answer={answer}
+            quiz={quiz}
+            quizzingStudent={quizzingStudent}
+          />
+        ) : (
+          btnSubmitCBT()
+        )}
       </Grid>
     );
   };
@@ -576,7 +460,8 @@ export default function LanunchStu() {
                 <ExitToApp className={classes.typoBtn} />
                 <Button
                   className={classes.typoBtn}
-                  onClick={() => history.push("/login/student")}
+                  onClick={handleLogout}
+                  // onClick={() => history.push("/login/student")}
                 >
                   Logout
                 </Button>
@@ -585,14 +470,8 @@ export default function LanunchStu() {
           </AppBar>
         </Grid>
         {waiting ? <WaitingForActivity /> : showContent()}
-
-        {/* <Grid container item xs={12} className={classes.content}>
-          
-        </Grid> */}
       </Grid>
     </>
     // </div>
   );
 }
-
-///-----

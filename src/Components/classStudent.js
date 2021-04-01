@@ -93,8 +93,8 @@ export default function ClassStudent({ match }) {
   const [student, setstudent] = useState([]);
   const [openAddStudent, setOpenAddStudent] = useState(false);
   const [openDialog, setopenDialog] = useState(false);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [openEdit, setopenEdit] = useState(false);
   const [openDelete, setopenDelete] = useState(false);
   const [index, setindex] = useState();

@@ -107,6 +107,7 @@ export default function DialogSelectSetting(props) {
         selectQuiz: selectQuiz.quizId,
         selectMethodQuiz: selectMethodQuiz,
         quiz: selectQuiz.quiz,
+        quizName: selectQuiz.quizName,
         roomPublic: selectClass.roomPublic,
         roomName: selectClass.roomName,
       };

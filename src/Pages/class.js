@@ -116,12 +116,11 @@ export default function Class() {
   };
 
   const handleDeleteroom = (roomId, index) => {
-    let newroom = [...room];
-    newroom.splice(index, 1);
-    setroom(newroom);
-    axios
-      .delete(`/room/deleteRoomByRoomId/${roomId}`)
-      .then((response) => console.log(response.status));
+    classService.deleteRoomByRoomId(roomId).then((res) => {
+      let newroom = [...room];
+      newroom.splice(index, 1);
+      setroom(newroom);
+    });
   };
 
   return (

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { httpClient } from "../Auth/axiosInterceptor";
 
 export const classService = {
   getAllRoom,
@@ -7,7 +8,7 @@ export const classService = {
 };
 
 function getAllRoom(uId) {
-  return axios
+  return httpClient
     .get(`/room/getAllRoom/${uId}`)
     .then((res) => {
       return res.data;
@@ -18,7 +19,7 @@ function getAllRoom(uId) {
 }
 
 function insertRoom(formroom, userId) {
-  return axios
+  return httpClient
     .post(`/room/insertRoom/${userId}`, formroom)
     .then((res) => {
       console.log("message: ", res.data.message);
@@ -30,7 +31,7 @@ function insertRoom(formroom, userId) {
 }
 
 function deleteRoomByRoomId(roomId) {
-  return axios
+  return httpClient
     .delete(`/room/deleteRoomByRoomId/${roomId}`)
     .then((res) => {
       return res.data.message;
