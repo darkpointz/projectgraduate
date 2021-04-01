@@ -13,6 +13,7 @@ export const reportService = {
   teacherStartQuiz,
   teacherFinishQuiz,
   getAllReport,
+  getReportByReportId,
 };
 
 function teacherNextStepCBT(reportId, formStep) {
@@ -129,6 +130,17 @@ function teacherFinishQuiz(reportId) {
 function getAllReport(userId) {
   return httpClient
     .get(`/report/getAllReport/${userId}`)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.log("err, ", err);
+    });
+}
+
+function getReportByReportId(reportId) {
+  return httpClient
+    .get(`/report/getReportByReportId/${reportId}`)
     .then((res) => {
       return res.data;
     })

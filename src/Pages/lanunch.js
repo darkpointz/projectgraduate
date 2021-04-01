@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core";
 import { Person, People } from "@material-ui/icons";
 import DialogSelectSetting from "../Components/dialogSelectSetting";
+import swal from "sweetalert";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -125,6 +126,15 @@ export default function Lanunch() {
     console.log("livequiz");
   };
 
+  const handleBtnLanunch = () => {
+    let liveId = localStorage.getItem("liveId");
+    if (liveId) {
+      swal("Error!", "You should finish your current activity first!", "error");
+    } else {
+      setopenDialogLanunch(true);
+    }
+  };
+
   return (
     <div className={classes.root}>
       <Grid container spacing={1} justify="center" alignItems="center">
@@ -133,7 +143,7 @@ export default function Lanunch() {
             <IconButton className={classes.iconButton}>
               <Paper
                 className={classes.paperClassic}
-                onClick={(e) => setopenDialogLanunch(true)}
+                onClick={handleBtnLanunch}
               >
                 <Person className={classes.icon} />
                 <Typography className={classes.typolabel}>Classic</Typography>

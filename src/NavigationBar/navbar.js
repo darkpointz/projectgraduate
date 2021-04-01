@@ -32,6 +32,7 @@ import { authService } from "../Auth/authService";
 import Result from "../Pages/result";
 import Createquiz from "../Components/createquiz";
 import LiveResult from "../Pages/liveResult";
+import ShowReportByReportId from "../Components/showReportByReportId";
 
 const drawerWidth = 200;
 
@@ -259,6 +260,10 @@ function Navbar(props) {
 
           <Route exact path="/createquiz/:quizId">
             <Createquiz />
+          </Route>
+
+          <Route exact path="/report/:reportId">
+            <ShowReportByReportId />
           </Route>
         </Switch>
       </main>

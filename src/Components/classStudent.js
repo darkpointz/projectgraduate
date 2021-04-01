@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { classService } from "../Services/classService";
 import axios from "axios";
 import DialogSelectCreate from "../Components/dialogSelectCreate";
 import DialogManualAddstudent from "./dialogManualAddStudent";
@@ -102,9 +103,9 @@ export default function ClassStudent({ match }) {
   const classes = useStyles();
 
   useEffect(() => {
-    axios.get(`/room/getRoomById/${params.id}`).then((res) => {
-      setroom(res.data.room.roomName);
-      setstudent(res.data.room.student);
+    classService.getRoomById(params.id).then((res) => {
+      setroom(res.room.roomName);
+      setstudent(res.room.student);
     });
   }, []);
 

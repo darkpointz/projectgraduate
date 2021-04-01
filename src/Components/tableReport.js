@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { reportService } from "../Services/reportService";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 
 import {
   withStyles,
@@ -18,7 +18,7 @@ import {
   TableContainer,
   Paper,
 } from "@material-ui/core";
-import { Add, Delete, Edit, Search } from "@material-ui/icons";
+import { Delete } from "@material-ui/icons";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -131,7 +131,10 @@ export default function TableReport() {
                       scope="row"
                       className={classes.TableCellContent}
                     >
-                      {item.quizName}
+                      {/* {item.quizName} */}
+                      <Link to={`/report/${item.reportId}`}>
+                        {item.quizName}
+                      </Link>
                     </TableCell>
                     <TableCell
                       align="center"

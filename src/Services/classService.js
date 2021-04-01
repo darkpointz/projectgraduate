@@ -5,6 +5,7 @@ export const classService = {
   getAllRoom,
   insertRoom,
   deleteRoomByRoomId,
+  getRoomById,
 };
 
 function getAllRoom(uId) {
@@ -35,6 +36,17 @@ function deleteRoomByRoomId(roomId) {
     .delete(`/room/deleteRoomByRoomId/${roomId}`)
     .then((res) => {
       return res.data.message;
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+}
+
+function getRoomById(roomId) {
+  return httpClient
+    .get(`/room/getRoomById/${roomId}`)
+    .then((res) => {
+      return res.data;
     })
     .catch((err) => {
       console.log(err.message);
