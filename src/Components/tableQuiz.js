@@ -7,11 +7,8 @@ import {
   withStyles,
   makeStyles,
   IconButton,
-  Button,
   TableBody,
-  Typography,
   TablePagination,
-  Grid,
   Table,
   TableCell,
   TableRow,
@@ -175,7 +172,7 @@ export default function TableQuiz({ path }) {
                       align="center"
                       className={classes.TableCellContent}
                     >
-                      {handleDate(item.createAt)}
+                      {handleDate(item.createdAt)}
                       {/* {item.createAt} */}
                     </TableCell>
 

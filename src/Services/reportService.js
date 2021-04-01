@@ -12,6 +12,7 @@ export const reportService = {
   teacherNextStepCBT,
   teacherStartQuiz,
   teacherFinishQuiz,
+  getAllReport,
 };
 
 function teacherNextStepCBT(reportId, formStep) {
@@ -117,6 +118,17 @@ function teacherStartQuiz(reportId) {
 function teacherFinishQuiz(reportId) {
   return httpClient
     .post(`/report/teacherFinishQuiz/${reportId}`)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.log("err, ", err);
+    });
+}
+
+function getAllReport(userId) {
+  return httpClient
+    .get(`/report/getAllReport/${userId}`)
     .then((res) => {
       return res.data;
     })
