@@ -139,7 +139,7 @@ export default function SelectMethodQuiz(props) {
             }}
             onClick={() => handleClickBtn("CBS")}
           >
-            Control By Student
+            Open Navigation
           </Button>
         </Grid>
         <Grid item xs={6} container justify="center">
@@ -152,7 +152,7 @@ export default function SelectMethodQuiz(props) {
             }}
             onClick={() => handleClickBtn("CBT")}
           >
-            Control By Teacher
+            Teacher Paced
           </Button>
         </Grid>
 

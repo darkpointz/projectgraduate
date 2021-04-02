@@ -100,13 +100,13 @@ export default function TableReport() {
           <TableHead>
             <TableRow className={classes.tableRow}>
               <StyledTableCell className={classes.TableCellHead}>
-                Name
+                QuizName
               </StyledTableCell>
               <StyledTableCell align="center" className={classes.TableCellHead}>
                 Date
               </StyledTableCell>
               <StyledTableCell align="center" className={classes.TableCellHead}>
-                Room
+                RoomName
               </StyledTableCell>
               <StyledTableCell align="center" className={classes.TableCellHead}>
                 Type
