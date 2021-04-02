@@ -1,12 +1,21 @@
 import React, { useState } from "react";
-
-import { Paper, TextField, Typography, Box, Button } from "@material-ui/core";
+import { useStyles } from "../Pages/styles";
+import { useTheme } from "../Pages/theme";
+import {
+  TextField,
+  Typography,
+  Box,
+  Button,
+  Grid,
+  ThemeProvider,
+} from "@material-ui/core";
 import swal from "sweetalert";
 import { createBrowserHistory } from "history";
 
 import { reportService } from "../Services/reportService";
 
 export default function LoginByUserName({ roomPublic, reportId }) {
+  const classes = useStyles();
   const [name, setname] = useState();
   const [stuid, setstuid] = useState();
   const [quiz, setquiz] = useState();
@@ -64,19 +73,49 @@ export default function LoginByUserName({ roomPublic, reportId }) {
   };
 
   return (
-    <div>
-      <Paper>
-        <Typography>{roomPublic ? "Name" : "Student ID"}</Typography>
-        <Box display="flex" flexDirection="column">
-          <TextField
-            id="outlined-basic"
-            variant="outlined"
-            value={roomPublic ? name : stuid}
-            onChange={(e) => handleChangeTextField(e.target.value)}
-          ></TextField>
-          <Button onClick={handleClickJoin}>Join</Button>
-        </Box>
-      </Paper>
-    </div>
+    <ThemeProvider theme={useTheme}>
+      <Grid
+        container
+        item
+        xs={12}
+        justify="center"
+        alignItems="center"
+        direction="column"
+      >
+        <Grid
+          className={classes.paper}
+          container
+          item
+          xs={12}
+          justify="center"
+          alignItems="center"
+          direction="column"
+        >
+          <Typography variant="h2" className={classes.typospace}>
+            Student Login
+          </Typography>
+          <Typography variant="h3">
+            {roomPublic ? "Name" : "Enter Your Student ID"}
+          </Typography>
+          <Box display="flex" flexDirection="column">
+            <TextField
+              className={classes.textfieldStu}
+              id="outlined-basic"
+              variant="outlined"
+              value={roomPublic ? name : stuid}
+              onChange={(e) => handleChangeTextField(e.target.value)}
+            ></TextField>
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              onClick={handleClickJoin}
+            >
+              Join
+            </Button>
+          </Box>
+        </Grid>
+      </Grid>
+    </ThemeProvider>
   );
 }

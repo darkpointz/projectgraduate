@@ -14,6 +14,7 @@ export const reportService = {
   teacherFinishQuiz,
   getAllReport,
   getReportByReportId,
+  deleteReportByReportId,
 };
 
 function teacherNextStepCBT(reportId, formStep) {
@@ -142,6 +143,18 @@ function getReportByReportId(reportId) {
   return httpClient
     .get(`/report/getReportByReportId/${reportId}`)
     .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.log("err, ", err);
+    });
+}
+
+function deleteReportByReportId(reportId) {
+  return httpClient
+    .delete(`/report/deleteReportByReportId/${reportId}`)
+    .then((res) => {
+      console.log(res.data);
       return res.data;
     })
     .catch((err) => {

@@ -13,6 +13,7 @@ import {
 import { Person, People } from "@material-ui/icons";
 import DialogSelectSetting from "../Components/dialogSelectSetting";
 import swal from "sweetalert";
+import DialogSelectRoomQQ from "../Components/dialogSelectRoomQQ";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -117,6 +118,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Lanunch() {
   const classes = useStyles();
   const [openDialogLanunch, setopenDialogLanunch] = useState(false);
+  const [openDialogQQ, setopenDialogQQ] = useState(false);
 
   const handleClose = () => {
     setopenDialogLanunch(false);
@@ -132,6 +134,15 @@ export default function Lanunch() {
       swal("Error!", "You should finish your current activity first!", "error");
     } else {
       setopenDialogLanunch(true);
+    }
+  };
+
+  const handleQuickQuestion = (type) => {
+    let liveId = localStorage.getItem("liveId");
+    if (liveId) {
+      swal("Error!", "You should finish your current activity first!", "error");
+    } else {
+      setopenDialogQQ(true);
     }
   };
 
@@ -199,6 +210,7 @@ export default function Lanunch() {
           onClose={handleClose}
           confirm={livequiz}
         />
+        <DialogSelectRoomQQ open={openDialogLanunch} />
       </Grid>
     </div>
   );

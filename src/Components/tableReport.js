@@ -19,6 +19,7 @@ import {
   Paper,
 } from "@material-ui/core";
 import { Delete } from "@material-ui/icons";
+import swal from "sweetalert";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -76,14 +77,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TableReport() {
   const classes = useStyles();
-  const [report, setquiz] = useState([]);
+  const [report, setreport] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   let history = useHistory();
   useEffect(() => {
     const uId = localStorage.getItem("userId");
     reportService.getAllReport(uId).then((res) => {
-      setquiz(res);
+      setreport(res);
       console.log(res);
     });
   }, []);
@@ -91,6 +92,37 @@ export default function TableReport() {
   const handleDate = (time) => {
     let date = time.slice(0, 10);
     return date;
+  };
+
+  const handleClickDelete = (item, i) => {
+    console.log("item: ", item);
+    swal({
+      title: "Please Confirm",
+      text: "Are you sure you want to delete?",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        reportService.deleteReportByReportId(item.reportId).then((res) => {
+          let newReport = [...report];
+          newReport.splice(i, 1);
+          setreport(newReport);
+          swal("Delete report success!", {
+            icon: "success",
+          });
+        });
+      }
+    });
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
   };
 
   return (
@@ -160,7 +192,7 @@ export default function TableReport() {
                     >
                       <IconButton
                         aria-label="iconDelete"
-                        // onClick={() => handleClickDelete(item, i)}
+                        onClick={() => handleClickDelete(item, i)}
                       >
                         <Delete className={classes.icon} />
                       </IconButton>
@@ -170,6 +202,17 @@ export default function TableReport() {
           </TableBody>
         </Table>
       </TableContainer>
+      {report ? (
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 20]}
+          component="div"
+          count={report.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+        />
+      ) : null}
     </div>
   );
 }
