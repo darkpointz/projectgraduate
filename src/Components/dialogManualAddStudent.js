@@ -5,7 +5,6 @@ import {
   Dialog,
   Button,
   useMediaQuery,
-  Box,
   TextField,
   useTheme,
   Grid,
@@ -13,7 +12,6 @@ import {
   DialogContent,
   DialogContentText,
   Divider,
-  DialogTitle,
 } from "@material-ui/core";
 
 import { Clear, Add } from "@material-ui/icons";

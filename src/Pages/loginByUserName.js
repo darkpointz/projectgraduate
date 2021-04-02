@@ -11,7 +11,6 @@ import { reportService } from "../Services/reportService";
 export default function LoginByUserName({ roomPublic, reportId }) {
   const [name, setname] = useState();
   const [stuid, setstuid] = useState();
-  const [quiz, setquiz] = useState();
   const history = createBrowserHistory({ forceRefresh: true });
   const classes = useStyles();
 

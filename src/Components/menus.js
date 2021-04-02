@@ -1,12 +1,12 @@
 
-import React from "react";
-import AllRepairList from "../pages/AllRepairList";
+// import React from "react";
+// import AllRepairList from "../pages/AllRepairList";
 import Launch from "../Page/quiz";
 import Quiz from "../Page/quiz";
 import Reports from "../Page/reports";
 import Results from "../Page/results";
-import History from "../pages/History";
-import ListAltIcon from '@material-ui/icons/ListAlt';
+// import History from "../pages/History";
+// import ListAltIcon from '@material-ui/icons/ListAlt';
 import Class from "../Page/class";
 
 

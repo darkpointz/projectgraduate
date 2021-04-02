@@ -12,10 +12,6 @@ import {
 } from "@material-ui/core";
 import swal from "sweetalert";
 
-// import { Menu, ExitToApp } from "@material-ui/icons";
-// import { makeStyles, useTheme } from "@material-ui/core/styles";
-// import LoginByUserName from "./loginByUserName";
-
 import { reportService } from "../Services/reportService";
 
 export default function LoginByroomName({ handleSetRoom }) {

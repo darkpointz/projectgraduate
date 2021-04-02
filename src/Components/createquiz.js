@@ -122,7 +122,6 @@ export default function Createquiz(props) {
         history.push("/quiz");
       });
     }
-    // submit(quizname, quiz);
   };
 
   const onClicksavequiz = (newquiz) => {

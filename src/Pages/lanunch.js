@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import {
   makeStyles,
   IconButton,
-  Button,
   Paper,
   Typography,
-  Box,
   Grid,
   Divider,
 } from "@material-ui/core";
@@ -17,7 +15,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
-  // layotBtnCreate: { display: "flex", justifyContent: "flex-end" },
   paperClassic: {
     backgroundColor: "#6DC8BE",
     width: "200px",

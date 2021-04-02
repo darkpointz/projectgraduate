@@ -19,7 +19,7 @@ const useStyles = makeStyles({
 
 export default function TableSelectQuiz(props) {
   const { setselectQuiz, selectQuiz } = props;
-  const classes = useStyles();
+  // const classes = useStyles();
   const [quiz, setquiz] = useState([]);
   const [select, setselect] = useState();
 

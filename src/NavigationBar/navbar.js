@@ -1,6 +1,4 @@
-import React, { useContext } from "react";
-import PropTypes from "prop-types";
-
+import React from "react";
 import {
   AppBar,
   CssBaseline,
@@ -146,13 +144,11 @@ function Navbar(props) {
           const { text, icon, onClick } = item;
           return (
             <ListItem button key={text} onClick={onClick}>
-              {/* {icon && <ListItemIcon>{icon}</ListItemIcon>} */}
               <ListItemText primary={text} />
             </ListItem>
           );
         })}
         <ListItem button key={"result"} onClick={() => history.push("/result")}>
-          {/* {icon && <ListItemIcon>{icon}</ListItemIcon>} */}
           <ListItemText primary={"Result"} />
         </ListItem>
         <Divider />
@@ -227,9 +223,6 @@ function Navbar(props) {
             from="/launch"
             render={(props) => <Lanunch {...props} />}
           />
-          {/* <Route exact path="/login">
-            <Login />
-          </Route> */}
           <Route exact path="/quiz" render={(props) => <Quiz {...props} />} />
           <Route
             exact
@@ -239,7 +232,6 @@ function Navbar(props) {
           <Route exact path="/room">
             <Class />
           </Route>
-          {/* <Route exact path="/room" render={(props) => <Class {...props} />} /> */}
 
           <Route exact path="/result">
             <Result />

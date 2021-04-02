@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Navbar from "../NavigationBar/navbar";
 import Login from "../Pages/login";
-import LoginByroomName from "../Pages/loginByUserRoomName";
 import LanunchStu from "../Pages/lanunchStu";
-import { withRouter, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import NavbarStudent from "../NavigationBar/navbarStudent";
 import LoginTeacher from "../Pages/loginTeacher";
 
-export default function ProtectedRoute({ currentUser, userStudent }) {
+export default function ProtectedRoute({ currentUser }) {
   return (
     <>
       <Switch>
@@ -36,27 +35,3 @@ export default function ProtectedRoute({ currentUser, userStudent }) {
     </>
   );
 }
-
-//----
-// {currentUser ? (
-//   <Navbar
-//     displayName={currentUser.displayName}
-//     displayPic={currentUser.photoURL}
-//   />
-// ) : userStudent ? (
-//   <Route path="/LanunchStu/:reportId/:stuid">
-//     <LanunchStu />
-//   </Route>
-// ) : (
-//   <>
-//     <Route path="/login/student">
-//       <NavbarStudent />
-//     </Route>
-//     <Route path="/login/teacher">
-//       <LoginTeacher />
-//     </Route>
-//     <Route exact path="/">
-//       <Login />
-//     </Route>
-//   </>
-// )}

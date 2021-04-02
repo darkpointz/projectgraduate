@@ -265,7 +265,6 @@ export default function LanunchStu() {
       return e.step == quiz[current]?.step;
     });
     return index;
-    // setindexQuizzing(index);
   };
 
   const handleShowQuiz = () => {
@@ -441,7 +440,6 @@ export default function LanunchStu() {
   };
 
   return (
-    // <div className={classes.root}>
     <>
       <CssBaseline />
       <Grid container>
@@ -461,7 +459,6 @@ export default function LanunchStu() {
                 <Button
                   className={classes.typoBtn}
                   onClick={handleLogout}
-                  // onClick={() => history.push("/login/student")}
                 >
                   Logout
                 </Button>
@@ -472,6 +469,5 @@ export default function LanunchStu() {
         {waiting ? <WaitingForActivity /> : showContent()}
       </Grid>
     </>
-    // </div>
   );
 }

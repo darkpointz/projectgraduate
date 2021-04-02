@@ -31,7 +31,6 @@ const useStyles = makeStyles({
   },
   txtfield: {
     marginBottom: "18px",
-    //marginLeft: "10px",
   },
   closeDialog: {
     fontSize: "16px",

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Createquiz from "../Components/createquiz";
-import Showquiz from "../Components/showquiz";
 import firebase from "firebase/app";
 import "firebase/firestore";
 
@@ -49,8 +48,3 @@ export default class quiz extends Component {
     );
   }
 }
-
-//---
-// {this.state.jsonobj.map((jsonobj) => (
-//   <Showquiz list={jsonobj.obj} />
-// ))}

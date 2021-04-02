@@ -1,17 +1,11 @@
-import React, { useState, useEffect, useContext } from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import axios from "axios";
-
+import React, { useState, useEffect } from "react";
 import {
   makeStyles,
-  IconButton,
   Button,
-  FormControl,
   Typography,
-  Box,
   Grid,
 } from "@material-ui/core";
-import { Add, Search, Edit } from "@material-ui/icons";
+import { Add} from "@material-ui/icons";
 import DialogCreateClass from "../Components/dialogCreateClass";
 import CardClass from "../Components/cardClass";
 import { classService } from "../Services/classService";
@@ -21,7 +15,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
-  // layotBtnCreate: { display: "flex", justifyContent: "flex-end" },
   btnCreate: {
     display: "flex",
     borderRadius: "20px",
@@ -59,15 +52,6 @@ const useStyles = makeStyles((theme) => ({
   formtextfield: {
     width: "55%",
   },
-  textfieldSearch: {
-    // padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    // paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-    // transition: theme.transitions.create("width"),
-    // [theme.breakpoints.up("md")]: {
-    //   width: "20ch",
-    // },
-  },
   typotitlePaper: {
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 600,
@@ -80,7 +64,6 @@ export default function Class() {
   const classes = useStyles();
   const [openCreateClass, setOpenCreateClass] = useState(false);
   const [room, setroom] = useState([]);
-  const [FBIdToken, setFBIdToken] = useState();
   const [userId, setuserId] = useState();
 
   useEffect(() => {
@@ -101,12 +84,6 @@ export default function Class() {
       roomName: newroom.roomName,
       roomPublic: newroom.roomPublic,
     };
-
-    // axios.post("/room/insertRoom", formroom).then((response) => {
-    //   newroom.roomId = response.data.message;
-    //   console.log(response.data.message);
-    //   setroom([...room, newroom]);
-    // });
     classService.insertRoom(formroom, userId).then((res) => {
       newroom.roomId = res;
       setroom([...room, newroom]);

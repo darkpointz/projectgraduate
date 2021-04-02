@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { useHistory, Route, Switch, Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import swal from "sweetalert";
 
 import {
   makeStyles,
   Paper,
   IconButton,
-  FormControl,
   Typography,
   Box,
   Card,
@@ -20,7 +19,6 @@ import {
   Delete,
   EditTwoTone,
 } from "@material-ui/icons";
-import ClassStudent from "./classStudent";
 import DialogDelete from "./dialogDelete";
 
 const useStyles = makeStyles((theme) => ({
@@ -97,8 +95,6 @@ export default function CardClass(props) {
         Deleteroom(room.roomId, index);
       }
     });
-    //
-    // setopendialogDel(false);
   };
 
   const canceldialog = () => {
@@ -150,7 +146,6 @@ export default function CardClass(props) {
             <Delete
               className={classes.btnDelete}
               onClick={handleDelete}
-              // onClick={() => setopendialogDel(true)}
               fontSize="large"
             />
           </IconButton>

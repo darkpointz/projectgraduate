@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   DialogContent,
   makeStyles,
@@ -31,7 +31,6 @@ export default function DialogDelete(props) {
 
   const handlebtnconfirm = () => {
     confirm();
-    // ${props.step}
   };
   return (
     <Dialog onClose={handleClose} open={open}>

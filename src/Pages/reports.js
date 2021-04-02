@@ -1,23 +1,16 @@
-import React, { useState, useEffect, forwardRef } from "react";
+import React from "react";
 import {
   makeStyles,
   Paper,
-  Button,
-  FormControl,
-  InputAdornment,
   Typography,
-  withStyles,
-  TextField,
   Grid,
 } from "@material-ui/core";
-import { quizService } from "../Services/quizService";
 import TableReport from "../Components/tableReport";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
-  // layotBtnCreate: { display: "flex", justifyContent: "flex-end" },
   btnCreate: {
     display: "flex",
     borderRadius: "20px",
@@ -67,7 +60,6 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 600,
     fontSize: "16px",
-    // color: "#E9E9E9",
   },
 }));
 

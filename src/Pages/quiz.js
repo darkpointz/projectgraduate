@@ -1,9 +1,5 @@
 import React, { useState, useEffect, forwardRef } from "react";
-import Createquiz from "../Components/createquiz";
 import { quizService } from "../Services/quizService";
-import Showquiz from "../Components/showquiz";
-import MaterialTable from "material-table";
-import swal from "sweetalert";
 import DialogSelectCreate from "../Components/dialogSelectCreate";
 import TableQuiz from "../Components/tableQuiz";
 
@@ -11,11 +7,7 @@ import {
   makeStyles,
   Paper,
   Button,
-  FormControl,
-  InputAdornment,
   Typography,
-  withStyles,
-  TextField,
   Grid,
 } from "@material-ui/core";
 import { Add, Folder } from "@material-ui/icons";
@@ -24,7 +16,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
-  // layotBtnCreate: { display: "flex", justifyContent: "flex-end" },
   btnCreate: {
     display: "flex",
     borderRadius: "20px",
@@ -65,15 +56,6 @@ const useStyles = makeStyles((theme) => ({
       width: "70%",
     },
   },
-  textfieldSearch: {
-    // padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    // paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-    // transition: theme.transitions.create("width"),
-    // [theme.breakpoints.up("md")]: {
-    //   width: "20ch",
-    // },
-  },
   typotitlePaper: {
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 600,
@@ -94,7 +76,6 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 600,
     fontSize: "16px",
-    // color: "#E9E9E9",
   },
 }));
 
@@ -115,20 +96,6 @@ export default function Quiz(props) {
     });
   }, []);
 
-  const clickCreate = () => {
-    setOpen(true);
-    // setbtnCreate(!btnCreate);
-  };
-
-  const onsumit = (quizname, quiz) => {
-    // clickCreate();
-    setbtnCreate(!btnCreate);
-    // firebase.firestore().collection("quiz").add({
-    //   quizname: quizname,
-    //   quiz: quiz,
-    // });
-  };
-
   const handleClose = (value) => {
     setOpen(false);
     if (value === "CN") {
@@ -140,8 +107,6 @@ export default function Quiz(props) {
   const clickFolder = (type) => {
     setpath(type);
   };
-
-  const handleDeleteQuiz = () => {};
 
   return (
     //--เดียวเปลี่ยนเป็นrouteแทน***
@@ -199,7 +164,6 @@ export default function Quiz(props) {
         onClose={handleClose}
         name="create quiz"
       />
-      {/* </Grid> */}
     </div>
   );
 }

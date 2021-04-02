@@ -35,7 +35,7 @@ export default function LiveMC({
   saveAnswerCBS,
   quizzingStudent,
   indexQuizzing,
-  typeDelivery,
+  // typeDelivery,
 }) {
   const classes = useStyles();
   const [answer, setanswer] = useState("");
@@ -54,18 +54,14 @@ export default function LiveMC({
     return (
       <>
         {quiz.choice.map((item, i) => {
-          return (
-            // justify="flex-end"
+          return (  
             <Grid container item xs={12} justify="center">
               <Typography>{charStep[i]}</Typography>
               <Button
                 id="btnt"
                 variant="contained"
-                // name={}
                 value={answer}
-                // value={item}
                 onClick={() => handleSelectAnswer(item)}
-                // className={classes.textField}
                 className={clsx(classes.textField, {
                   [classes.btnTrue]: item === answer,
                 })}
