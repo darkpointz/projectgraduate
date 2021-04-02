@@ -1,16 +1,26 @@
 import React, { useState } from "react";
+import { useStyles } from "../Pages/styles";
+import { useTheme } from "../Pages/theme";
 
-import { Paper, TextField, Typography, Box, Button } from "@material-ui/core";
+import {
+  TextField,
+  Typography,
+  Box,
+  Button,
+  Grid,
+  ThemeProvider,
+} from "@material-ui/core";
 import swal from "sweetalert";
 
-import { Menu, ExitToApp } from "@material-ui/icons";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import LoginByUserName from "./loginByUserName";
+// import { Menu, ExitToApp } from "@material-ui/icons";
+// import { makeStyles, useTheme } from "@material-ui/core/styles";
+// import LoginByUserName from "./loginByUserName";
 
 import { reportService } from "../Services/reportService";
 
 export default function LoginByroomName({ handleSetRoom }) {
   const [room, setroom] = useState("");
+  const classes = useStyles();
 
   const handleClickJoin = () => {
     reportService
@@ -25,17 +35,47 @@ export default function LoginByroomName({ handleSetRoom }) {
   };
 
   return (
-    <Paper>
-      <Typography>Room Name</Typography>
-      <Box display="flex" flexDirection="column">
-        <TextField
-          id="outlined-basic"
-          variant="outlined"
-          value={room}
-          onChange={(e) => setroom(e.target.value)}
-        ></TextField>
-        <Button onClick={handleClickJoin}>Join</Button>
-      </Box>
-    </Paper>
+    <ThemeProvider theme={useTheme}>
+      <Grid
+        container
+        item
+        xs={12}
+        justify="center"
+        alignItems="center"
+        direction="column"
+      >
+        <Grid
+          className={classes.paper}
+          container
+          item
+          xs={12}
+          justify="center"
+          alignItems="center"
+          direction="column"
+        >
+          <Typography variant="h2" className={classes.typospace}>
+            Student Login
+          </Typography>
+          <Typography variant="h3">Enter Room Name</Typography>
+          <Box display="flex" flexDirection="column">
+            <TextField
+              className={classes.textfieldStu}
+              id="outlined-basic"
+              variant="outlined"
+              value={room}
+              onChange={(e) => setroom(e.target.value)}
+            ></TextField>
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              onClick={handleClickJoin}
+            >
+              Join
+            </Button>
+          </Box>
+        </Grid>
+      </Grid>
+    </ThemeProvider>
   );
 }

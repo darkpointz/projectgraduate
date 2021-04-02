@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { auth } from "./Auth/firebase";
-import { BrowserRouter, Route, NavLink, Switch } from "react-router-dom";
+// import { BrowserRouter, Route, NavLink, Switch } from "react-router-dom";
 import "./index.css";
-import Navbar from "./NavigationBar/navbar";
+// import Navbar from "./NavigationBar/navbar";
 import { makeStyles } from "@material-ui/core/styles";
-import Lanunch from "./Pages/lanunch";
-import Class from "./Pages/class";
+// import Lanunch from "./Pages/lanunch";
+// import Class from "./Pages/class";
 import { authService } from "./Auth/authService";
-import Quiz from "./Pages/quiz";
-import Login from "./Pages/login";
-import LoginNew from "./Pages/loginNew";
-import axios from "axios";
+// import Quiz from "./Pages/quiz";
+// import Login from "./Pages/login";
+// import LoginNew from "./Pages/loginNew";
+// import axios from "axios";
 import jwtDecode from "jwt-decode";
 
-import LanunchStu from "./Pages/lanunchStu";
-import LiveResult from "./Pages/liveResult";
+// import LanunchStu from "./Pages/lanunchStu";
+// import LiveResult from "./Pages/liveResult";
 import ProtectedRoute from "./Routes/ProtectedRoute";
-import AxiosInterceptor from './Auth/axiosInterceptor'
+// import AxiosInterceptor from './Auth/axiosInterceptor'
 
 // import { AuthProvider, AuthContext } from "./Auth/authService";
 

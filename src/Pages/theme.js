@@ -7,6 +7,10 @@ const useTheme = createMuiTheme({
         fontSize: "32px",
         fontWeight: 600,
       },
+      h3: {
+        fontSize: "26px",
+        fontWeight: 300,
+      },
     },
     palette: {
       primary: {

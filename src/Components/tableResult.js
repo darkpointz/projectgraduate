@@ -183,13 +183,9 @@ export default function TableResult({
         );
       }
     }
-<<<<<<< HEAD
-    console.log(row);
-=======
     if (type === "csv") {
       return rowcsv;
     }
->>>>>>> 6d2c1817230519b1b2109da96549e5f247c532c5
     return row;
   };
 
@@ -229,11 +225,6 @@ export default function TableResult({
           search: false,
           exportButton: true,
           exportAllData: true,
-<<<<<<< HEAD
-          // exportCsv: (columnsTable,rowsTable),
-=======
-          // exportCsv: handleExportCsv(),
->>>>>>> 6d2c1817230519b1b2109da96549e5f247c532c5
           headerStyle: {
             backgroundColor: "#19A999",
             color: "#FFF",

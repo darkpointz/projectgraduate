@@ -93,10 +93,10 @@ export default function Multiplechoice(props) {
 
     let choice = [];
     let correct = [];
-    ansChoice.forEach((data) => {
-      choice.push(data.ans);
-      if (data.correct) {
-        correct.push(data.ans);
+    ansChoice?.forEach((data) => {
+      choice.push(data?.ans);
+      if (data?.correct) {
+        correct.push(data?.ans);
       }
     });
     const type = "multiplechoice";
@@ -152,7 +152,7 @@ export default function Multiplechoice(props) {
                 icon={<RadioButtonUnchecked fontSize="small" />}
                 name="correct"
                 style={{ color: "#6be17a" }}
-                checked={x.correct}
+                checked={x?.correct}
                 checkedIcon={<CheckCircle />}
                 onChange={(e) => handleCheckbox(e, i)}
                 inputProps={{ "aria-label": "primary checkbox" }}
@@ -162,7 +162,7 @@ export default function Multiplechoice(props) {
                 size="small"
                 name="ans"
                 label={`Answer ${i + 1}`}
-                value={x.ans}
+                value={x?.ans}
                 onChange={(e) => handlechoice(e, i)}
                 // onChange={(e) => handlechoice(e, i)}
               />
