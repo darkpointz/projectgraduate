@@ -267,6 +267,11 @@ function Navbar(props) {
           <Route exact path="/report/:reportId">
             <ShowReportByReportId />
           </Route>
+
+          <Route exact path="/report/:reportId">
+            <ShowReportByReportId />
+          </Route>
+
         </Switch>
       </main>
     </div>

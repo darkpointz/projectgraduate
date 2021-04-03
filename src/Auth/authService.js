@@ -14,9 +14,6 @@ async function signInWithGoogle() {
     .signInWithPopup(provider)
     .then((res) => {
       // setuser(res.user);
-      var credential = res.credential;
-      var token = credential.idToken;
-      const FBUserIDtoken = `Bearer ${token}`;
       currentUser = res.user;
       localStorage.setItem("user", currentUser);
       localStorage.setItem("userId", currentUser.uid);

@@ -1,4 +1,4 @@
-import { makeStyles, Grid, Button, Typography } from "@material-ui/core";
+import { makeStyles, Grid, Button, Typography, Paper } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import { teal } from "@material-ui/core/colors";
 import clsx from "clsx";
@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   textField: {
-    width: "40%",
+    width: "70%",
     height: "85%",
     marginRight: "16px",
     marginBottom: "32px",
@@ -28,6 +28,22 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("sm")]: {
       padding: theme.spacing(3),
     },
+  },
+  paperCharStep: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "15%",
+    padding: theme.spacing(0, 1),
+    marginRight: "14px",
+    borderRadius: "18px",
+    height: "50%",
+    backgroundColor: "#EFF3F5",
+  },
+  typoCharStep: {
+    fontFamily: "'Prompt', sans-serif",
+    fontWeight: 500,
+    fontSize: "16px",
   },
 }));
 export default function LiveMC({
@@ -56,23 +72,28 @@ export default function LiveMC({
         {quiz.choice.map((item, i) => {
           return (
             // justify="flex-end"
-            <Grid container item xs={12} justify="center">
-              <Typography>{charStep[i]}</Typography>
-              <Button
-                id="btnt"
-                variant="contained"
-                // name={}
-                value={answer}
-                // value={item}
-                onClick={() => handleSelectAnswer(item)}
-                // className={classes.textField}
-                className={clsx(classes.textField, {
-                  [classes.btnTrue]: item === answer,
-                })}
-              >
-                {item}
-                {/* {"ก.5 คำ และ ข.5 คำก.5 คำ และ ข.5 คำ5 คำ และ ข.5 คำ"} */}
-              </Button>
+            <Grid container item xs={12} justify="center" >
+              <Grid container item xs={3} alignItems="center" justify="flex-end">
+                <Paper className={classes.paperCharStep}>
+                  <Typography className={classes.typoCharStep}>{charStep[i]}</Typography>
+                </Paper>
+              </Grid>
+              <Grid container item xs={9} alignItems="center" >
+
+                <Button
+                  id="btnt"
+                  variant="contained"
+                  value={answer}
+                  onClick={() => handleSelectAnswer(item)}
+                  // className={classes.textField}
+                  className={clsx(classes.textField, {
+                    [classes.btnTrue]: item === answer,
+                  })}
+                >
+                  {item}
+                  {/* {"ก.5 คำ และ ข.5 คำก.5 คำ และ ข.5 คำ5 คำ และ ข.5 คำ"} */}
+                </Button>
+              </Grid>
             </Grid>
           );
         })}
