@@ -6,6 +6,7 @@ import LanunchStu from "../Pages/lanunchStu";
 import { withRouter, Route, Switch } from "react-router-dom";
 import NavbarStudent from "../NavigationBar/navbarStudent";
 import LoginTeacher from "../Pages/loginTeacher";
+import Register from "../Pages/register";
 
 export default function ProtectedRoute({ currentUser, userStudent }) {
   return (
@@ -13,7 +14,12 @@ export default function ProtectedRoute({ currentUser, userStudent }) {
       <Switch>
         {currentUser ? (
           <Navbar
-            displayName={currentUser.displayName}
+            displayName={
+              currentUser.displayName
+                ? currentUser.displayName
+                : currentUser.email
+            }
+            // displayName={currentUser.displayName}
             displayPic={currentUser.photoURL}
           />
         ) : (
@@ -26,6 +32,9 @@ export default function ProtectedRoute({ currentUser, userStudent }) {
             </Route>
             <Route path="/login/teacher">
               <LoginTeacher />
+            </Route>
+            <Route path="/register">
+              <Register />
             </Route>
             <Route exact path="/">
               <Login />

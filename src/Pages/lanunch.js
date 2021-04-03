@@ -119,13 +119,14 @@ export default function Lanunch() {
   const classes = useStyles();
   const [openDialogLanunch, setopenDialogLanunch] = useState(false);
   const [openDialogQQ, setopenDialogQQ] = useState(false);
+  const [typeQQ, settypeQQ] = useState();
 
-  const handleClose = () => {
+  const handleCloseDialogLanunch = () => {
     setopenDialogLanunch(false);
   };
-  const livequiz = () => {
-    setopenDialogLanunch(false);
-    console.log("livequiz");
+
+  const handleCloseDialogQQ = () => {
+    setopenDialogQQ(false);
   };
 
   const handleBtnLanunch = () => {
@@ -143,6 +144,7 @@ export default function Lanunch() {
       swal("Error!", "You should finish your current activity first!", "error");
     } else {
       setopenDialogQQ(true);
+      settypeQQ(type);
     }
   };
 
@@ -183,34 +185,48 @@ export default function Lanunch() {
 
         <Grid item xs={12} container>
           <Grid item xs={4} container justify="center">
-            <Paper className={classes.paperQQMC}>
-              <Typography className={classes.typoQQicon}>MC</Typography>
-              <Typography className={classes.typoQQlabel}>
-                Multiplechoice
-              </Typography>
-            </Paper>
+            <IconButton className={classes.iconButton}>
+              <Paper className={classes.paperQQMC}>
+                <Typography className={classes.typoQQicon}>MC</Typography>
+                <Typography className={classes.typoQQlabel}>
+                  Multiplechoice
+                </Typography>
+              </Paper>
+            </IconButton>
           </Grid>
           <Grid item xs={4} container justify="center">
-            <Paper className={classes.paperQQTF}>
-              <Typography className={classes.typoQQicon}>TF</Typography>
-              <Typography className={classes.typoQQlabel}>Truefalse</Typography>
-            </Paper>
+            <IconButton className={classes.iconButton}>
+              <Paper
+                className={classes.paperQQTF}
+                onClick={() => handleQuickQuestion("TF")}
+              >
+                <Typography className={classes.typoQQicon}>TF</Typography>
+                <Typography className={classes.typoQQlabel}>
+                  Truefalse
+                </Typography>
+              </Paper>
+            </IconButton>
           </Grid>
           <Grid item xs={4} container justify="center">
-            <Paper className={classes.paperQQSA}>
-              <Typography className={classes.typoQQicon}>SA</Typography>
-              <Typography className={classes.typoQQlabel}>
-                ShortAnswer
-              </Typography>
-            </Paper>
+            <IconButton className={classes.iconButton}>
+              <Paper className={classes.paperQQSA}>
+                <Typography className={classes.typoQQicon}>SA</Typography>
+                <Typography className={classes.typoQQlabel}>
+                  ShortAnswer
+                </Typography>
+              </Paper>
+            </IconButton>
           </Grid>
         </Grid>
         <DialogSelectSetting
           open={openDialogLanunch}
-          onClose={handleClose}
-          confirm={livequiz}
+          onClose={handleCloseDialogLanunch}
         />
-        <DialogSelectRoomQQ open={openDialogLanunch} />
+        <DialogSelectRoomQQ
+          open={openDialogQQ}
+          onClose={handleCloseDialogQQ}
+          typeQQ={typeQQ}
+        />
       </Grid>
     </div>
   );

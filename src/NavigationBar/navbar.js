@@ -136,9 +136,11 @@ function Navbar(props) {
     <div>
       <div className={classes.toolbar} />
       <ListItem alignItems="center">
-        <ListItemAvatar>
-          <Avatar alt="displayPic" src={displayPic} />
-        </ListItemAvatar>
+        {displayPic ? (
+          <ListItemAvatar>
+            <Avatar alt="displayPic" src={displayPic} />
+          </ListItemAvatar>
+        ) : null}
         <ListItemText primary={props.displayName} />
       </ListItem>
       <Divider />

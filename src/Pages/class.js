@@ -145,7 +145,7 @@ export default function Class() {
         </Grid>
 
         <Grid container item xs={12}>
-          {room.map((room, index) => {
+          {room?.map((room, index) => {
             return (
               <CardClass
                 key={room.roomId}

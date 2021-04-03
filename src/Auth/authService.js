@@ -6,7 +6,7 @@ import firebase from "firebase";
 export const authService = {
   signInWithGoogle,
   logout,
-  // isLogin,
+  signInWithEmail,
 };
 async function signInWithGoogle() {
   let currentUser, FBIdToken;
@@ -34,7 +34,33 @@ async function signInWithGoogle() {
       console.log("tokensdsdsdddd:", token);
       const FBUserIDtoken = `Bearer ${token}`;
       localStorage.setItem("FBIdToken", FBUserIDtoken);
-      axios.defaults.headers.common["Authorization"] = FBUserIDtoken;
+      // axios.defaults.headers.common["Authorization"] = FBUserIDtoken;
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+}
+
+async function signInWithEmail(email, password) {
+  let currentUser;
+  await auth
+    .signInWithEmailAndPassword(email, password)
+    .then((res) => {
+      currentUser = res.user;
+      localStorage.setItem("user", currentUser);
+      localStorage.setItem("userId", currentUser.uid);
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+
+  await auth.currentUser
+    .getIdToken(true)
+    .then((token) => {
+      console.log("tokensdsdsdddd:", token);
+      const FBUserIDtoken = `Bearer ${token}`;
+      localStorage.setItem("FBIdToken", FBUserIDtoken);
+      // axios.defaults.headers.common["Authorization"] = FBUserIDtoken;
     })
     .catch((err) => {
       console.log(err.message);

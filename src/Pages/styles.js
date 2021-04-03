@@ -42,7 +42,44 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 600,
   },
   button: {
-    margin: "10px 0",
+    width: "250px",
+    margin: "10px 10px",
+  },
+  buttonStu: {
+    width: "250px",
+    margin: "10px 10px",
+    background: "#CD7672",
+    transition: "background-color 0.5s",
+    "&:hover": {
+      backgroundColor: "#995956",
+      transition: "background-color 0.5s",
+      cursor: "pointer",
+    },
+  },
+  buttonTea: {
+    width: "250px",
+    margin: "10px 10px",
+    background: "#EEB462",
+    transition: "background-color 0.5s",
+    "&:hover": {
+      backgroundColor: "#99733F",
+      transition: "background-color 0.5s",
+      cursor: "pointer",
+    },
+  },
+  googleButton: {
+    textTransform: "none",
+    margin: "10px 10px",
+    display: "flex",
+    boxShadow: theme.shadows[3],
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText,
+    transition: "background-color 0.5s",
+    "&:hover": {
+      backgroundColor: theme.palette.primary.dark,
+      transition: "background-color 0.5s",
+      cursor: "pointer",
+    },
   },
   gridTypo: {
     marginTop: 24,
@@ -74,6 +111,12 @@ const useStyles = makeStyles((theme) => ({
   },
   textfieldStu: {
     margin: theme.spacing(1, 1),
+  },
+  resize: {
+    fontSize: "26px",
+  },
+  transparent: {
+    backgroundColor: "transparent",
   },
 }));
 

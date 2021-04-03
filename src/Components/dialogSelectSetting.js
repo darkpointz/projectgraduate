@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import TableSelectClass from "./tableSelectClass";
 import { reportService } from "../Services/reportService";
 import { createBrowserHistory } from "history";
 import { useHistory } from "react-router-dom";
@@ -20,6 +19,7 @@ import {
   DialogContent,
 } from "@material-ui/core";
 import { Close, ArrowBackIos, ArrowForwardIos } from "@material-ui/icons";
+import TableSelectClass from "./tableSelectClass";
 import TableSelectQuiz from "./tableSelectQuiz";
 import SelectMethodQuiz from "./selectMethodQuiz";
 
@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function DialogSelectSetting(props) {
   const classes = useStyles();
-  const { open, onClose, confirm } = props;
+  const { open, onClose } = props;
   const [activeStep, setActiveStep] = useState(0);
   const [selectClass, setselectClass] = useState();
   const [selectQuiz, setselectQuiz] = useState();
@@ -121,7 +121,7 @@ export default function DialogSelectSetting(props) {
 
         localStorage.setItem("liveId", res);
       });
-      confirm();
+      onClose();
       setActiveStep(0);
     }
   };
