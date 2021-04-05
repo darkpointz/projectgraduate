@@ -108,7 +108,7 @@ export default function ResultMC({
 
       {quiz.choice.map((item, i) => {
         return (
-          <Grid container item xs={12}>
+          <Grid container item xs={12} key={i}>
             <Grid container item xs={1} alignItems="center" justify="center">
               <Paper
                 className={clsx(classes.paperCharStep, {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { reportService } from "../Services/reportService";
 import firebase from "firebase/app";
 import { useHistory } from "react-router-dom";
+import { createBrowserHistory } from "history";
 
 import {
   makeStyles,
@@ -18,6 +19,7 @@ import ResultMC from "../Components/resultMC";
 import ResultTF from "../Components/resultTF";
 import ResultSA from "../Components/resultSA";
 import TableResult from "../Components/tableResult";
+import QuickTF from "../Components/quickTF";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -79,6 +81,7 @@ export default function Result() {
   const classes = useStyles();
   const [reportId, setreportId] = useState();
   const [typeDelivery, settypeDelivery] = useState();
+  const [type, settype] = useState();
   const [quiz, setquiz] = useState([]);
   const [roomName, setroomName] = useState();
   const [score, setscore] = useState([]);
@@ -87,20 +90,27 @@ export default function Result() {
   const [current, setcurrent] = useState(0);
   const [stepMax, setstepMax] = useState();
   const [start, setstart] = useState();
-  let history = useHistory();
+  const [finish, setfinish] = useState();
+  const [question, setquestion] = useState();
 
+  // const history = createBrowserHistory({ forceRefresh: true });
+  let history = useHistory();
+  let unsubscribe;
+
+  //---cleanup unsubscribe ตอนนี้ใช้refreshหน้าอยู่
   useEffect(() => {
     reportService.resultTeacher(localStorage.getItem("liveId")).then((res) => {
       setreportId(localStorage.getItem("liveId"));
       settypeDelivery(res);
       console.log(res);
       if (res) {
-        firebase
+        unsubscribe = firebase
           .firestore()
           .collection("Report")
           .doc(localStorage.getItem("liveId"))
           .onSnapshot((doc) => {
             console.log(doc.data());
+            // if (doc && doc.exists) {
             //--setข้อปัจจุบัน
             doc.data().quiz.find((e) => {
               if (e.active === true) {
@@ -120,10 +130,27 @@ export default function Result() {
             setstudentMax(doc.data().student.length);
             //--setว่าเริ่มทำยัง
             setstart(doc.data().start);
+            //--QQ
+            settype(doc.data().type);
+            //--
+            setfinish(false);
           });
       }
     });
   }, []);
+
+  const serviceClearState = () => {
+    setcurrent(0);
+    setquiz([]);
+    setstepMax();
+    setroomName();
+    setscore([]);
+    setstudent([]);
+    setstudentMax();
+    setstart();
+    settype();
+    setfinish();
+  };
 
   const calculatorPercent = (count) => {
     let percent = Math.round((count / studentMax) * 100);
@@ -203,10 +230,27 @@ export default function Result() {
   };
 
   const handleBtnStart = () => {
-    reportService.teacherStartQuiz(reportId).then((res) => {
-      console.log(res);
-      setstart(true);
-    });
+    let formquiz = {
+      question: question,
+      type: type,
+      typeDelivery: typeDelivery,
+    };
+    if (quiz[0]?.choice) {
+      formquiz.choice = quiz[0]?.choice;
+    }
+    if (typeDelivery === "QuickQuestion") {
+      reportService
+        .teacherStartQuickQuestion(reportId, formquiz)
+        .then((res) => {
+          console.log(res);
+          setstart(true);
+        });
+    } else {
+      reportService.teacherStartQuiz(reportId).then((res) => {
+        console.log(res);
+        setstart(true);
+      });
+    }
   };
 
   const showNavigateStep = () => {
@@ -281,10 +325,36 @@ export default function Result() {
   };
 
   const handleBtnFinish = () => {
+    setfinish(true);
     reportService.teacherFinishQuiz(reportId).then((res) => {
       localStorage.removeItem("liveId");
       history.push("/launch");
+      // return () => {
+      //   unsubscribe();
+      //   serviceClearState();
+      // };
+      // unsubscribe();
     });
+  };
+
+  const saveQuestion = (newQuestion) => {
+    let newQuiz = quiz;
+    newQuiz[current].question = newQuestion;
+    setquestion(newQuestion);
+  };
+
+  const handleShowResultQQ = () => {
+    console.log(typeDelivery);
+    return (
+      <>
+        <QuickTF
+          quiz={quiz[current]}
+          score={score[current]}
+          saveQuestion={saveQuestion}
+          question={quiz[current].question}
+        />
+      </>
+    );
   };
 
   return (
@@ -351,6 +421,8 @@ export default function Result() {
             ? handleShowResultCBT()
             : typeDelivery === "CBS"
             ? handleShowResultCBS()
+            : type === "QuickQuestion"
+            ? handleShowResultQQ()
             : handleShowNoResult()}
         </Grid>
       </Grid>

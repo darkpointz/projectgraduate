@@ -146,10 +146,9 @@ export default function CardClass(props) {
         </CardContent>
         <CardActions className={classes.cardActions}>
           {checkAccountBox(room.roomPublic)}
-          <IconButton aria-label="iconDelete">
+          <IconButton aria-label="iconDelete" onClick={handleDelete}>
             <Delete
               className={classes.btnDelete}
-              onClick={handleDelete}
               // onClick={() => setopendialogDel(true)}
               fontSize="large"
             />

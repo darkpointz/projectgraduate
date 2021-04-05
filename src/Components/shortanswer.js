@@ -125,7 +125,7 @@ export default function Shortanswer(props) {
               )}
             </div>
             <div className={classes.boxAddAnswer}>
-              {correct.length - 1 === i && correct.length <= 10 ? (
+              {correct.length - 1 === i && correct.length <= 19 ? (
                 <Button
                   variant="contained"
                   className={classes.btnaddAnswer}

@@ -3,6 +3,7 @@ import { httpClient } from "../Auth/axiosInterceptor";
 
 export const reportService = {
   insertReport,
+  insertReportQQ,
   getRoomTypeByStudent,
   insertStudentByPublicRoom,
   manageStudentByPrivateRoom,
@@ -15,6 +16,7 @@ export const reportService = {
   getAllReport,
   getReportByReportId,
   deleteReportByReportId,
+  teacherStartQuickQuestion,
 };
 
 function teacherNextStepCBT(reportId, formStep) {
@@ -32,6 +34,7 @@ function resultTeacher(reportId) {
   return httpClient
     .post(`/report/checkMethodDelivery/${reportId}`)
     .then((res) => {
+      console.log(res.data);
       return res.data;
     })
     .catch((err) => {
@@ -42,6 +45,18 @@ function resultTeacher(reportId) {
 function insertReport(uId, formReport) {
   return httpClient
     .post(`/report/insertReport/${uId}`, formReport)
+    .then((res) => {
+      console.log("message: ", res.data.message);
+      return res.data.message;
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+}
+
+function insertReportQQ(uId, formReport) {
+  return httpClient
+    .post(`/report/insertReportQQ/${uId}`, formReport)
     .then((res) => {
       console.log("message: ", res.data.message);
       return res.data.message;
@@ -98,6 +113,17 @@ function getQuizByStudent(formStudent) {
 function answerByStudent(formStudent, reportId) {
   return httpClient
     .post(`/report/answerByStudent/${reportId}`, formStudent)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.log("err, ", err);
+    });
+}
+
+function teacherStartQuickQuestion(reportId, formquiz) {
+  return httpClient
+    .post(`/report/teacherStartQuickQuestion/${reportId}`, formquiz)
     .then((res) => {
       return res.data;
     })

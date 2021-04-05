@@ -153,11 +153,11 @@ export default function Lanunch() {
       <Grid container spacing={1} justify="center" alignItems="center">
         <Grid item xs={12} container>
           <Grid item xs={6} container justify="center">
-            <IconButton className={classes.iconButton}>
-              <Paper
-                className={classes.paperClassic}
-                onClick={handleBtnLanunch}
-              >
+            <IconButton
+              className={classes.iconButton}
+              onClick={handleBtnLanunch}
+            >
+              <Paper className={classes.paperClassic}>
                 <Person className={classes.icon} />
                 <Typography className={classes.typolabel}>Classic</Typography>
               </Paper>
@@ -185,7 +185,10 @@ export default function Lanunch() {
 
         <Grid item xs={12} container>
           <Grid item xs={4} container justify="center">
-            <IconButton className={classes.iconButton}>
+            <IconButton
+              className={classes.iconButton}
+              onClick={() => handleQuickQuestion("QQMC")}
+            >
               <Paper className={classes.paperQQMC}>
                 <Typography className={classes.typoQQicon}>MC</Typography>
                 <Typography className={classes.typoQQlabel}>
@@ -195,11 +198,11 @@ export default function Lanunch() {
             </IconButton>
           </Grid>
           <Grid item xs={4} container justify="center">
-            <IconButton className={classes.iconButton}>
-              <Paper
-                className={classes.paperQQTF}
-                onClick={() => handleQuickQuestion("TF")}
-              >
+            <IconButton
+              className={classes.iconButton}
+              onClick={() => handleQuickQuestion("QQTF")}
+            >
+              <Paper className={classes.paperQQTF}>
                 <Typography className={classes.typoQQicon}>TF</Typography>
                 <Typography className={classes.typoQQlabel}>
                   Truefalse
@@ -208,7 +211,10 @@ export default function Lanunch() {
             </IconButton>
           </Grid>
           <Grid item xs={4} container justify="center">
-            <IconButton className={classes.iconButton}>
+            <IconButton
+              className={classes.iconButton}
+              onClick={() => handleQuickQuestion("QQSA")}
+            >
               <Paper className={classes.paperQQSA}>
                 <Typography className={classes.typoQQicon}>SA</Typography>
                 <Typography className={classes.typoQQlabel}>

@@ -157,7 +157,7 @@ export default function TableReport() {
               report
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((item, i) => (
-                  <TableRow key={item.quizId}>
+                  <TableRow key={i}>
                     <TableCell
                       component="th"
                       scope="row"

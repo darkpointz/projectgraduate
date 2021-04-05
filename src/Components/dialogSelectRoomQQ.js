@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import {
   Typography,
   makeStyles,
@@ -51,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function DialogSelectRoomQQ({ open, onClose, typeQQ }) {
+  let history = useHistory();
   const classes = useStyles();
   const [selectClass, setselectClass] = useState();
   const [activeStep, setActiveStep] = useState(0);
@@ -61,32 +63,58 @@ export default function DialogSelectRoomQQ({ open, onClose, typeQQ }) {
   };
 
   const handlFinish = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    // if (activeStep === steps.length - 1) {
-    //   //กรอกครบ
-    //   const uId = localStorage.getItem("userId");
-    //   const formReport = {
-    //     selectClass: selectClass.roomId,
-    //     selectQuiz: selectQuiz.quizId,
-    //     selectMethodQuiz: selectMethodQuiz,
-    //     quiz: selectQuiz.quiz,
-    //     quizName: selectQuiz.quizName,
-    //     roomPublic: selectClass.roomPublic,
-    //     roomName: selectClass.roomName,
-    //   };
-    //   console.log(formReport);
-    //   reportService.insertReport(uId, formReport).then((res) => {
-    //     console.log("resss: ", res);
-    //     history.push("/result");
-    //     // if (res) {
-    //     //   <Link to={`/result`} />;
-    //     // }
+    //กรอกครบ
+    const uId = localStorage.getItem("userId");
+    const formReport = {
+      selectClass: selectClass.roomId,
+      selectMethodQuiz: typeQQ,
+      roomPublic: selectClass.roomPublic,
+      roomName: selectClass.roomName,
+    };
+    if (typeQQ === "QQMC") {
+      formReport.quiz = [
+        {
+          type: "multiplechoice",
+          choice: ["", "", "", "", ""],
+          active: false,
+          question: "",
+          step: 1,
+          correct: [],
+        },
+      ];
+    } else if (typeQQ === "QQTF") {
+      formReport.quiz = [
+        {
+          type: "truefalse",
+          active: false,
+          question: "",
+          step: 1,
+          correct: "",
+        },
+      ];
+    } else if (typeQQ === "QQSA") {
+      formReport.quiz = [
+        {
+          type: "truefalse",
+          active: false,
+          question: "",
+          step: 1,
+          correct: [],
+        },
+      ];
+    }
+    console.log(formReport);
+    reportService.insertReportQQ(uId, formReport).then((res) => {
+      console.log("resss: ", res);
+      history.push("/result");
+      // if (res) {
+      //   <Link to={`/result`} />;
+      // }
 
-    //     localStorage.setItem("liveId", res);
-    //   });
-    //   onClose();
-    //   setActiveStep(0);
-    // }
+      localStorage.setItem("liveId", res);
+    });
+    onClose();
+    setActiveStep(0);
   };
 
   const handleSetSelectClass = (selectclass) => {
@@ -100,6 +128,10 @@ export default function DialogSelectRoomQQ({ open, onClose, typeQQ }) {
         setselectClass={handleSetSelectClass}
       />
     );
+  };
+
+  const checkDisabledBtn = () => {
+    return selectClass ? false : true;
   };
 
   return (
@@ -140,6 +172,7 @@ export default function DialogSelectRoomQQ({ open, onClose, typeQQ }) {
                 <Button
                   variant="contained"
                   color="primary"
+                  disabled={checkDisabledBtn()}
                   onClick={handlFinish}
                 >
                   Finish
