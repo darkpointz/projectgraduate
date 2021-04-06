@@ -163,6 +163,7 @@ export default function LanunchStu() {
     };
 
     reportService.getQuizByStudent(formStudent).then((res) => {
+      console.log(res);
       if (res === "CBT") {
         firebase
           .firestore()
@@ -251,6 +252,28 @@ export default function LanunchStu() {
               setstepMax(doc.data().quiz.length);
               setwaiting(false);
               settypeDelivery("CBS");
+            } else if (doc.data().finish) {
+              history.push("/login/student");
+            }
+          });
+      } else if (res === "QuickQuestion") {
+        firebase
+          .firestore()
+          .collection("Report")
+          .doc(params.reportId)
+          .onSnapshot((doc) => {
+            if (doc.data().start && doc.data().finish === false) {
+              setwaiting(false);
+              console.log("doc", doc.data());
+              setquiz(doc.data().quiz);
+              let indexStu = doc.data().student.findIndex((e) => {
+                return e.stuid === params.stuid;
+              });
+              let done = doc.data().student[indexStu].quizzing[0]?.done;
+
+              if (done?.done) {
+                setwaiting(true);
+              }
             } else if (doc.data().finish) {
               history.push("/login/student");
             }

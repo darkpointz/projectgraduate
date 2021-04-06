@@ -7,6 +7,7 @@ import { withRouter, Route, Switch } from "react-router-dom";
 import NavbarStudent from "../NavigationBar/navbarStudent";
 import LoginTeacher from "../Pages/loginTeacher";
 import Register from "../Pages/register";
+import { classService } from "../Services/classService";
 
 export default function ProtectedRoute({ currentUser, userStudent }) {
   return (
@@ -19,7 +20,6 @@ export default function ProtectedRoute({ currentUser, userStudent }) {
                 ? currentUser.displayName
                 : currentUser.email
             }
-            // displayName={currentUser.displayName}
             displayPic={currentUser.photoURL}
           />
         ) : (

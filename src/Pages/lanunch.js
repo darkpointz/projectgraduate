@@ -131,8 +131,12 @@ export default function Lanunch() {
 
   const handleBtnLanunch = () => {
     let liveId = localStorage.getItem("liveId");
+    let roomName = localStorage.getItem("RoomName");
+    console.log(roomName);
     if (liveId) {
       swal("Error!", "You should finish your current activity first!", "error");
+    } else if (!roomName) {
+      swal("Error!", "You should select class!", "error");
     } else {
       setopenDialogLanunch(true);
     }
@@ -140,8 +144,11 @@ export default function Lanunch() {
 
   const handleQuickQuestion = (type) => {
     let liveId = localStorage.getItem("liveId");
+    let roomName = localStorage.getItem("RoomName");
     if (liveId) {
       swal("Error!", "You should finish your current activity first!", "error");
+    } else if (!roomName) {
+      swal("Error!", "You should select class!", "error");
     } else {
       setopenDialogQQ(true);
       settypeQQ(type);

@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   paperAnswer: {
     display: "flex",
     justifyContent: "space-between",
-    backgroundColor: "#ffcaca",
+    backgroundColor: "#F5F7F8",
     width: "50%",
     padding: theme.spacing(1),
     margin: "10px 0",
@@ -48,7 +48,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function QuickTF({ quiz, score, saveQuestion, question }) {
+export default function QuickTF({
+  quiz,
+  score,
+  saveQuestion,
+  question,
+  start,
+}) {
   const classes = useStyles();
   const [newQuestion, setnewQuestion] = useState(question);
   const handleQuestion = (e) => {
@@ -58,19 +64,25 @@ export default function QuickTF({ quiz, score, saveQuestion, question }) {
   return (
     <div className={classes.root}>
       <Grid container item xs={12} direction="column">
-        <Typography className={classes.typoQuestion}>
-          Add Question(Optional)
-        </Typography>
-        <TextField
-          variant="outlined"
-          label="Question"
-          className={classes.textFieldQuestion}
-          value={question}
-          //   value={quiz.question}
-          onChange={(e) => handleQuestion(e)}
-        >
-          {quiz.question}
-        </TextField>
+        {start ? (
+          <Typography className={classes.typoQuestion}>{question}</Typography>
+        ) : (
+          <>
+            <Typography className={classes.typoQuestion}>
+              Add Question(Optional)
+            </Typography>
+            <TextField
+              variant="outlined"
+              label="Question"
+              className={classes.textFieldQuestion}
+              value={question}
+              //   value={quiz.question}
+              onChange={(e) => handleQuestion(e)}
+            >
+              {quiz.question}
+            </TextField>
+          </>
+        )}
       </Grid>
       <Grid container item xs={12} alignItems="center">
         <Paper

@@ -72,6 +72,7 @@ async function logout() {
       localStorage.removeItem("FBIdToken");
       localStorage.removeItem("user");
       localStorage.removeItem("userId");
+      localStorage.removeItem("RoomName");
       console.log("logout_sucess");
     })
     .catch((err) => {

@@ -93,8 +93,8 @@ export default function Result() {
   const [finish, setfinish] = useState();
   const [question, setquestion] = useState();
 
-  // const history = createBrowserHistory({ forceRefresh: true });
-  let history = useHistory();
+  const history = createBrowserHistory({ forceRefresh: true });
+  // let history = useHistory();
   let unsubscribe;
 
   //---cleanup unsubscribe ตอนนี้ใช้refreshหน้าอยู่
@@ -238,7 +238,8 @@ export default function Result() {
     if (quiz[0]?.choice) {
       formquiz.choice = quiz[0]?.choice;
     }
-    if (typeDelivery === "QuickQuestion") {
+    console.log(formquiz);
+    if (type === "QuickQuestion") {
       reportService
         .teacherStartQuickQuestion(reportId, formquiz)
         .then((res) => {
@@ -352,6 +353,7 @@ export default function Result() {
           score={score[current]}
           saveQuestion={saveQuestion}
           question={quiz[current].question}
+          start={start}
         />
       </>
     );

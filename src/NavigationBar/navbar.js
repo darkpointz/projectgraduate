@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import {
@@ -16,10 +16,15 @@ import {
   Typography,
   ListItemAvatar,
   Avatar,
+  FormControl,
+  MenuItem,
+  Select,
+  Grid,
+  InputLabel,
+  Button,
 } from "@material-ui/core";
-
-import { Menu, ExitToApp } from "@material-ui/icons";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { Menu, ExitToApp, ArrowDropDown } from "@material-ui/icons";
+import { formatMs, makeStyles, useTheme } from "@material-ui/core/styles";
 import { withRouter, Route, Switch } from "react-router-dom";
 import swal from "sweetalert";
 
@@ -33,12 +38,14 @@ import Result from "../Pages/result";
 import Createquiz from "../Components/createquiz";
 import LiveResult from "../Pages/liveResult";
 import ShowReportByReportId from "../Components/showReportByReportId";
+import { classService } from "../Services/classService";
 
 const drawerWidth = 200;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
+    flexGrow: 1,
     width: "100%",
   },
   drawer: {
@@ -53,6 +60,16 @@ const useStyles = makeStyles((theme) => ({
       width: `calc(100% - ${drawerWidth}px)`,
       marginLeft: drawerWidth,
     },
+  },
+  selectRoom: {
+    width: "30%",
+    textAlign: "center",
+  },
+  menuItem: {
+    fontFamily: "'Prompt', sans-serif",
+    fontWeight: 500,
+    fontSize: "28px",
+    color: "#fff",
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -90,7 +107,23 @@ function Navbar(props) {
 
   const classes = useStyles();
   const theme = useTheme();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [room, setroom] = useState();
+  const [selectRoom, setselectRoom] = useState("");
+  const [roomName, setroomName] = useState("");
+  const [roomId, setroomId] = useState("");
+
+  useEffect(() => {
+    const uId = localStorage.getItem("userId");
+    classService.getAllRoom(uId).then((res) => {
+      setroom(res);
+      const selectRoom = localStorage.getItem("Room");
+      const RoomName = localStorage.getItem("RoomName");
+      console.log(RoomName);
+      setselectRoom(selectRoom);
+      setroomName(RoomName);
+    });
+  }, []);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -169,6 +202,12 @@ function Navbar(props) {
     </div>
   );
 
+  const handleChangeRoom = (event) => {
+    console.log(event.target.value);
+    localStorage.setItem("RoomName", event.target.value);
+    setroomName(event.target.value);
+  };
+
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
@@ -177,18 +216,39 @@ function Navbar(props) {
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            className={classes.menuButton}
-          >
-            <Menu />
-          </IconButton>
-          <Typography className={classes.typoLogo} noWrap>
-            Qton
-          </Typography>
+          <Grid xs={4} container>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              className={classes.menuButton}
+            >
+              <Menu />
+            </IconButton>
+            <Typography className={classes.typoLogo} noWrap>
+              Qton
+            </Typography>
+          </Grid>
+          <Grid xs={8} container>
+            <FormControl className={classes.selectRoom}>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={roomName}
+                onChange={handleChangeRoom}
+                className={classes.menuItem}
+              >
+                {room?.map((room, i) => {
+                  return (
+                    <MenuItem key={i} value={room.roomName}>
+                      {room.roomName}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </Grid>
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">
@@ -271,7 +331,6 @@ function Navbar(props) {
           <Route exact path="/report/:reportId">
             <ShowReportByReportId />
           </Route>
-
         </Switch>
       </main>
     </div>

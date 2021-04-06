@@ -72,11 +72,7 @@ export default function DialogSelectSetting(props) {
   });
   let history = useHistory();
 
-  const steps = [
-    "Select Class",
-    "Select Quiz",
-    "Setting and Choose Delivery Method",
-  ];
+  const steps = ["Select Quiz", "Setting and Choose Delivery Method"];
 
   const handleCloseDialog = () => {
     setselectClass();
@@ -84,32 +80,18 @@ export default function DialogSelectSetting(props) {
     onClose();
   };
 
-  const getStepContent = (stepIndex) => {
-    switch (stepIndex) {
-      case 0:
-        return "Select Class";
-      case 1:
-        return "Select Quiz";
-      case 2:
-        return "Setting and Choose Delivery Method";
-      default:
-        return "Unknown stepIndex";
-    }
-  };
-
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     if (activeStep === steps.length - 1) {
       //กรอกครบ
       const uId = localStorage.getItem("userId");
+      let roomName = localStorage.getItem("RoomName");
       const formReport = {
-        selectClass: selectClass.roomId,
         selectQuiz: selectQuiz.quizId,
         selectMethodQuiz: selectMethodQuiz,
         quiz: selectQuiz.quiz,
         quizName: selectQuiz.quizName,
-        roomPublic: selectClass.roomPublic,
-        roomName: selectClass.roomName,
+        roomName: roomName,
       };
       console.log(formReport);
       reportService.insertReport(uId, formReport).then((res) => {
@@ -130,9 +112,6 @@ export default function DialogSelectSetting(props) {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleSetSelectClass = (selectclass) => {
-    setselectClass(selectclass);
-  };
   const handleSetSelectQuiz = (selectquiz) => {
     setselectQuiz(selectquiz);
   };
@@ -146,19 +125,12 @@ export default function DialogSelectSetting(props) {
     switch (activeStep) {
       case 0:
         return (
-          <TableSelectClass
-            selectClass={selectClass}
-            setselectClass={handleSetSelectClass}
-          />
-        );
-      case 1:
-        return (
           <TableSelectQuiz
             selectQuiz={selectQuiz}
             setselectQuiz={handleSetSelectQuiz}
           />
         );
-      case 2:
+      case 1:
         return (
           <SelectMethodQuiz
             selectMethodQuiz={selectMethodQuiz}
@@ -173,10 +145,8 @@ export default function DialogSelectSetting(props) {
   const checkDisabledBtn = () => {
     switch (activeStep) {
       case 0:
-        return selectClass ? false : true;
-      case 1:
         return selectQuiz ? false : true;
-      case 2:
+      case 1:
         return selectMethodQuiztf ? false : true;
       default:
         return true;
