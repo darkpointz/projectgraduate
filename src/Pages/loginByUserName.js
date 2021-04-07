@@ -29,23 +29,20 @@ export default function LoginByUserName({ roomPublic, reportId }) {
       reportId: reportId,
       stuid: stuid,
     };
-
-    setTimeout(() => {
-      if (stuid) {
-        reportService
-          .manageStudentByPrivateRoom(stuid, reportId)
-          .then((res) => {
-            console.log(res);
-            if (res.data.message === "succes") {
-              localStorage.setItem("stuid", stuid);
-              history.push(`/LanunchStu/${reportId}/${stuid}`);
-            }
-          });
-      }
-    }, 1000);
+    if (stuid) {
+      reportService.manageStudentByPrivateRoom(stuid, reportId).then((res) => {
+        console.log(res);
+        if (res.data.message === "succes") {
+          localStorage.setItem("stuid", stuid);
+          history.push(`/LanunchStu/${reportId}/${stuid}`);
+        }
+      });
+    }
   });
 
   const handleClickJoin = () => {
+    reportService.manageStudentByPrivateRoom(9999, 9999);
+
     if (roomPublic) {
       let formStudent = {
         name: name,
@@ -68,30 +65,25 @@ export default function LoginByUserName({ roomPublic, reportId }) {
           swal("Error!", "Check your room name!", "error");
         });
     } else {
-      let formStudent = {
-        reportId: reportId,
-        stuid: stuid,
-      };
-      console.log("formStudent: ", formStudent);
-      setTimeout(() => {
-        reportService
-          .manageStudentByPrivateRoom(stuid, reportId)
-          // .manageStudentByPrivateRoom(formStudent, reportId)
-          .then((res) => {
-            console.log("res- ", res);
-            if (res.data.message === "succes") {
-              localStorage.setItem("stuid", stuid);
-              history.push(`/LanunchStu/${reportId}/${stuid}`);
-            } else if (res === 406) {
-              swal("Error!", " You have submitted a quiz!", "error");
-            } else {
-              swal("Error!", "Check your Student ID!", "error");
-            }
-          })
-          .catch((err) => {
+      // setTimeout(() => {
+      reportService
+        .manageStudentByPrivateRoom(stuid, reportId)
+        // .manageStudentByPrivateRoom(formStudent, reportId)
+        .then((res) => {
+          console.log("res- ", res);
+          if (res.data.message === "succes") {
+            localStorage.setItem("stuid", stuid);
+            history.push(`/LanunchStu/${reportId}/${stuid}`);
+          } else if (res === 406) {
+            swal("Error!", " You have submitted a quiz!", "error");
+          } else {
             swal("Error!", "Check your Student ID!", "error");
-          });
-      }, 1000);
+          }
+        })
+        .catch((err) => {
+          swal("Error!", "Check your Student ID!", "error");
+        });
+      // }, 1000);
     }
   };
 

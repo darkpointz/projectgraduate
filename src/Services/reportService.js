@@ -90,7 +90,7 @@ function insertStudentByPublicRoom(formStudent, reportId) {
 }
 
 function manageStudentByPrivateRoom(stuid, reportId) {
-  return axios.post(`/report/manageStudentByPrivateRoom/${reportId}/${stuid}`);
+  return axios.get(`/report/manageStudentByPrivateRoom/${reportId}/${stuid}`);
 }
 
 function getQuizByStudent(formStudent) {
