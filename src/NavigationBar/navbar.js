@@ -108,10 +108,9 @@ function Navbar(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [room, setroom] = useState();
+  const [room, setroom] = useState([]);
   const [selectRoom, setselectRoom] = useState("");
   const [roomName, setroomName] = useState("");
-  const [roomId, setroomId] = useState("");
 
   useEffect(() => {
     const uId = localStorage.getItem("userId");

@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useStyles } from "../Pages/styles";
 import { useTheme } from "../Pages/theme";
 import { createBrowserHistory } from "history";
+import { useHistory } from "react-router-dom";
 import LoginByUserRoomName from "../Pages/loginByUserRoomName";
 import LoginByUserName from "../Pages/loginByUserName";
+import firebase from "firebase/app";
+
+import { reportService } from "../Services/reportService";
 import {
   AppBar,
   CssBaseline,
@@ -16,9 +20,56 @@ import {
 
 export default function NavbarStudent() {
   const classes = useStyles();
-  const history = createBrowserHistory({ forceRefresh: true });
+  // const history = createBrowserHistory({ forceRefresh: true });
+  let history = useHistory();
   const [report, setreport] = useState();
   const [roomPublic, setroomPublic] = useState();
+
+  useEffect(() => {
+    let roomName = localStorage.getItem("RoomStudent");
+    let stuid = localStorage.getItem("stuid");
+    let reportId = localStorage.getItem("ReportId");
+    if (!reportId) {
+      let unsubscribe;
+      unsubscribe = firebase
+        .firestore()
+        .collection("Report")
+        .where("roomName", "==", roomName)
+        .onSnapshot((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            if (!doc.data().finish) {
+              let submit;
+              doc.data().student.find((e) => {
+                if (e.stuid === stuid) {
+                  submit = e.submit;
+                }
+              });
+              console.log("e.submit: ", submit);
+              if (submit === false) {
+                setreport(doc.id);
+                setroomPublic(doc.data().roomPublic);
+                localStorage.setItem("ReportId", doc.id);
+              }
+              console.log("---");
+            }
+          });
+        });
+      return () => {
+        if (unsubscribe) {
+          unsubscribe();
+        }
+      };
+    }
+    // if (roomName) {
+    //   reportService.getRoomTypeByStudent(roomName).then((res) => {
+    //     console.log(res);
+    //     if (res) {
+    //       setreport(res.reportId);
+    //       setroomPublic(res.roomPublic);
+    //     }
+    //   });
+    // }
+  });
 
   const handleSetRoom = (roomUser, roomPublic) => {
     setreport(roomUser);

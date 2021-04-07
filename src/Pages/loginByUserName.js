@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useStyles } from "../Pages/styles";
 import { useTheme } from "../Pages/theme";
 import {
@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import swal from "sweetalert";
 import { createBrowserHistory } from "history";
+import { useHistory } from "react-router-dom";
 
 import { reportService } from "../Services/reportService";
 
@@ -19,7 +20,30 @@ export default function LoginByUserName({ roomPublic, reportId }) {
   const [name, setname] = useState();
   const [stuid, setstuid] = useState();
   const [quiz, setquiz] = useState();
-  const history = createBrowserHistory({ forceRefresh: true });
+  // const history = createBrowserHistory({ forceRefresh: true });
+  let history = useHistory();
+
+  useEffect(() => {
+    let stuid = localStorage.getItem("stuid");
+    let formStudent = {
+      reportId: reportId,
+      stuid: stuid,
+    };
+
+    setTimeout(() => {
+      if (stuid) {
+        reportService
+          .manageStudentByPrivateRoom(stuid, reportId)
+          .then((res) => {
+            console.log(res);
+            if (res.data.message === "succes") {
+              localStorage.setItem("stuid", stuid);
+              history.push(`/LanunchStu/${reportId}/${stuid}`);
+            }
+          });
+      }
+    }, 1000);
+  });
 
   const handleClickJoin = () => {
     if (roomPublic) {
@@ -27,6 +51,7 @@ export default function LoginByUserName({ roomPublic, reportId }) {
         name: name,
         reportId: reportId,
       };
+      console.log("formStudent: ", formStudent);
       reportService
         .insertStudentByPublicRoom(formStudent, reportId)
         .then((res) => {
@@ -34,7 +59,8 @@ export default function LoginByUserName({ roomPublic, reportId }) {
           if (res.succes === "succes") {
             history.push(`/LanunchStu/${reportId}/${res.stuid}`);
           } else {
-            swal("Error!", "Check your Student ID!", "error");
+            swal("Error!", "Check sdfsdfsdfsdfID!", "error");
+            // swal("Error!", "Check your Student ID!", "error");
           }
         })
         .catch((err) => {
@@ -46,21 +72,26 @@ export default function LoginByUserName({ roomPublic, reportId }) {
         reportId: reportId,
         stuid: stuid,
       };
-
-      reportService
-        .manageStudentByPrivateRoom(formStudent, reportId)
-        .then((res) => {
-          console.log(res);
-          if (res.succes === "succes") {
-            history.push(`/LanunchStu/${reportId}/${stuid}`);
-          } else {
+      console.log("formStudent: ", formStudent);
+      setTimeout(() => {
+        reportService
+          .manageStudentByPrivateRoom(stuid, reportId)
+          // .manageStudentByPrivateRoom(formStudent, reportId)
+          .then((res) => {
+            console.log("res- ", res);
+            if (res.data.message === "succes") {
+              localStorage.setItem("stuid", stuid);
+              history.push(`/LanunchStu/${reportId}/${stuid}`);
+            } else if (res === 406) {
+              swal("Error!", " You have submitted a quiz!", "error");
+            } else {
+              swal("Error!", "Check your Student ID!", "error");
+            }
+          })
+          .catch((err) => {
             swal("Error!", "Check your Student ID!", "error");
-          }
-        })
-        .catch((err) => {
-          console.log(err.json);
-          swal("Error!", "Check your Student ID!", "error");
-        });
+          });
+      }, 1000);
     }
   };
 

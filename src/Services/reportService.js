@@ -17,6 +17,7 @@ export const reportService = {
   getReportByReportId,
   deleteReportByReportId,
   teacherStartQuickQuestion,
+  finishQuizCBS,
 };
 
 function teacherNextStepCBT(reportId, formStep) {
@@ -88,15 +89,8 @@ function insertStudentByPublicRoom(formStudent, reportId) {
     });
 }
 
-function manageStudentByPrivateRoom(formStudent, reportId) {
-  return httpClient
-    .post(`/report/manageStudentByPrivateRoom/${reportId}`, formStudent)
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err) => {
-      console.log("err, ", err);
-    });
+function manageStudentByPrivateRoom(stuid, reportId) {
+  return axios.post(`/report/manageStudentByPrivateRoom/${reportId}/${stuid}`);
 }
 
 function getQuizByStudent(formStudent) {
@@ -182,6 +176,17 @@ function deleteReportByReportId(reportId) {
     .then((res) => {
       console.log(res.data);
       return res.data;
+    })
+    .catch((err) => {
+      console.log("err, ", err);
+    });
+}
+
+function finishQuizCBS(formStudent) {
+  return httpClient
+    .post(`/report/finishQuizCBS`, formStudent)
+    .then((res) => {
+      return res;
     })
     .catch((err) => {
       console.log("err, ", err);

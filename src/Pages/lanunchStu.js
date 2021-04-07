@@ -208,6 +208,8 @@ export default function LanunchStu() {
               });
               //--quizzingStudent
             } else if (doc.data().finish) {
+              localStorage.removeItem("liveId");
+              localStorage.removeItem("ReportId");
               history.push("/login/student");
             }
           });
@@ -253,6 +255,8 @@ export default function LanunchStu() {
               setwaiting(false);
               settypeDelivery("CBS");
             } else if (doc.data().finish) {
+              localStorage.removeItem("liveId");
+              localStorage.removeItem("ReportId");
               history.push("/login/student");
             }
           });
@@ -275,6 +279,8 @@ export default function LanunchStu() {
                 setwaiting(true);
               }
             } else if (doc.data().finish) {
+              localStorage.removeItem("liveId");
+              localStorage.removeItem("ReportId");
               history.push("/login/student");
             }
           });
@@ -292,9 +298,6 @@ export default function LanunchStu() {
   };
 
   const handleShowQuiz = () => {
-    {
-      console.log("quiz[current]?.type: ", quiz);
-    }
     return (
       <>
         {quiz[current]?.type === "multiplechoice" ? (
@@ -336,9 +339,20 @@ export default function LanunchStu() {
       icon: "warning",
       buttons: true,
       dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete) {
-        history.push("/login/student");
+    }).then((willFinish) => {
+      if (willFinish) {
+        if (answer) {
+          submitAnswer();
+        }
+        let formStudent = {
+          stuid: localStorage.getItem("stuid"),
+          reportId: localStorage.getItem("ReportId"),
+        };
+        console.log(formStudent);
+        reportService.finishQuizCBS(formStudent).then((res) => {
+          localStorage.removeItem("ReportId");
+          history.push("/login/student");
+        });
       }
     });
   };
@@ -353,6 +367,9 @@ export default function LanunchStu() {
     }).then((willDelete) => {
       if (willDelete) {
         history.push("/login/student");
+        localStorage.removeItem("RoomStudent");
+        localStorage.removeItem("stuid");
+        localStorage.removeItem("ReportId");
       }
     });
   };

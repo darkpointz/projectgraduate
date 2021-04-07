@@ -93,12 +93,12 @@ export default function Result() {
   const [finish, setfinish] = useState();
   const [question, setquestion] = useState();
 
-  const history = createBrowserHistory({ forceRefresh: true });
-  // let history = useHistory();
-  let unsubscribe;
+  // const history = createBrowserHistory({ forceRefresh: true });
+  let history = useHistory();
 
   //---cleanup unsubscribe ตอนนี้ใช้refreshหน้าอยู่
   useEffect(() => {
+    let unsubscribe;
     reportService.resultTeacher(localStorage.getItem("liveId")).then((res) => {
       setreportId(localStorage.getItem("liveId"));
       settypeDelivery(res);
@@ -137,20 +137,12 @@ export default function Result() {
           });
       }
     });
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
   }, []);
-
-  const serviceClearState = () => {
-    setcurrent(0);
-    setquiz([]);
-    setstepMax();
-    setroomName();
-    setscore([]);
-    setstudent([]);
-    setstudentMax();
-    setstart();
-    settype();
-    setfinish();
-  };
 
   const calculatorPercent = (count) => {
     let percent = Math.round((count / studentMax) * 100);

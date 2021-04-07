@@ -23,6 +23,13 @@ export default function LoginByroomName({ handleSetRoom }) {
       .getRoomTypeByStudent(room)
       .then((res) => {
         handleSetRoom(res.reportId, res.roomPublic);
+        if (res.roomPublic === false) {
+          localStorage.setItem("RoomStudent", room);
+        } else if (res.roomPublic === true) {
+          localStorage.setItem("RoomStudent", room);
+          // localStorage.removeItem("RoomStudent");
+          localStorage.removeItem("stuid");
+        }
       })
       .catch((err) => {
         console.log(err.json);

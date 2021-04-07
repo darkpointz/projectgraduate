@@ -2,6 +2,7 @@ import React from "react";
 import { createBrowserHistory } from "history";
 import { useStyles } from "./styles.js";
 import { useTheme } from "./theme.js";
+import { useHistory } from "react-router-dom";
 import {
   CssBaseline,
   Button,
@@ -14,7 +15,8 @@ import {
 
 export default function Login() {
   const classes = useStyles();
-  const history = createBrowserHistory({ forceRefresh: true });
+  // const history = createBrowserHistory({ forceRefresh: true });
+  let history = useHistory();
 
   return (
     <ThemeProvider theme={useTheme}>
