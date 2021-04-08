@@ -6,6 +6,7 @@ import {
   Button,
   CircularProgress,
 } from "@material-ui/core";
+import clsx from "clsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,21 +24,36 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "48px",
     marginTop: "30px",
   },
+  typoTitleWhite: { color: "#fff" },
   progress: {
     color: "#19A999",
   },
+  progressWhite: {
+    color: "#fff",
+  },
 }));
 
-export default function WaitingForActivity() {
+export default function WaitingForActivity({ colorWhite }) {
   const classes = useStyles();
   return (
     <div className={classes.root}>
       <Grid container item xs={12} className={classes.content}>
         <Grid container item xs={12} alignItems="center" justify="center">
-          <CircularProgress size={120} className={classes.progress} />
+          <CircularProgress
+            size={120}
+            className={clsx(classes.progress, {
+              [classes.progressWhite]: colorWhite === "true",
+            })}
+          />
+          {/* <CircularProgress size={120} className={classes.progress} /> */}
         </Grid>
         <Grid container item xs={12} alignItems="center" justify="center">
-          <Typography className={classes.typoTitle}>
+          <Typography
+            className={clsx(classes.typoTitle, {
+              [classes.typoTitleWhite]: colorWhite === "true",
+            })}
+          >
+            {/* <Typography className={classes.typoTitle}> */}
             Waiting For Activity...
           </Typography>
         </Grid>

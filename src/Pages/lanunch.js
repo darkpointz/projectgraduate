@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import { reportService } from "../Services/reportService";
 
 import {
   makeStyles,
@@ -118,15 +120,10 @@ const useStyles = makeStyles((theme) => ({
 export default function Lanunch() {
   const classes = useStyles();
   const [openDialogLanunch, setopenDialogLanunch] = useState(false);
-  const [openDialogQQ, setopenDialogQQ] = useState(false);
-  const [typeQQ, settypeQQ] = useState();
+  let history = useHistory();
 
   const handleCloseDialogLanunch = () => {
     setopenDialogLanunch(false);
-  };
-
-  const handleCloseDialogQQ = () => {
-    setopenDialogQQ(false);
   };
 
   const handleBtnLanunch = () => {
@@ -150,8 +147,57 @@ export default function Lanunch() {
     } else if (!roomName) {
       swal("Error!", "You should select class!", "error");
     } else {
-      setopenDialogQQ(true);
-      settypeQQ(type);
+      //สร้าง
+      const uId = localStorage.getItem("userId");
+      const roomName = localStorage.getItem("RoomName");
+      const formReport = {
+        // selectClass: selectClass.roomId,
+        selectMethodQuiz: type,
+        // roomPublic: selectClass.roomPublic,
+        roomName: roomName,
+      };
+      if (type === "QQMC") {
+        formReport.quiz = [
+          {
+            type: "multiplechoice",
+            choice: ["", "", "", "", ""],
+            active: false,
+            question: "",
+            step: 1,
+            correct: [],
+          },
+        ];
+      } else if (type === "QQTF") {
+        formReport.quiz = [
+          {
+            type: "truefalse",
+            active: false,
+            question: "",
+            step: 1,
+            correct: "",
+          },
+        ];
+      } else if (type === "QQSA") {
+        formReport.quiz = [
+          {
+            type: "truefalse",
+            active: false,
+            question: "",
+            step: 1,
+            correct: [],
+          },
+        ];
+      }
+      console.log("formReport: ", formReport);
+      reportService.insertReportQQ(uId, formReport).then((res) => {
+        console.log("resss: ", res);
+        history.push("/result");
+        // if (res) {
+        //   <Link to={`/result`} />;
+        // }
+
+        localStorage.setItem("liveId", res);
+      });
     }
   };
 
@@ -234,11 +280,6 @@ export default function Lanunch() {
         <DialogSelectSetting
           open={openDialogLanunch}
           onClose={handleCloseDialogLanunch}
-        />
-        <DialogSelectRoomQQ
-          open={openDialogQQ}
-          onClose={handleCloseDialogQQ}
-          typeQQ={typeQQ}
         />
       </Grid>
     </div>

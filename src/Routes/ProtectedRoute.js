@@ -27,7 +27,7 @@ export default function ProtectedRoute({ currentUser, userStudent }) {
             <Route path="/lanunchStu/:reportId/:stuid">
               <LanunchStu />
             </Route>
-            <Route path="/login/student">
+            <Route path="/login/student/:room">
               <NavbarStudent />
             </Route>
             <Route path="/login/teacher">

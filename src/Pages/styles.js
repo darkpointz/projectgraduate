@@ -31,10 +31,13 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   title: {
-    flexGrow: 1,
+    // flexGrow: 1,
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 600,
     fontSize: "34px",
+    "&:hover": {
+      cursor: "pointer",
+    },
   },
   typoLogin: {
     fontFamily: "'Prompt', sans-serif",

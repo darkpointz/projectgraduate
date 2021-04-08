@@ -25,13 +25,9 @@ export default function LoginByUserName({ roomPublic, reportId }) {
 
   useEffect(() => {
     let stuid = localStorage.getItem("stuid");
-    let formStudent = {
-      reportId: reportId,
-      stuid: stuid,
-    };
     if (stuid) {
       reportService.manageStudentByPrivateRoom(stuid, reportId).then((res) => {
-        console.log(res);
+        console.log("res---------------------");
         if (res.data.message === "succes") {
           localStorage.setItem("stuid", stuid);
           history.push(`/LanunchStu/${reportId}/${stuid}`);
@@ -54,6 +50,7 @@ export default function LoginByUserName({ roomPublic, reportId }) {
         .then((res) => {
           console.log(res);
           if (res.succes === "succes") {
+            localStorage.setItem("stuid", res.stuid);
             history.push(`/LanunchStu/${reportId}/${res.stuid}`);
           } else {
             swal("Error!", "Check sdfsdfsdfsdfID!", "error");
@@ -81,6 +78,7 @@ export default function LoginByUserName({ roomPublic, reportId }) {
           }
         })
         .catch((err) => {
+          console.log("err- ");
           swal("Error!", "Check your Student ID!", "error");
         });
       // }, 1000);

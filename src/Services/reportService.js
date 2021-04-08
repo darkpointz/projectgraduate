@@ -18,6 +18,7 @@ export const reportService = {
   deleteReportByReportId,
   teacherStartQuickQuestion,
   finishQuizCBS,
+  submitAnswerQQ,
 };
 
 function teacherNextStepCBT(reportId, formStep) {
@@ -107,6 +108,17 @@ function getQuizByStudent(formStudent) {
 function answerByStudent(formStudent, reportId) {
   return httpClient
     .post(`/report/answerByStudent/${reportId}`, formStudent)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.log("err, ", err);
+    });
+}
+
+function submitAnswerQQ(formStudent, reportId) {
+  return httpClient
+    .post(`/report/submitAnswerQQ/${reportId}`, formStudent)
     .then((res) => {
       return res.data;
     })

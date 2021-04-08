@@ -79,16 +79,20 @@ export default function LoginTeacher() {
         <Grid container item xs={12} className={classes.GridAppBar}>
           <AppBar position="sticky" elevation={0} className={classes.appBar}>
             <Toolbar>
-              <Typography variant="h6" className={classes.title}>
-                Qton
-              </Typography>
-              <Button
-                color="inherit"
-                className={classes.btn}
-                onClick={() => history.push("/login/student")}
-              >
-                Student Login
-              </Button>
+              <Grid container item xs={2}>
+                <Typography variant="h6" className={classes.title}>
+                  Qton
+                </Typography>
+              </Grid>
+              <Grid container item xs={10} justify="flex-end">
+                <Button
+                  color="inherit"
+                  className={classes.btn}
+                  onClick={() => history.push("/login/student/0")}
+                >
+                  Student Login
+                </Button>
+              </Grid>
             </Toolbar>
           </AppBar>
         </Grid>

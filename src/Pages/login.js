@@ -83,7 +83,7 @@ export default function Login() {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => history.push("/login/student/room")}
+                onClick={() => history.push("/login/student/room/0")}
                 className={classes.buttonStu}
               >
                 Login Student

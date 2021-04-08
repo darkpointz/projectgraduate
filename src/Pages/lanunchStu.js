@@ -145,6 +145,7 @@ export default function LanunchStu() {
   const [current, setcurrent] = useState(0);
   const [roomName, setroomName] = useState();
   const [typeDelivery, settypeDelivery] = useState();
+  const [type, settype] = useState();
   const [quizzingStudent, setquizzingStudent] = useState([]);
   const [waiting, setwaiting] = useState(true);
 
@@ -161,11 +162,11 @@ export default function LanunchStu() {
       reportId: params.reportId,
       stuid: params.stuid,
     };
-
+    let unsubscribe;
     reportService.getQuizByStudent(formStudent).then((res) => {
       console.log(res);
       if (res === "CBT") {
-        firebase
+        unsubscribe = firebase
           .firestore()
           .collection("Report")
           .doc(params.reportId)
@@ -192,7 +193,7 @@ export default function LanunchStu() {
                   let done = doc.data().student[indexStu].quizzing.find((e) => {
                     return e.step === data.step;
                   });
-
+                  settype(doc.data().type);
                   if (done?.done) {
                     setwaiting(true);
                     // setquiz([]);
@@ -210,12 +211,15 @@ export default function LanunchStu() {
             } else if (doc.data().finish) {
               localStorage.removeItem("liveId");
               localStorage.removeItem("ReportId");
-              history.push("/login/student");
+              let room = localStorage.getItem("RoomStudent");
+              console.log("roomName, ", room);
+              history.push(`/login/student/${room}`);
+              // history.push("/login/student");
             }
           });
         settypeDelivery("CBT");
       } else if (res === "CBS") {
-        firebase
+        unsubscribe = firebase
           .firestore()
           .collection("Report")
           .doc(params.reportId)
@@ -249,7 +253,7 @@ export default function LanunchStu() {
                 quizzingStudent.push(form);
               });
               setquizzingStudent(quizzingStudent);
-
+              settype(doc.data().type);
               setroomName(doc.data().roomName);
               setstepMax(doc.data().quiz.length);
               setwaiting(false);
@@ -257,11 +261,12 @@ export default function LanunchStu() {
             } else if (doc.data().finish) {
               localStorage.removeItem("liveId");
               localStorage.removeItem("ReportId");
-              history.push("/login/student");
+              let room = localStorage.getItem("RoomStudent");
+              history.push(`/login/student/${room}`);
             }
           });
       } else if (res === "QuickQuestion") {
-        firebase
+        unsubscribe = firebase
           .firestore()
           .collection("Report")
           .doc(params.reportId)
@@ -274,18 +279,25 @@ export default function LanunchStu() {
                 return e.stuid === params.stuid;
               });
               let done = doc.data().student[indexStu].quizzing[0]?.done;
-
-              if (done?.done) {
+              settype(doc.data().type);
+              if (done) {
+                console.log("done: ", done);
                 setwaiting(true);
               }
             } else if (doc.data().finish) {
               localStorage.removeItem("liveId");
               localStorage.removeItem("ReportId");
-              history.push("/login/student");
+              let room = localStorage.getItem("RoomStudent");
+              history.push(`/login/student/${room}`);
             }
           });
       }
     });
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
   }, []);
 
   const handleFetchAnswer = () => {
@@ -302,7 +314,6 @@ export default function LanunchStu() {
       <>
         {quiz[current]?.type === "multiplechoice" ? (
           <>
-            {console.log("---------------------------")}
             <LiveMC
               quiz={quiz[current]}
               type={typeDelivery}
@@ -349,9 +360,9 @@ export default function LanunchStu() {
           reportId: localStorage.getItem("ReportId"),
         };
         console.log(formStudent);
+        localStorage.removeItem("ReportId");
         reportService.finishQuizCBS(formStudent).then((res) => {
-          localStorage.removeItem("ReportId");
-          history.push("/login/student");
+          history.push("/login/student/finish");
         });
       }
     });
@@ -366,7 +377,7 @@ export default function LanunchStu() {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        history.push("/login/student");
+        history.push("/login/student/0");
         localStorage.removeItem("RoomStudent");
         localStorage.removeItem("stuid");
         localStorage.removeItem("ReportId");
@@ -421,10 +432,20 @@ export default function LanunchStu() {
       step: oldCurrent,
       answer: answer,
     };
-    reportService.answerByStudent(formStudent, params.reportId).then((res) => {
-      setanswer();
-      setoldCurrent();
-    });
+    if (type === "QUIZ") {
+      reportService
+        .answerByStudent(formStudent, params.reportId)
+        .then((res) => {
+          setanswer();
+          setoldCurrent();
+        });
+    } else if (type === "QuickQuestion") {
+      console.log("----------");
+      reportService.submitAnswerQQ(formStudent, params.reportId).then(() => {
+        setanswer();
+        setoldCurrent();
+      });
+    }
   };
 
   const showContent = () => {
@@ -441,10 +462,10 @@ export default function LanunchStu() {
             <Typography className={classes.typoStep}>
               {typeDelivery === "CBS" ? (
                 <>
-                  {current + 1}/{stepMax}{" "}
+                  {current + 1}/{stepMax}
                 </>
               ) : (
-                quiz[current]?.step
+                <>{quiz[current]?.step} .</>
               )}
             </Typography>
           </Grid>

@@ -20,6 +20,7 @@ import ResultTF from "../Components/resultTF";
 import ResultSA from "../Components/resultSA";
 import TableResult from "../Components/tableResult";
 import QuickTF from "../Components/quickTF";
+import QuickMC from "../Components/quickMC";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -340,13 +341,23 @@ export default function Result() {
     console.log(typeDelivery);
     return (
       <>
-        <QuickTF
-          quiz={quiz[current]}
-          score={score[current]}
-          saveQuestion={saveQuestion}
-          question={quiz[current].question}
-          start={start}
-        />
+        {typeDelivery === "QQTF" ? (
+          <QuickTF
+            quiz={quiz[current]}
+            score={score[current]}
+            saveQuestion={saveQuestion}
+            question={quiz[current].question}
+            start={start}
+          />
+        ) : (
+          <QuickMC
+            quiz={quiz[current]}
+            score={score[current]}
+            saveQuestion={saveQuestion}
+            question={quiz[current].question}
+            start={start}
+          />
+        )}
       </>
     );
   };
