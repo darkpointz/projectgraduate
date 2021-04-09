@@ -180,7 +180,7 @@ export default function Lanunch() {
       } else if (type === "QQSA") {
         formReport.quiz = [
           {
-            type: "truefalse",
+            type: "shortanswer",
             active: false,
             question: "",
             step: 1,

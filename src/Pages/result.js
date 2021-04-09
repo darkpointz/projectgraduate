@@ -21,6 +21,7 @@ import ResultSA from "../Components/resultSA";
 import TableResult from "../Components/tableResult";
 import QuickTF from "../Components/quickTF";
 import QuickMC from "../Components/quickMC";
+import QuickSA from "../Components/quickSA";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -92,7 +93,9 @@ export default function Result() {
   const [stepMax, setstepMax] = useState();
   const [start, setstart] = useState();
   const [finish, setfinish] = useState();
-  const [question, setquestion] = useState();
+
+  const [question, setquestion] = useState("");
+  const [answerQQ, setanswerQQ] = useState([]);
 
   // const history = createBrowserHistory({ forceRefresh: true });
   let history = useHistory();
@@ -331,33 +334,51 @@ export default function Result() {
     });
   };
 
-  const saveQuestion = (newQuestion) => {
+  const saveQuestionQQ = (newQuestion) => {
     let newQuiz = quiz;
     newQuiz[current].question = newQuestion;
+    console.log("quiz ", newQuiz);
+    setquiz(newQuiz);
     setquestion(newQuestion);
   };
 
+  const saveAnswerQQ = (newAnswer, index) => {
+    let newQuiz = quiz;
+    newQuiz[current].choice[index] = newAnswer;
+    console.log(newQuiz);
+    setquiz(newQuiz);
+  };
+
   const handleShowResultQQ = () => {
-    console.log(typeDelivery);
     return (
       <>
         {typeDelivery === "QQTF" ? (
           <QuickTF
             quiz={quiz[current]}
             score={score[current]}
-            saveQuestion={saveQuestion}
+            saveQuestion={saveQuestionQQ}
             question={quiz[current].question}
             start={start}
           />
-        ) : (
+        ) : typeDelivery === "QQMC" ? (
           <QuickMC
             quiz={quiz[current]}
-            score={score[current]}
-            saveQuestion={saveQuestion}
+            score={score}
+            saveQuestion={saveQuestionQQ}
+            saveAnswer={saveAnswerQQ}
+            answerQQ={answerQQ}
             question={quiz[current].question}
             start={start}
           />
-        )}
+        ) : typeDelivery === "QQSA" ? (
+          <QuickSA
+            quiz={quiz[current]}
+            saveQuestion={saveQuestionQQ}
+            question={quiz[current].question}
+            start={start}
+            student={student}
+          />
+        ) : null}
       </>
     );
   };

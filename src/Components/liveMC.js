@@ -55,39 +55,48 @@ export default function LiveMC({
 }) {
   const classes = useStyles();
   const [answer, setanswer] = useState("");
+  const [indexAnswer, setindexAnswer] = useState();
   let charStep = ["A", "B", "C", "D", "E"]; //กรณี5ตัวเลือก
 
   useEffect(() => {
     setanswer(quizzingStudent?.answer);
   });
 
-  const handleSelectAnswer = (item) => {
+  const handleSelectAnswer = (item, index) => {
+    console.log(quiz.choice[index]);
     setanswer(item);
-    saveAnswerCBS(quiz.step, item, indexQuizzing);
+    setindexAnswer(index);
+    saveAnswerCBS(quiz.step, item, indexQuizzing, index);
   };
 
   const handleTypeCBS = () => {
     return (
       <>
-        {quiz.choice.map((item, i) => {
+        {quiz.choice.map((item, index) => {
           return (
             // justify="flex-end"
-            <Grid container item xs={12} justify="center" >
-              <Grid container item xs={3} alignItems="center" justify="flex-end">
+            <Grid container item xs={12} justify="center">
+              <Grid
+                container
+                item
+                xs={3}
+                alignItems="center"
+                justify="flex-end"
+              >
                 <Paper className={classes.paperCharStep}>
-                  <Typography className={classes.typoCharStep}>{charStep[i]}</Typography>
+                  <Typography className={classes.typoCharStep}>
+                    {charStep[index]}
+                  </Typography>
                 </Paper>
               </Grid>
-              <Grid container item xs={9} alignItems="center" >
-
+              <Grid container item xs={9} alignItems="center">
                 <Button
                   id="btnt"
                   variant="contained"
                   value={answer}
-                  onClick={() => handleSelectAnswer(item)}
-                  // className={classes.textField}
+                  onClick={() => handleSelectAnswer(item, index)}
                   className={clsx(classes.textField, {
-                    [classes.btnTrue]: item === answer,
+                    [classes.btnTrue]: index === indexAnswer,
                   })}
                 >
                   {item}

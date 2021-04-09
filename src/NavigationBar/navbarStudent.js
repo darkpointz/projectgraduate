@@ -108,7 +108,7 @@ export default function NavbarStudent() {
                 <Typography
                   variant="h6"
                   className={classes.title}
-                  onClick={() => history.push("/login/teacher")}
+                  onClick={() => history.push("/")}
                 >
                   Qton
                 </Typography>

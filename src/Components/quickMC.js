@@ -7,6 +7,7 @@ import {
   Paper,
   Grid,
 } from "@material-ui/core";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -21,18 +22,16 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 500,
     fontSize: "24px",
+    marginBottom: "12px",
   },
   paperAnswer: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "#ffcaca",
+    backgroundColor: "#F5F7F8",
     width: "60%",
     padding: theme.spacing(2),
     margin: "7px 0",
-  },
-  paperTrue: {
-    backgroundColor: "#E7F6EA",
   },
   paperCharStep: {
     display: "flex",
@@ -43,13 +42,14 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "14px",
     borderRadius: "18px",
     height: "50%",
-    backgroundColor: "#EFF3F5",
+    backgroundColor: "#F5F7F8 ",
   },
-  textFieldQuestion: { width: "50%" },
+  textFieldQuestion: { width: "50%", marginBottom: "12px" },
   typoAnswer: {
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 500,
     fontSize: "16px",
+    width: "100%",
   },
   typoCharStep: {
     fontFamily: "'Prompt', sans-serif",
@@ -75,13 +75,22 @@ export default function QuickMC({
   saveQuestion,
   question,
   start,
+  saveAnswer,
+  answerQQ,
 }) {
   const classes = useStyles();
+  const [answer, setanswer] = useState(answerQQ);
   let charStep = ["A", "B", "C", "D", "E"]; //กรณี5ตัวเลือก
 
   const handleQuestion = (e) => {
     // setQuestion(e.target.value);
     saveQuestion(e.target.value);
+  };
+
+  const handleAnswer = (e, index) => {
+    let newanswer = answer;
+    console.log("newanswer: ", newanswer);
+    saveAnswer(e.target.value, index);
   };
 
   return (
@@ -109,7 +118,41 @@ export default function QuickMC({
           </>
         )}
       </Grid>
-      <Grid container item xs={12} alignItems="center"></Grid>
+      {quiz.choice.map((item, i) => {
+        return (
+          <Grid container item xs={12} key={i}>
+            <Grid container item xs={1} alignItems="center">
+              <Paper className={classes.paperCharStep}>
+                <Typography className={classes.typoCharStep}>
+                  {charStep[i]}
+                </Typography>
+              </Paper>
+            </Grid>
+
+            <Grid container item xs={10}>
+              {start ? (
+                <Paper className={classes.paperAnswer}>
+                  <Typography className={classes.typoAnswer}>{item}</Typography>
+                  <Typography className={classes.typoAnswer}>
+                    {score[i]}
+                  </Typography>
+                </Paper>
+              ) : (
+                <Paper className={classes.paperAnswer}>
+                  <TextField
+                    className={classes.typoAnswer}
+                    label="Add Answer(Optional)"
+                    value={answerQQ[i]}
+                    onChange={(e) => handleAnswer(e, i)}
+                  >
+                    {item}
+                  </TextField>
+                </Paper>
+              )}
+            </Grid>
+          </Grid>
+        );
+      })}
     </div>
   );
 }

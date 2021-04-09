@@ -7,6 +7,7 @@ import {
   Paper,
   Grid,
 } from "@material-ui/core";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -23,19 +24,18 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "22px",
   },
   textFieldQuestion: { width: "50%" },
-  paperAnswer: {
-    display: "flex",
-    justifyContent: "space-between",
-    backgroundColor: "#F5F7F8",
-    width: "50%",
-    padding: theme.spacing(1),
-    margin: "10px 0",
-  },
-  typoTF: {
-    marginLeft: "14px",
+  typoStudent: {
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 500,
     fontSize: "18px",
+  },
+  paperStudent: {
+    display: "flex",
+    alignItems: "center",
+    backgroundColor: "#F5F7F8",
+    width: "95%",
+    padding: theme.spacing(1),
+    margin: "7px 0",
   },
   typoScore: {
     marginRight: "14px",
@@ -44,10 +44,9 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "18px",
   },
 }));
-
-export default function QuickTF({
+export default function QuickSA({
   quiz,
-  score,
+  student,
   saveQuestion,
   question,
   start,
@@ -80,23 +79,26 @@ export default function QuickTF({
           </>
         )}
       </Grid>
-      <Grid container item xs={12} alignItems="center">
-        <Paper
-          className={classes.paperAnswer}
-          // style={{ width: `${scoreCountCorrect}%` }}
-        >
-          <Typography className={classes.typoTF}>True</Typography>
-
-          <Typography className={classes.typoScore}>{score.True}</Typography>
-        </Paper>
-      </Grid>
-      <Grid container item xs={12} alignItems="center">
-        <Paper className={classes.paperAnswer}>
-          <Typography className={classes.typoTF}>False</Typography>
-
-          <Typography className={classes.typoScore}>{score.False}</Typography>
-        </Paper>
-      </Grid>
+      {student.map((item, i) => {
+        return (
+          <Grid container item xs={12}>
+            <Grid container item xs={4}>
+              <Paper className={classes.paperStudent}>
+                <Typography className={classes.typoStudent}>
+                  {item.fname}
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid container item xs={8}>
+              <Paper className={classes.paperStudent}>
+                <Typography className={classes.typoStudent}>
+                  {item.quizzing[0]?.answer}
+                </Typography>
+              </Paper>
+            </Grid>
+          </Grid>
+        );
+      })}
     </div>
   );
 }

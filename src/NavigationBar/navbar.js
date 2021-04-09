@@ -215,7 +215,7 @@ function Navbar(props) {
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <Grid xs={4} container>
+          <Grid item xs={4} container>
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -229,7 +229,7 @@ function Navbar(props) {
               Qton
             </Typography>
           </Grid>
-          <Grid xs={8} container>
+          <Grid item xs={8} container>
             <FormControl className={classes.selectRoom}>
               <Select
                 labelId="demo-simple-select-label"

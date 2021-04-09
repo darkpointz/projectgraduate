@@ -37,8 +37,6 @@ export default function LoginByUserName({ roomPublic, reportId }) {
   });
 
   const handleClickJoin = () => {
-    reportService.manageStudentByPrivateRoom(9999, 9999);
-
     if (roomPublic) {
       let formStudent = {
         name: name,

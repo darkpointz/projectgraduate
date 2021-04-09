@@ -440,7 +440,6 @@ export default function LanunchStu() {
           setoldCurrent();
         });
     } else if (type === "QuickQuestion") {
-      console.log("----------");
       reportService.submitAnswerQQ(formStudent, params.reportId).then(() => {
         setanswer();
         setoldCurrent();
@@ -474,11 +473,13 @@ export default function LanunchStu() {
           </Grid>
         </Grid>
         <Grid container item xs={12} justify="center" alignItems="center">
-          <Paper className={classes.paperQuestion}>
-            <Typography className={classes.typoQuestion}>
-              {quiz[current]?.question}
-            </Typography>
-          </Paper>
+          {quiz[current]?.question === "" ? null : (
+            <Paper className={classes.paperQuestion}>
+              <Typography className={classes.typoQuestion}>
+                {quiz[current]?.question}
+              </Typography>
+            </Paper>
+          )}
         </Grid>
 
         <Grid container item xs={12} justify="center">
