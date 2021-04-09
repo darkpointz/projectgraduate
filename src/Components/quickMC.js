@@ -12,12 +12,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
-  gridTF: {
-    padding: theme.spacing(5),
-    [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing(3),
-    },
-  },
   typoStepQuestion: {
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 500,
@@ -60,12 +54,14 @@ const useStyles = makeStyles((theme) => ({
     marginRight: "14px",
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 500,
-    fontSize: "18px",
+    fontSize: "16px",
   },
   typoQuestion: {
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 500,
     fontSize: "22px",
+    display: "flex",
+    justifyContent: "flex-end",
   },
 }));
 
@@ -133,7 +129,7 @@ export default function QuickMC({
               {start ? (
                 <Paper className={classes.paperAnswer}>
                   <Typography className={classes.typoAnswer}>{item}</Typography>
-                  <Typography className={classes.typoAnswer}>
+                  <Typography className={classes.typoScore}>
                     {score[i]}
                   </Typography>
                 </Paper>

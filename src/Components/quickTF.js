@@ -11,12 +11,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
-  gridTF: {
-    padding: theme.spacing(5),
-    [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing(3),
-    },
-  },
   typoQuestion: {
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 500,

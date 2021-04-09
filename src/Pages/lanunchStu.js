@@ -153,6 +153,7 @@ export default function LanunchStu() {
 
   const [answer, setanswer] = useState();
   const [oldCurrent, setoldCurrent] = useState();
+  const [indexAnswerMC, setindexAnswerMC] = useState();
 
   let params = useParams();
 
@@ -280,6 +281,7 @@ export default function LanunchStu() {
               });
               let done = doc.data().student[indexStu].quizzing[0]?.done;
               settype(doc.data().type);
+              settypeDelivery(doc.data().method);
               if (done) {
                 console.log("done: ", done);
                 setwaiting(true);
@@ -413,11 +415,15 @@ export default function LanunchStu() {
     );
   };
 
-  const saveAnswerCBS = (step, answer, indexQuizzing) => {
+  const saveAnswerCBS = (step, answer, indexQuizzing, index) => {
     setanswer(answer);
     setoldCurrent(step);
-
     let newQuizzing = quizzingStudent;
+    if (index || index === 0) {
+      console.log("indexAnswerMC: ", index);
+      setindexAnswerMC(index);
+    }
+
     if (indexQuizzing >= 0) {
       newQuizzing[indexQuizzing] = { answer: answer, step: step };
     } else {
@@ -440,9 +446,17 @@ export default function LanunchStu() {
           setoldCurrent();
         });
     } else if (type === "QuickQuestion") {
+      console.log("typeDelivery: ", typeDelivery);
+      if (typeDelivery === "QQMC") {
+        formStudent.indexAnswerMC = indexAnswerMC;
+      } else {
+        formStudent.indexAnswerMC = "-1";
+      }
+      console.log("formStudent: ", formStudent);
       reportService.submitAnswerQQ(formStudent, params.reportId).then(() => {
         setanswer();
         setoldCurrent();
+        setindexAnswerMC();
       });
     }
   };

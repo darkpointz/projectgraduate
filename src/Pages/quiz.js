@@ -131,7 +131,7 @@ export default function Quiz(props) {
 
   const handleClose = (value) => {
     setOpen(false);
-    if (value === "CN") {
+    if (value === "createNew") {
       // setbtnCreate(true);
       history.push("/createquiz/0");
     }

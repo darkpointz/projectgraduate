@@ -120,8 +120,9 @@ export default function ClassStudent({ match }) {
 
   const handleCloseAddStudent = (value) => {
     setOpenAddStudent(false);
-    if (value === "CN") {
+    if (value === "createNew") {
       setopenDialog(true);
+    } else if (value === "import") {
     }
   };
 
@@ -292,6 +293,7 @@ export default function ClassStudent({ match }) {
       <DialogSelectCreate
         open={openAddStudent}
         onClose={handleCloseAddStudent}
+        type="classStudent"
         name="add student"
       />
       <DialogManualAddstudent

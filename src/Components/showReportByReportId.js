@@ -66,7 +66,6 @@ export default function ShowReportByReportId() {
   }, []);
 
   const handleDate = (createdAt) => {
-    console.log(createdAt);
     let date = createdAt?.slice(0, 10);
     let time = createdAt?.slice(11, 16);
     date = `${date} ${time}`;

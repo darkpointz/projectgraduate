@@ -63,7 +63,6 @@ export default function LiveMC({
   });
 
   const handleSelectAnswer = (item, index) => {
-    console.log(quiz.choice[index]);
     setanswer(item);
     setindexAnswer(index);
     saveAnswerCBS(quiz.step, item, indexQuizzing, index);
