@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { classService } from "../Services/classService";
+import CSVReader from "react-csv-reader";
 import axios from "axios";
 import DialogSelectCreate from "../Components/dialogSelectCreate";
 import DialogManualAddstudent from "./dialogManualAddStudent";
@@ -118,11 +119,19 @@ export default function ClassStudent({ match }) {
     setPage(0);
   };
 
-  const handleCloseAddStudent = (value) => {
+  const handleCloseAddStudent = (value, data) => {
     setOpenAddStudent(false);
     if (value === "createNew") {
       setopenDialog(true);
     } else if (value === "import") {
+      const formStudent = {
+        student: data,
+      };
+      setstudent(student.concat(data));
+      console.log(data);
+      classService.insertStudentByRoomId(formStudent, params.id).then((res) => {
+        setopenDialog(false);
+      });
     }
   };
 
@@ -132,12 +141,15 @@ export default function ClassStudent({ match }) {
       student: newstudent,
     };
     console.log(formStudent);
-    axios
-      .put(`/room/insertStudentByRoomId/${params.id}`, formStudent)
-      .then((res) => {
-        console.log(res);
-      });
-    setopenDialog(false);
+    classService.insertStudentByRoomId(formStudent, params.id).then((res) => {
+      setopenDialog(false);
+    });
+    // axios
+    //   .put(`/room/insertStudentByRoomId/${params.id}`, formStudent)
+    //   .then((res) => {
+    //     console.log(res);
+    //   });
+    // setopenDialog(false);
   };
 
   const handleCloseManualAdd = () => {
@@ -165,10 +177,8 @@ export default function ClassStudent({ match }) {
 
   const handleDeleteStudent = () => {
     const list = [...student];
-    axios
-      .delete(
-        `/room/deleteStudentByRoomId/${params.id}/${student[index].stuid}`
-      )
+    classService
+      .deleteStudentByRoomId(params.id, student[index].stuid)
       .then((res) => {
         console.log(res);
         list.splice(index, 1);

@@ -6,7 +6,9 @@ import {
   Button,
   DialogTitle,
   Box,
+  Paper,
 } from "@material-ui/core";
+import CSVReader from "react-csv-reader";
 
 const useStyles = makeStyles({
   root: {
@@ -32,6 +34,9 @@ const useStyles = makeStyles({
     fontSize: "16px",
     width: "20%",
   },
+  importCSV: {
+    backgroundColor: "#E4FBFF",
+  },
 });
 
 export default function DialogSelectCreateQuiz(props) {
@@ -44,6 +49,18 @@ export default function DialogSelectCreateQuiz(props) {
   const handleSelect = (value) => {
     onClose(value);
   };
+
+  const handleForce = (data) => {
+    onClose("import", data);
+  };
+
+  const papaparseOptions = {
+    header: true,
+    dynamicTyping: true,
+    skipEmptyLines: true,
+    transformHeader: (header) => header.toLowerCase().replace(/\W/g, "_"),
+  };
+
   return (
     <Dialog onClose={handleClose} open={open}>
       <Box display="flex" justifyContent="flex-end">
@@ -63,15 +80,25 @@ export default function DialogSelectCreateQuiz(props) {
           Create New
         </Button>
         {type === "classStudent" ? (
-          <Button
-            className={classes.btnImport}
-            variant="contained"
-            size="small"
-            onClick={() => handleSelect("import")}
-          >
-            Import
-          </Button>
-        ) : null}
+          // <div className={classes.importCSV}>
+          <Paper>
+            <CSVReader
+              cssClass="react-csv-input"
+              label="Select CSV with secret Death Star statistics"
+              onFileLoaded={handleForce}
+              parserOptions={papaparseOptions}
+            />
+          </Paper>
+        ) : // </div>
+        // <Button
+        //   className={classes.btnImport}
+        //   variant="contained"
+        //   size="small"
+        //   onClick={() => handleSelect("import")}
+        // >
+        //   Import
+        // </Button>
+        null}
       </div>
     </Dialog>
   );

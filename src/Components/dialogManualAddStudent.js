@@ -104,7 +104,6 @@ export default function DialogManualAddstudent(props) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("xs"));
   const { onClose, open, saveNewstudent } = props;
-  const [openDialog, setopenDialog] = useState(false);
   const [student, setstudent] = useState([{ stuid: "", fname: "", lname: "" }]);
 
   const handleClose = () => {

@@ -6,6 +6,8 @@ export const classService = {
   insertRoom,
   deleteRoomByRoomId,
   getRoomById,
+  insertStudentByRoomId,
+  deleteStudentByRoomId,
 };
 
 function getAllRoom(uId) {
@@ -31,9 +33,31 @@ function insertRoom(formroom, userId) {
     });
 }
 
+function insertStudentByRoomId(formStudent, roomId) {
+  return httpClient
+    .put(`/room/insertStudentByRoomId/${roomId}`, formStudent)
+    .then((res) => {
+      return res.data.message;
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+}
+
 function deleteRoomByRoomId(roomId) {
   return httpClient
     .delete(`/room/deleteRoomByRoomId/${roomId}`)
+    .then((res) => {
+      return res.data.message;
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+}
+
+function deleteStudentByRoomId(roomId, stuid) {
+  return httpClient
+    .delete(`/room/deleteStudentByRoomId/${roomId}/${stuid}`)
     .then((res) => {
       return res.data.message;
     })
