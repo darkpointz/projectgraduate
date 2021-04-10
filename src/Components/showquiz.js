@@ -220,8 +220,9 @@ const Showquiz = ({ key, list, step, deleteQuiz, savequiz }) => {
         <Multiplechoice
           questionEdit={list.question}
           step={list.step}
-          correctQuiz={list.choice}
+          correctQuiz={list.correct}
           savequiz={savequizEdit}
+          choice={list.choice}
         />
       ) : null}
       <DialogDelete

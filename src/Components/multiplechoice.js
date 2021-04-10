@@ -77,8 +77,23 @@ export default function Multiplechoice(props) {
 
   useEffect(() => {
     setquestion(props.questionEdit);
-    setAnsChoice(props.correctQuiz);
+    setAnsChoice(handleSetansChoice(props.choice, props.correctQuiz));
+    // setAnsChoice(props.correctQuiz);
   }, []);
+
+  const handleSetansChoice = (choice, correct) => {
+    let newansChoice = [];
+    choice.forEach((item) => {
+      let obj = { ans: item };
+      if (item.includes(correct)) {
+        obj.correct = true;
+      } else {
+        obj.correct = false;
+      }
+      newansChoice.push(obj);
+    });
+    return newansChoice;
+  };
 
   const handlechoice = (e, index) => {
     const { name, value } = e.target;

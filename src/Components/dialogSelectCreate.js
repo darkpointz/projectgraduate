@@ -7,6 +7,7 @@ import {
   DialogTitle,
   Box,
   Paper,
+  Grid,
 } from "@material-ui/core";
 import CSVReader from "react-csv-reader";
 
@@ -68,38 +69,43 @@ export default function DialogSelectCreateQuiz(props) {
           X
         </Button>
       </Box>
-
-      <DialogTitle id="simple-dialog-title">{`Select a ${name} method`}</DialogTitle>
-      <div className={classes.root}>
-        <Button
-          className={classes.btnCreateNew}
-          variant="contained"
-          size="small"
-          onClick={() => handleSelect("createNew")}
-        >
-          Create New
-        </Button>
-        {type === "classStudent" ? (
-          // <div className={classes.importCSV}>
-          <Paper>
-            <CSVReader
-              cssClass="react-csv-input"
-              label="Select CSV with secret Death Star statistics"
-              onFileLoaded={handleForce}
-              parserOptions={papaparseOptions}
-            />
-          </Paper>
-        ) : // </div>
-        // <Button
-        //   className={classes.btnImport}
-        //   variant="contained"
-        //   size="small"
-        //   onClick={() => handleSelect("import")}
-        // >
-        //   Import
-        // </Button>
-        null}
-      </div>
+      <Grid item xs={12} container justify="center">
+        <DialogTitle id="simple-dialog-title">{`Select a ${name} method`}</DialogTitle>
+      </Grid>
+      <Grid item xs={12} container justify="center">
+        <Grid item xs={6} container justify="center">
+          <Button
+            className={classes.btnCreateNew}
+            variant="contained"
+            size="small"
+            onClick={() => handleSelect("createNew")}
+          >
+            Create New
+          </Button>
+        </Grid>
+        <Grid item xs={6}>
+          {type === "classStudent" ? (
+            // <div className={classes.importCSV}>
+            <Paper className={classes.btnCreateNew}>
+              <CSVReader
+                cssClass="react-csv-input"
+                label="Import student with CSV"
+                onFileLoaded={handleForce}
+                parserOptions={papaparseOptions}
+              />
+            </Paper>
+          ) : // </div>
+          // <Button
+          //   className={classes.btnImport}
+          //   variant="contained"
+          //   size="small"
+          //   onClick={() => handleSelect("import")}
+          // >
+          //   Import
+          // </Button>
+          null}
+        </Grid>
+      </Grid>
     </Dialog>
   );
 }
