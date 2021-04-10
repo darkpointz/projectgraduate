@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { auth, provider } from "./firebase";
 import axios from "axios";
 import firebase from "firebase";
+import { userService } from "../Services/userService";
+import swal from "sweetalert";
 
 export const authService = {
   signInWithGoogle,
@@ -24,18 +26,19 @@ async function signInWithGoogle() {
     .catch((err) => {
       console.log(err.message);
     });
-
-  await auth.currentUser
-    .getIdToken(true)
-    .then((token) => {
-      console.log("tokensdsdsdddd:", token);
-      const FBUserIDtoken = `Bearer ${token}`;
-      localStorage.setItem("FBIdToken", FBUserIDtoken);
-      // axios.defaults.headers.common["Authorization"] = FBUserIDtoken;
-    })
-    .catch((err) => {
-      console.log(err.message);
-    });
+  if (currentUser) {
+    await auth.currentUser
+      .getIdToken(true)
+      .then((token) => {
+        console.log("tokensdsdsdddd:", token);
+        const FBUserIDtoken = `Bearer ${token}`;
+        localStorage.setItem("FBIdToken", FBUserIDtoken);
+        // axios.defaults.headers.common["Authorization"] = FBUserIDtoken;
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  }
 }
 
 async function signInWithEmail(email, password) {
@@ -43,6 +46,7 @@ async function signInWithEmail(email, password) {
   await auth
     .signInWithEmailAndPassword(email, password)
     .then((res) => {
+      console.log(res.user);
       currentUser = res.user;
       localStorage.setItem("user", currentUser);
       localStorage.setItem("userId", currentUser.uid);
@@ -50,11 +54,10 @@ async function signInWithEmail(email, password) {
     .catch((err) => {
       console.log(err.message);
     });
-
   await auth.currentUser
     .getIdToken(true)
     .then((token) => {
-      console.log("tokensdsdsdddd:", token);
+      console.log("token:", token);
       const FBUserIDtoken = `Bearer ${token}`;
       localStorage.setItem("FBIdToken", FBUserIDtoken);
       // axios.defaults.headers.common["Authorization"] = FBUserIDtoken;

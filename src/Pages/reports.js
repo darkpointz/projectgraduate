@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core";
 import { quizService } from "../Services/quizService";
 import TableReport from "../Components/tableReport";
+import { firebaseConfig } from "../Auth/firebase";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -73,13 +74,34 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Reports() {
   const classes = useStyles();
+
+  const handleDownload = async () => {
+    // const storageRef = firebaseConfig.storage().ref();
+    // const fileRef = storageRef.child("templateStudent.csv");
+    // fileRef.getDownloadURL();
+    const storage = firebaseConfig.storage();
+    const storageRef = storage.ref();
+    const pathReference = storage.ref("templateStudent.csv");
+    var gsReference = storage.refFromURL(
+      "gs://project4thquiz.appspot.com/templateStudent.csv"
+    );
+    storageRef.getDownloadURL().then((res) => {});
+    // storageRef
+    //   .child("templateStudent.csv")
+    //   .getDownloadURL()
+    //   .then((url) => {})
+    //   .catch((error) => {
+    //     // Handle any errors
+    //   });
+  };
+
   return (
     <div className={classes.root}>
       <Grid container spacing={1} direction="column">
         <Grid container item xs={12}>
           <Paper className={classes.paper}>
             <Typography className={classes.typotitlePaper}>Report</Typography>
-
+            <Button onClick={handleDownload}>download</Button>
             <Grid container item xs={12}>
               <TableReport />
             </Grid>

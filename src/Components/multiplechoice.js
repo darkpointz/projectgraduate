@@ -77,7 +77,9 @@ export default function Multiplechoice(props) {
 
   useEffect(() => {
     setquestion(props.questionEdit);
-    setAnsChoice(handleSetansChoice(props.choice, props.correctQuiz));
+    if (props.choice) {
+      setAnsChoice(handleSetansChoice(props.choice, props.correctQuiz));
+    }
     // setAnsChoice(props.correctQuiz);
   }, []);
 
@@ -109,9 +111,11 @@ export default function Multiplechoice(props) {
     let choice = [];
     let correct = [];
     ansChoice.forEach((data) => {
-      choice.push(data.ans);
-      if (data.correct) {
-        correct.push(data.ans);
+      if (data.ans !== "") {
+        choice.push(data.ans);
+        if (data.correct) {
+          correct.push(data.ans);
+        }
       }
     });
     const type = "multiplechoice";

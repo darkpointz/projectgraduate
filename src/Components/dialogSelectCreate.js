@@ -30,6 +30,9 @@ const useStyles = makeStyles({
     backgroundColor: "#E4FBFF",
     color: "#00b5e2",
     marginBottom: "40px",
+    display: "flex",
+    justifyContent: "center",
+    width: "80%",
   },
   closeDialog: {
     fontSize: "16px",
@@ -83,12 +86,13 @@ export default function DialogSelectCreateQuiz(props) {
             Create New
           </Button>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={6} container justify="center">
           {type === "classStudent" ? (
             // <div className={classes.importCSV}>
-            <Paper className={classes.btnCreateNew}>
+            <Paper className={classes.btnImport}>
               <CSVReader
-                cssClass="react-csv-input"
+                cssClass={classes.btnImport}
+                // cssClass="react-csv-input"
                 label="Import student with CSV"
                 onFileLoaded={handleForce}
                 parserOptions={papaparseOptions}

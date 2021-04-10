@@ -36,9 +36,19 @@ export default function LoginTeacher() {
     if (!password) {
       swal("error!", "Check your Password!", "error");
     }
-    authService.signInWithEmail(email, password).then((res) => {
-      history.push("/launch");
-    });
+    authService
+      .signInWithEmail(email, password)
+      .then((res) => {
+        let uid = localStorage.getItem("userId");
+        if (uid) {
+          history.push("/launch");
+        } else {
+          swal("error!", "Check your Email or Password", "error");
+        }
+      })
+      .catch((err) => {
+        swal("error!", "Check your Email or Password", "error");
+      });
     // userService
     //   .signInWithEmail(formUser)
     //   .then((res) => {

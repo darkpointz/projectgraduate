@@ -24,7 +24,8 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     fontSize: "16px",
     borderRadius: "14px",
-    textAlign: "justify",
+    // textAlign: "justify",
+    textAlign: "center",
     padding: theme.spacing(1),
   },
   typoRowIncorrect: {
@@ -35,13 +36,23 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "14px",
 
     padding: theme.spacing(1),
-    textAlign: "justify",
+    textAlign: "center",
+    // textAlign: "justify",
+  },
+  typoRowScore: {
+    fontFamily: "'Prompt', sans-serif",
+    fontWeight: 500,
+    fontSize: "16px",
+    padding: theme.spacing(1),
+    textAlign: "center",
+    // textAlign: "justify",
   },
   typoRowClassScore: {
     fontFamily: "'Prompt', sans-serif",
     fontWeight: 500,
     fontSize: "15px",
-    textAlign: "justify",
+    // textAlign: "justify",
+    textAlign: "center",
   },
   btnExport: {
     borderRadius: "16px",
@@ -91,6 +102,11 @@ export default function TableResult({
         field: "fname",
         headerStyle: {
           padding: 20,
+          borderBottom: "1px solid black",
+          borderTop: "1px solid black",
+        },
+        cellStyle: {
+          borderBottom: "1px solid black",
         },
       },
       {
@@ -100,6 +116,13 @@ export default function TableResult({
           width: 10,
           maxWidth: 20,
           padding: 10,
+          borderLeft: "1px solid black",
+          borderBottom: "1px solid black",
+          borderTop: "1px solid black",
+        },
+        cellStyle: {
+          borderLeft: "1px solid black",
+          borderBottom: "1px solid black",
         },
       },
     ];
@@ -111,6 +134,13 @@ export default function TableResult({
         field: "answer" + i,
         headerStyle: {
           backgroundColor: "#039be5",
+          borderLeft: "1px solid black",
+          borderBottom: "1px solid black",
+          borderTop: "1px solid black",
+        },
+        cellStyle: {
+          borderLeft: "1px solid black",
+          borderBottom: "1px solid black",
         },
       });
       columnCsv.push(i + 1);
@@ -130,7 +160,12 @@ export default function TableResult({
         if (data.quizzing?.length) {
           row.push({
             fname: data.fname,
-            score: `${data.countScore}/${stepMax}`,
+            score: (
+              <Typography className={classes.typoRowScore}>
+                {data.countScore}/{stepMax}
+              </Typography>
+            ),
+            // score: `${data.countScore}/${stepMax}`,
           });
           rowCsv.push([data.fname, `${data.countScore}`]);
 
@@ -151,11 +186,9 @@ export default function TableResult({
               //ตอบผิด
               let test = `answer${i - 1}`;
               row[indexObject][test] = (
-                <Box display="flex" justify="center">
-                  <Typography className={classes.typoRowIncorrect}>
-                    {result.answer}
-                  </Typography>
-                </Box>
+                <Typography className={classes.typoRowIncorrect}>
+                  {result.answer}
+                </Typography>
               );
               //add rowCsv
               rowCsv[indexObject].push(result.answer);
@@ -258,7 +291,6 @@ export default function TableResult({
                 fontFamily: "'Prompt', sans-serif",
                 fontWeight: 500,
                 fontSize: "15px",
-
                 textAlign: "center",
                 // color: checkColorRow(rowData) ? "#19A999" : "F5F7F8",
                 // color: colorRow === rowData.tableData.id ? "#19A999" : "F5F7F8",

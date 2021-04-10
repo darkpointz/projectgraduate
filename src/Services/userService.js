@@ -2,11 +2,11 @@ import axios from "axios";
 import { httpClient } from "../Auth/axiosInterceptor";
 export const userService = {
   register,
-  signInWithEmail,
+  getHashPassword,
 };
 
 function register(formRegister) {
-  return axios
+  return httpClient
     .post(`/user/register`, formRegister)
     .then((res) => {
       return res.data;
@@ -16,11 +16,10 @@ function register(formRegister) {
     });
 }
 
-function signInWithEmail(formUser) {
-  return axios
-    .post(`/user/signInWithEmail`, formUser)
+function getHashPassword(formUser) {
+  return httpClient
+    .post(`/user/getHashPassword`, formUser)
     .then((res) => {
-      console.log("+++-----+++");
       return res;
     })
     .catch((err) => {

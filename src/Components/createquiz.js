@@ -87,7 +87,7 @@ export default function Createquiz(props) {
   let history = useHistory();
   let params = useParams();
   const classes = useStyles();
-  const [quizname, setquizname] = useState("");
+  const [quizname, setquizname] = useState("Untitled Quiz");
   const [quiz, setquiz] = useState([]);
   const [selectchoice, setselectchoice] = useState(0);
   const [editQuiz, seteditQuiz] = useState(false);
