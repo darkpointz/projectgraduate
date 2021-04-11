@@ -119,15 +119,29 @@ export default function ClassStudent({ match }) {
     setPage(0);
   };
 
+  const handleChangeHeaderCSV = (data) => {
+    let newData = [];
+    data.map((item) => {
+      let form = {};
+      form.stuid = item.studentid;
+      form.fname = item.firstname;
+      form.lname = item.lastname;
+      newData.push(form);
+    });
+    return newData;
+  };
+
   const handleCloseAddStudent = (value, data) => {
     setOpenAddStudent(false);
     if (value === "createNew") {
       setopenDialog(true);
     } else if (value === "import") {
+      let newData = handleChangeHeaderCSV(data);
       const formStudent = {
-        student: data,
+        student: newData,
       };
-      setstudent(student.concat(data));
+
+      setstudent(student.concat(newData));
       console.log(data);
       classService.insertStudentByRoomId(formStudent, params.id).then((res) => {
         setopenDialog(false);
@@ -144,12 +158,6 @@ export default function ClassStudent({ match }) {
     classService.insertStudentByRoomId(formStudent, params.id).then((res) => {
       setopenDialog(false);
     });
-    // axios
-    //   .put(`/room/insertStudentByRoomId/${params.id}`, formStudent)
-    //   .then((res) => {
-    //     console.log(res);
-    //   });
-    // setopenDialog(false);
   };
 
   const handleCloseManualAdd = () => {

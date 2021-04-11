@@ -41,6 +41,7 @@ const useStyles = makeStyles({
   importCSV: {
     backgroundColor: "#E4FBFF",
   },
+  btnInput: { backgroundColor: "#E4FBFF" },
 });
 
 export default function DialogSelectCreateQuiz(props) {
@@ -86,19 +87,21 @@ export default function DialogSelectCreateQuiz(props) {
             Create New
           </Button>
         </Grid>
-        <Grid item xs={6} container justify="center">
+        <Grid item xs={6} container justify="center" direction="column">
           {type === "classStudent" ? (
             // <div className={classes.importCSV}>
-            <Paper className={classes.btnImport}>
-              <CSVReader
-                cssClass={classes.btnImport}
-                // cssClass="react-csv-input"
-                label="Import student with CSV"
-                onFileLoaded={handleForce}
-                parserOptions={papaparseOptions}
-              />
-            </Paper>
-          ) : // </div>
+            // <Paper className={classes.btnImport}>
+            <CSVReader
+              // cssClass={classes.btnImport}
+              cssInputClass={classes.btnInput}
+              cssLabelClass={classes.btnInput}
+              // cssClass="react-csv-input"
+              label="Import student with CSV"
+              onFileLoaded={handleForce}
+              parserOptions={papaparseOptions}
+            />
+          ) : // </Paper>
+          // </div>
           // <Button
           //   className={classes.btnImport}
           //   variant="contained"
