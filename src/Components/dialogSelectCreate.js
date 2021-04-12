@@ -89,28 +89,24 @@ export default function DialogSelectCreateQuiz(props) {
         </Grid>
         <Grid item xs={6} container justify="center" direction="column">
           {type === "classStudent" ? (
-            // <div className={classes.importCSV}>
-            // <Paper className={classes.btnImport}>
-            <CSVReader
-              // cssClass={classes.btnImport}
-              cssInputClass={classes.btnInput}
-              cssLabelClass={classes.btnInput}
-              // cssClass="react-csv-input"
-              label="Import student with CSV"
-              onFileLoaded={handleForce}
-              parserOptions={papaparseOptions}
-            />
-          ) : // </Paper>
-          // </div>
-          // <Button
-          //   className={classes.btnImport}
-          //   variant="contained"
-          //   size="small"
-          //   onClick={() => handleSelect("import")}
-          // >
-          //   Import
-          // </Button>
-          null}
+            <Button
+              className={classes.btnImport}
+              variant="contained"
+              size="small"
+            >
+              <CSVReader
+                inputStyle={{
+                  opacity: 0,
+                  width: "170px",
+                  marginLeft: "-45px",
+                }}
+                label="Import student 
+                with CSV File"
+                onFileLoaded={handleForce}
+                parserOptions={papaparseOptions}
+              />
+            </Button>
+          ) : null}
         </Grid>
       </Grid>
     </Dialog>
