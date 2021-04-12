@@ -23,25 +23,31 @@ const useStyles = makeStyles({
   btnCreateNew: {
     backgroundColor: "#E4FBFF",
     color: "#00b5e2",
-    marginRight: "16px",
-    marginBottom: "40px",
+    // marginLeft: "40px",
+    marginBottom: "20px",
+    width: "60%",
   },
   btnImport: {
     backgroundColor: "#E4FBFF",
     color: "#00b5e2",
-    marginBottom: "40px",
+    marginBottom: "20px",
+    // marginLeft: "40px",
     display: "flex",
     justifyContent: "center",
-    width: "80%",
+    width: "60%",
   },
   closeDialog: {
     fontSize: "16px",
     width: "20%",
   },
-  importCSV: {
-    backgroundColor: "#E4FBFF",
+  labelCSV: {
+    marginLeft: "10px",
   },
-  btnInput: { backgroundColor: "#E4FBFF" },
+  btnTemplate: {
+    fontFamily: "'Prompt', sans-serif",
+    fontWeight: 500,
+    fontSize: "13px",
+  },
 });
 
 export default function DialogSelectCreateQuiz(props) {
@@ -77,38 +83,46 @@ export default function DialogSelectCreateQuiz(props) {
         <DialogTitle id="simple-dialog-title">{`Select a ${name} method`}</DialogTitle>
       </Grid>
       <Grid item xs={12} container justify="center">
-        <Grid item xs={6} container justify="center">
+        <Button
+          className={classes.btnCreateNew}
+          variant="contained"
+          size="small"
+          onClick={() => handleSelect("createNew")}
+        >
+          Create New
+        </Button>
+      </Grid>
+      <Grid item xs={12} container justify="center">
+        {type === "classStudent" ? (
           <Button
-            className={classes.btnCreateNew}
+            className={classes.btnImport}
             variant="contained"
             size="small"
-            onClick={() => handleSelect("createNew")}
           >
-            Create New
+            <CSVReader
+              inputStyle={{
+                opacity: 0,
+                width: "170px",
+                marginLeft: "-162px",
+                textalign: "center",
+              }}
+              label="Import with CSV File"
+              onFileLoaded={handleForce}
+              parserOptions={papaparseOptions}
+            />
+          </Button>
+        ) : null}
+      </Grid>
+      {type === "classStudent" ? (
+        <Grid item xs={12} container justify="flex-end">
+          <Button
+            className={classes.btnTemplate}
+            href="https://firebasestorage.googleapis.com/v0/b/project4thquiz.appspot.com/o/templateStudent.csv?alt=media&token=fc9bd36a-19e6-4bf1-9fcc-71de888ad45f"
+          >
+            Download Template CSV
           </Button>
         </Grid>
-        <Grid item xs={6} container justify="center" direction="column">
-          {type === "classStudent" ? (
-            <Button
-              className={classes.btnImport}
-              variant="contained"
-              size="small"
-            >
-              <CSVReader
-                inputStyle={{
-                  opacity: 0,
-                  width: "170px",
-                  marginLeft: "-45px",
-                }}
-                label="Import student 
-                with CSV File"
-                onFileLoaded={handleForce}
-                parserOptions={papaparseOptions}
-              />
-            </Button>
-          ) : null}
-        </Grid>
-      </Grid>
+      ) : null}
     </Dialog>
   );
 }

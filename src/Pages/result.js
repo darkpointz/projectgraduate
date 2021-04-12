@@ -11,9 +11,15 @@ import {
   Typography,
   Grid,
   Divider,
+  Badge,
 } from "@material-ui/core";
 
-import { NavigateNext, NavigateBefore, GroupTwoTone } from "@material-ui/icons";
+import {
+  NavigateNext,
+  NavigateBefore,
+  GroupTwoTone,
+  PanTool,
+} from "@material-ui/icons";
 
 import ResultMC from "../Components/resultMC";
 import ResultTF from "../Components/resultTF";
@@ -22,6 +28,7 @@ import TableResult from "../Components/tableResult";
 import QuickTF from "../Components/quickTF";
 import QuickMC from "../Components/quickMC";
 import QuickSA from "../Components/quickSA";
+import DialogShowStudent from "../Components/dialogShowStudent";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -96,6 +103,7 @@ export default function Result() {
 
   const [question, setquestion] = useState("");
   const [answerQQ, setanswerQQ] = useState([]);
+  const [openDialogShowStudent, setopenDialogShowStudent] = useState(false);
 
   // const history = createBrowserHistory({ forceRefresh: true });
   let history = useHistory();
@@ -198,14 +206,14 @@ export default function Result() {
     );
   };
 
-  const countStundentJoin = () => {
+  const countStudentJoin = () => {
     let result = student?.filter((element) => {
       return element.join === true;
     });
     return result.length;
   };
 
-  const countStundent = () => {
+  const countStudent = () => {
     let count;
     count = score[current]?.countCorrect + score[current]?.countFail;
     return count;
@@ -383,6 +391,20 @@ export default function Result() {
     );
   };
 
+  const handleCloseDialogShowStudent = () => {
+    setopenDialogShowStudent(false);
+  };
+
+  const countStudentRaiseHand = () => {
+    let count = 0;
+    student.map((item) => {
+      if (item.raiseHand === true) {
+        count = count + 1;
+      }
+    });
+    return count;
+  };
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -418,7 +440,7 @@ export default function Result() {
               {typeDelivery === "CBT" ? (
                 <Grid item xs={3} container>
                   <Typography className={classes.typoCountStudent}>
-                    Students Answered {countStundent()} / {studentMax}
+                    Students Answered {countStudent()} / {studentMax}
                   </Typography>
                 </Grid>
               ) : (
@@ -430,10 +452,19 @@ export default function Result() {
               </Grid>
 
               <Grid item xs={1} container>
-                <GroupTwoTone />
+                {/* <GroupTwoTone />
                 <Typography className={classes.typoCountStudent}>
-                  {countStundentJoin()} / {studentMax}
-                </Typography>
+                  {countStudentJoin()} / {studentMax}
+                </Typography> */}
+                <Badge badgeContent={countStudentRaiseHand()} color="primary">
+                  <Button
+                    className={classes.typoCountStudent}
+                    onClick={(e) => setopenDialogShowStudent(true)}
+                  >
+                    <GroupTwoTone />
+                    {countStudentJoin()} / {studentMax}
+                  </Button>
+                </Badge>
               </Grid>
             </Grid>
 
@@ -452,6 +483,11 @@ export default function Result() {
             : handleShowNoResult()}
         </Grid>
       </Grid>
+      <DialogShowStudent
+        open={openDialogShowStudent}
+        handleClose={handleCloseDialogShowStudent}
+        student={student}
+      />
     </div>
   );
 }

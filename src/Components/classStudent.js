@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { classService } from "../Services/classService";
 import CSVReader from "react-csv-reader";
@@ -136,6 +136,7 @@ export default function ClassStudent({ match }) {
     if (value === "createNew") {
       setopenDialog(true);
     } else if (value === "import") {
+      //---ทำตรงนี้
       let newData = handleChangeHeaderCSV(data);
       const formStudent = {
         student: newData,
