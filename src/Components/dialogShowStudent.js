@@ -68,7 +68,13 @@ export default function DialogShowStudent({ open, handleClose, student }) {
           {student.map((item) => {
             if (item.raiseHand === true && item.join === true) {
               return (
-                <Grid item xs={12} container alignItems="center">
+                <Grid
+                  item
+                  xs={12}
+                  container
+                  alignItems="center"
+                  key={item.stuid}
+                >
                   <Typography className={classes.typoNameStudent}>
                     • {item.fname} {item?.lname}
                   </Typography>
@@ -84,7 +90,7 @@ export default function DialogShowStudent({ open, handleClose, student }) {
           {student.map((item) => {
             if (item.raiseHand === false && item.join === true) {
               return (
-                <Grid item xs={12} container>
+                <Grid item xs={12} container key={item.stuid}>
                   <Typography className={classes.typoNameStudent}>
                     • {item.fname} {item?.lname}
                   </Typography>

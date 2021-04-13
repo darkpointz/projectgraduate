@@ -12,6 +12,7 @@ import {
   FormGroup,
 } from "@material-ui/core";
 import { teal } from "@material-ui/core/colors";
+import clsx from "clsx";
 
 const useStyles = makeStyles({
   divider: {
@@ -36,6 +37,10 @@ const useStyles = makeStyles({
     fontSize: "16px",
     // backgroundColor: { colorCBS },
   },
+  btnSelectDelivery: {
+    backgroundColor: "#6DC8BE",
+    color: "white",
+  },
 });
 
 const ChangeSwitch = withStyles({
@@ -55,6 +60,7 @@ const ChangeSwitch = withStyles({
 export default function SelectMethodQuiz(props) {
   const classes = useStyles();
   const { selectMethodQuiz, setselectMethodQuiz } = props;
+  // const [select, setselect] = useState(selectMethodQuiz);
   const [select, setselect] = useState({
     delivery: "",
     SQ: false,
@@ -66,54 +72,76 @@ export default function SelectMethodQuiz(props) {
 
   useEffect(() => {
     setselect(selectMethodQuiz);
-    if (selectMethodQuiz.delivery === "CBS") {
-      setcolorCBS({
-        backgroundColor: "#6DC8BE",
-        color: "white",
-      });
-    } else if (selectMethodQuiz.delivery === "CBT") {
-      setcolorCBT({
-        backgroundColor: "#6DC8BE",
-        color: "white",
-      });
-    }
+    // if (selectMethodQuiz?.delivery === "CBS") {
+    //   setcolorCBS({
+    //     backgroundColor: "#6DC8BE",
+    //     color: "white",
+    //   });
+    // } else if (selectMethodQuiz?.delivery === "CBT") {
+    //   setcolorCBT({
+    //     backgroundColor: "#6DC8BE",
+    //     color: "white",
+    //   });
+    // }
   }, []);
 
-  const [colorCBS, setcolorCBS] = useState({
-    backgroundColor: "",
-    color: "",
-  });
-  const [colorCBT, setcolorCBT] = useState({
-    backgroundColor: "",
-    color: "",
-  });
+  // const [colorCBS, setcolorCBS] = useState({
+  //   backgroundColor: "",
+  //   color: "",
+  // });
+  // const [colorCBT, setcolorCBT] = useState({
+  //   backgroundColor: "",
+  //   color: "",
+  // });
 
   const handleChange = (event) => {
-    setselect({ ...select, [event.target.name]: event.target.checked });
+    const { name, checked } = event.target;
+    let newSelect = { ...select };
+    switch (name) {
+      case "SQ":
+        newSelect.SQ = !newSelect.SQ;
+        break;
+      case "SA":
+        newSelect.SA = !newSelect.SA;
+        break;
+      case "SADA":
+        newSelect.SADA = !newSelect.SADA;
+        break;
+      case "SAAA":
+        newSelect.SAAA = !newSelect.SAAA;
+        break;
+      default:
+        break;
+    }
+    // console.log(newSelect);
+    setselect(newSelect);
+    // setselect({ ...select, [event.target.name]: event.target.checked });
+    setselectMethodQuiz(newSelect);
   };
 
   const handleClickBtn = (txt) => {
-    let newSelect = select;
+    let newSelect = { ...select };
 
     if (txt === "CBS") {
-      setcolorCBS({
-        backgroundColor: "#6DC8BE",
-        color: "white",
-      });
-      setcolorCBT({
-        backgroundColor: "",
-        color: "",
-      });
+      // setcolorCBS({
+      //   backgroundColor: "#6DC8BE",
+      //   color: "white",
+      // });
+      // setcolorCBT({
+      //   backgroundColor: "",
+      //   color: "",
+      // });
       newSelect.delivery = "CBS";
     } else if (txt === "CBT") {
-      setcolorCBS({
-        backgroundColor: "",
-        color: "",
-      });
-      setcolorCBT({
-        backgroundColor: "#6DC8BE",
-        color: "white",
-      });
+      // setcolorCBS({
+      //   backgroundColor: "",
+      //   color: "",
+      // });
+      // setcolorCBT({
+      //   backgroundColor: "#6DC8BE",
+      //   color: "white",
+      // });
+      newSelect.SQ = false;
       newSelect.delivery = "CBT";
     }
     setselect(newSelect);
@@ -132,11 +160,13 @@ export default function SelectMethodQuiz(props) {
         <Grid item xs={6} container justify="center">
           <Button
             variant="outlined"
-            className={classes.btnDelivery}
-            style={{
-              backgroundColor: colorCBS.backgroundColor,
-              color: colorCBS.color,
-            }}
+            className={clsx(classes.btnDelivery, {
+              [classes.btnSelectDelivery]: select?.delivery === "CBS",
+            })}
+            // style={{
+            //   backgroundColor: colorCBS.backgroundColor,
+            //   color: colorCBS.color,
+            // }}
             onClick={() => handleClickBtn("CBS")}
           >
             Open Navigation
@@ -145,11 +175,13 @@ export default function SelectMethodQuiz(props) {
         <Grid item xs={6} container justify="center">
           <Button
             variant="outlined"
-            className={classes.btnDelivery}
-            style={{
-              backgroundColor: colorCBT.backgroundColor,
-              color: colorCBT.color,
-            }}
+            className={clsx(classes.btnDelivery, {
+              [classes.btnSelectDelivery]: select?.delivery === "CBT",
+            })}
+            // style={{
+            //   backgroundColor: colorCBT.backgroundColor,
+            //   color: colorCBT.color,
+            // }}
             onClick={() => handleClickBtn("CBT")}
           >
             Teacher Paced
@@ -168,9 +200,10 @@ export default function SelectMethodQuiz(props) {
                   control={
                     <ChangeSwitch
                       checked={select.SQ}
-                      onChange={handleChange}
                       name="SQ"
+                      onChange={(e) => handleChange(e)}
                       color="primary"
+                      disabled={select.delivery === "CBT"}
                     />
                   }
                   label={
@@ -185,8 +218,8 @@ export default function SelectMethodQuiz(props) {
                   control={
                     <ChangeSwitch
                       checked={select.SA}
-                      onChange={handleChange}
                       name="SA"
+                      onChange={(e) => handleChange(e)}
                       color="primary"
                     />
                   }
@@ -209,7 +242,7 @@ export default function SelectMethodQuiz(props) {
                   control={
                     <ChangeSwitch
                       checked={select.SADA}
-                      onChange={handleChange}
+                      onChange={(e) => handleChange(e)}
                       name="SADA"
                       color="primary"
                     />
@@ -226,7 +259,7 @@ export default function SelectMethodQuiz(props) {
                   control={
                     <ChangeSwitch
                       checked={select.SAAA}
-                      onChange={handleChange}
+                      onChange={(e) => handleChange(e)}
                       name="SAAA"
                       color="primary"
                     />

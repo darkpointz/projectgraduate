@@ -82,7 +82,6 @@ export default function Reports() {
         <Grid container item xs={12}>
           <Paper className={classes.paper}>
             <Typography className={classes.typotitlePaper}>Report</Typography>
-
             <Grid container item xs={12}>
               <TableReport />
             </Grid>

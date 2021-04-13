@@ -62,6 +62,7 @@ export default function DialogSelectSetting(props) {
   const [selectClass, setselectClass] = useState();
   const [selectQuiz, setselectQuiz] = useState();
   const [selectMethodQuiztf, setselectMethodQuiztf] = useState(false);
+  // const [selectMethodQuiz, setselectMethodQuiz] = useState();
   const [selectMethodQuiz, setselectMethodQuiz] = useState({
     delivery: "",
     SQ: false,
@@ -117,6 +118,7 @@ export default function DialogSelectSetting(props) {
   };
 
   const handleSetMethodQuiz = (selectMethodQuiz) => {
+    console.log(selectMethodQuiz);
     setselectMethodQuiztf(true);
     setselectMethodQuiz(selectMethodQuiz);
   };
