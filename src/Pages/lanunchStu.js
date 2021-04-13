@@ -3,13 +3,9 @@ import { reportService } from "../Services/reportService";
 import { useParams, useHistory } from "react-router-dom";
 import firebase from "firebase/app";
 import swal from "sweetalert";
+import clsx from "clsx";
 
-import {
-  NavigateNext,
-  NavigateBefore,
-  FirstPage,
-  LastPage,
-} from "@material-ui/icons";
+import { PanTool } from "@material-ui/icons";
 
 import {
   AppBar,
@@ -91,6 +87,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     fontSize: "18px",
     borderRadius: "18px",
+    marginRight: "32px",
     [theme.breakpoints.down("sm")]: {
       fontSize: "14px",
     },
@@ -137,6 +134,20 @@ const useStyles = makeStyles((theme) => ({
       padding: theme.spacing(2),
     },
   },
+  iconPanTool: {},
+  iconPanToolTrue: {
+    color: "#5FCCF5",
+  },
+  typoIconPanTool: {
+    fontFamily: "'Prompt', sans-serif",
+    fontWeight: 500,
+    fontSize: "24px",
+    marginRight: "8px",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "18px",
+      marginRight: "6px",
+    },
+  },
 }));
 
 export default function LanunchStu() {
@@ -150,7 +161,7 @@ export default function LanunchStu() {
   const [waiting, setwaiting] = useState(true);
 
   const [stepMax, setstepMax] = useState();
-
+  const [raiseHand, setraiseHand] = useState();
   const [answer, setanswer] = useState();
   const [oldCurrent, setoldCurrent] = useState();
   const [indexAnswerMC, setindexAnswerMC] = useState();
@@ -177,9 +188,11 @@ export default function LanunchStu() {
 
             if (doc.data().start && doc.data().finish === false) {
               setwaiting(false);
+              setroomName(doc.data().roomName);
               let indexStu = doc.data().student.findIndex((e) => {
                 return e.stuid === params.stuid;
               });
+              setraiseHand(doc.data().student[indexStu].raiseHand);
               setquizzingStudent(doc.data().student[indexStu].quizzing);
               console.log(doc.data().student[indexStu].quizzing);
               //--quiz
@@ -244,6 +257,7 @@ export default function LanunchStu() {
               let indexStudent = doc
                 .data()
                 .student.findIndex((e) => e.stuid === params.stuid);
+              setraiseHand(doc.data().student[indexStudent].raiseHand);
               //--setคำตอบนร.
               doc.data().student[indexStudent].quizzing.forEach((data) => {
                 let form = {
@@ -279,6 +293,7 @@ export default function LanunchStu() {
               let indexStu = doc.data().student.findIndex((e) => {
                 return e.stuid === params.stuid;
               });
+              setraiseHand(doc.data().student[indexStu].raiseHand);
               let done = doc.data().student[indexStu].quizzing[0]?.done;
               settype(doc.data().type);
               settypeDelivery(doc.data().method);
@@ -461,9 +476,25 @@ export default function LanunchStu() {
     }
   };
 
+  const handleRaiseHand = () => {
+    let newRaiseHand = !raiseHand;
+    let formStudent = {
+      reportId: params.reportId,
+      stuid: params.stuid,
+      raiseHand: newRaiseHand,
+    };
+    reportService.raiseHandStudent(formStudent).then(() => {
+      setraiseHand(newRaiseHand);
+    });
+  };
+
   const showContent = () => {
     return (
       <Grid container item xs={12} className={classes.content}>
+        <Grid container item xs={7} md={8} />
+        <Grid container item xs={5} md={4} justify="center">
+          {typeDelivery === "CBS" ? btnFinishQuizCBS() : null}
+        </Grid>
         <Grid
           container
           item
@@ -471,19 +502,37 @@ export default function LanunchStu() {
           alignItems="center"
           className={classes.gridRowStep}
         >
-          <Grid container item xs={5} justify="center">
+          <Grid container item xs={5} md={5} justify="center">
             <Typography className={classes.typoStep}>
               {typeDelivery === "CBS" ? (
                 <>
-                  {current + 1}/{stepMax}
+                  {current + 1} / {stepMax}
                 </>
               ) : (
                 <>{quiz[current]?.step} .</>
               )}
             </Typography>
           </Grid>
-          <Grid container item xs={7} justify="center">
-            {typeDelivery === "CBS" ? btnFinishQuizCBS() : null}
+          <Grid container item xs={2} md={2} />
+          <Grid
+            container
+            item
+            xs={5}
+            md={5}
+            justify="center"
+            alignItems="center"
+          >
+            <Typography className={classes.typoIconPanTool}>
+              {raiseHand === false ? <>Raise hand :</> : <>Lower hand :</>}
+            </Typography>
+            <IconButton onClick={handleRaiseHand}>
+              {/* <PanTool className={classes.iconPanTool} /> */}
+              <PanTool
+                className={clsx(classes.iconPanTool, {
+                  [classes.iconPanToolTrue]: raiseHand === true,
+                })}
+              />
+            </IconButton>
           </Grid>
         </Grid>
         <Grid container item xs={12} justify="center" alignItems="center">

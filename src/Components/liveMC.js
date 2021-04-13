@@ -74,7 +74,7 @@ export default function LiveMC({
         {quiz.choice.map((item, index) => {
           return (
             // justify="flex-end"
-            <Grid container item xs={12} justify="center">
+            <Grid container item xs={12} justify="center" key={item}>
               <Grid
                 container
                 item

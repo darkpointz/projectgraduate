@@ -179,7 +179,7 @@ export default function LoginTeacher() {
               >
                 Login with Email
               </Button>
-              <Typography variant="body2">Or Sign Up Using</Typography>
+              <Typography variant="body2">Or Sign In Using</Typography>
               <Button
                 variant="contained"
                 color="primary"

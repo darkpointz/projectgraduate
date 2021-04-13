@@ -183,6 +183,7 @@ export default function PaginationLanunchStu({
 
       {quiz.slice(page, maxPage).map((item, index) => (
         <Button
+          key={item.step}
           variant="outlined"
           className={clsx(classes.btnStep, {
             [classes.btnTrue]: handleCheckStyleStep(item.step),

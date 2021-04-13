@@ -19,6 +19,7 @@ export const reportService = {
   teacherStartQuickQuestion,
   finishQuizCBS,
   submitAnswerQQ,
+  raiseHandStudent,
 };
 
 function teacherNextStepCBT(reportId, formStep) {
@@ -197,6 +198,17 @@ function deleteReportByReportId(reportId) {
 function finishQuizCBS(formStudent) {
   return httpClient
     .post(`/report/finishQuizCBS`, formStudent)
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      console.log("err, ", err);
+    });
+}
+
+function raiseHandStudent(formStudent) {
+  return httpClient
+    .post(`/report/raiseHandStudent`, formStudent)
     .then((res) => {
       return res;
     })

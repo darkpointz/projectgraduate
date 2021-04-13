@@ -14,12 +14,7 @@ import {
   Badge,
 } from "@material-ui/core";
 
-import {
-  NavigateNext,
-  NavigateBefore,
-  GroupTwoTone,
-  PanTool,
-} from "@material-ui/icons";
+import { NavigateNext, NavigateBefore, GroupTwoTone } from "@material-ui/icons";
 
 import ResultMC from "../Components/resultMC";
 import ResultTF from "../Components/resultTF";
