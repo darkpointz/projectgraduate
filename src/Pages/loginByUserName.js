@@ -12,6 +12,7 @@ import {
 import swal from "sweetalert";
 import { createBrowserHistory } from "history";
 import { useHistory } from "react-router-dom";
+import Cookies from 'universal-cookie';
 
 import { reportService } from "../Services/reportService";
 
@@ -22,9 +23,11 @@ export default function LoginByUserName({ roomPublic, reportId }) {
   const [quiz, setquiz] = useState();
   // const history = createBrowserHistory({ forceRefresh: true });
   let history = useHistory();
+  const cookies = new Cookies();
 
   useEffect(() => {
     let stuid = localStorage.getItem("stuid");
+    // let stuid = cookies.get('stuid')
     if (stuid) {
       reportService.manageStudentByPrivateRoom(stuid, reportId).then((res) => {
         console.log("res---------------------");
@@ -34,7 +37,7 @@ export default function LoginByUserName({ roomPublic, reportId }) {
         }
       });
     }
-  });
+  }, []);
 
   const handleClickJoin = () => {
     if (roomPublic) {
@@ -42,13 +45,14 @@ export default function LoginByUserName({ roomPublic, reportId }) {
         name: name,
         reportId: reportId,
       };
-      console.log("formStudent: ", formStudent);
+
       reportService
         .insertStudentByPublicRoom(formStudent, reportId)
         .then((res) => {
           console.log(res);
           if (res.succes === "succes") {
             localStorage.setItem("stuid", res.stuid);
+            cookies.set('stuid', res.stuid, { path: '/' });
             history.push(`/LanunchStu/${reportId}/${res.stuid}`);
           } else {
             swal("Error!", "Check sdfsdfsdfsdfID!", "error");
@@ -60,7 +64,8 @@ export default function LoginByUserName({ roomPublic, reportId }) {
           swal("Error!", "Check your room name!", "error");
         });
     } else {
-      // setTimeout(() => {
+      console.log("formStudentlogin: ", stuid);
+      console.log("reportId: ", reportId);
       reportService
         .manageStudentByPrivateRoom(stuid, reportId)
         // .manageStudentByPrivateRoom(formStudent, reportId)
@@ -76,7 +81,7 @@ export default function LoginByUserName({ roomPublic, reportId }) {
           }
         })
         .catch((err) => {
-          console.log("err- ");
+          console.log("err- ", err);
           swal("Error!", "Check your Student ID!", "error");
         });
       // }, 1000);

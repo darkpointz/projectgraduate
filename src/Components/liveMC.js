@@ -92,14 +92,15 @@ export default function LiveMC({
                 <Button
                   id="btnt"
                   variant="contained"
-                  value={answer}
+                  value={item}
+                  // value={answer}
                   onClick={() => handleSelectAnswer(item, index)}
                   className={clsx(classes.textField, {
-                    [classes.btnTrue]: index === indexAnswer,
+                    [classes.btnTrue]: item === answer,
+                    // [classes.btnTrue]: index === indexAnswer,
                   })}
                 >
                   {item}
-                  {/* {"ก.5 คำ และ ข.5 คำก.5 คำ และ ข.5 คำ5 คำ และ ข.5 คำ"} */}
                 </Button>
               </Grid>
             </Grid>

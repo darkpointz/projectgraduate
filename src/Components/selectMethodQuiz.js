@@ -72,27 +72,8 @@ export default function SelectMethodQuiz(props) {
 
   useEffect(() => {
     setselect(selectMethodQuiz);
-    // if (selectMethodQuiz?.delivery === "CBS") {
-    //   setcolorCBS({
-    //     backgroundColor: "#6DC8BE",
-    //     color: "white",
-    //   });
-    // } else if (selectMethodQuiz?.delivery === "CBT") {
-    //   setcolorCBT({
-    //     backgroundColor: "#6DC8BE",
-    //     color: "white",
-    //   });
-    // }
   }, []);
 
-  // const [colorCBS, setcolorCBS] = useState({
-  //   backgroundColor: "",
-  //   color: "",
-  // });
-  // const [colorCBT, setcolorCBT] = useState({
-  //   backgroundColor: "",
-  //   color: "",
-  // });
 
   const handleChange = (event) => {
     const { name, checked } = event.target;
@@ -123,29 +104,14 @@ export default function SelectMethodQuiz(props) {
     let newSelect = { ...select };
 
     if (txt === "CBS") {
-      // setcolorCBS({
-      //   backgroundColor: "#6DC8BE",
-      //   color: "white",
-      // });
-      // setcolorCBT({
-      //   backgroundColor: "",
-      //   color: "",
-      // });
+      newSelect.SADA = false;
       newSelect.delivery = "CBS";
     } else if (txt === "CBT") {
-      // setcolorCBS({
-      //   backgroundColor: "",
-      //   color: "",
-      // });
-      // setcolorCBT({
-      //   backgroundColor: "#6DC8BE",
-      //   color: "white",
-      // });
       newSelect.SQ = false;
       newSelect.delivery = "CBT";
     }
     setselect(newSelect);
-    setselectMethodQuiz(select);
+    setselectMethodQuiz(newSelect);
   };
 
   return (
@@ -245,6 +211,7 @@ export default function SelectMethodQuiz(props) {
                       onChange={(e) => handleChange(e)}
                       name="SADA"
                       color="primary"
+                      disabled={select.delivery === "CBS"}
                     />
                   }
                   label={

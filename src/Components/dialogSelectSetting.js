@@ -62,7 +62,6 @@ export default function DialogSelectSetting(props) {
   const [selectClass, setselectClass] = useState();
   const [selectQuiz, setselectQuiz] = useState();
   const [selectMethodQuiztf, setselectMethodQuiztf] = useState(false);
-  // const [selectMethodQuiz, setselectMethodQuiz] = useState();
   const [selectMethodQuiz, setselectMethodQuiz] = useState({
     delivery: "",
     SQ: false,
@@ -97,6 +96,7 @@ export default function DialogSelectSetting(props) {
       console.log(formReport);
       reportService.insertReport(uId, formReport).then((res) => {
         console.log("resss: ", res);
+
         history.push("/result");
         // if (res) {
         //   <Link to={`/result`} />;

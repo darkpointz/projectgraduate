@@ -36,6 +36,7 @@ export default function PaginationLanunchStu({
   setcurrent,
   quiz,
   quizzingStudent,
+  SQ
 }) {
   const classes = useStyles();
   const [page, setpage] = useState(0);
@@ -169,6 +170,18 @@ export default function PaginationLanunchStu({
       tf = false;
     }
     return tf;
+
+    //**** */
+    // let tf;
+    // quizzingStudent.find((e) => {
+    //   if (e.step === index) {
+    //     tf = true;
+    //   }
+    // });
+    // if (!tf) {
+    //   tf = false;
+    // }
+    // return tf;
   };
   return (
     <Grid container item xs={12} justify="center">
@@ -186,11 +199,13 @@ export default function PaginationLanunchStu({
           key={item.step}
           variant="outlined"
           className={clsx(classes.btnStep, {
+            // [classes.btnTrue]: handleCheckStyleStep(index),
             [classes.btnTrue]: handleCheckStyleStep(item.step),
           })}
           onClick={() => handleSelectPage(item.step - 1)}
         >
-          {item.step}
+          {SQ === true ? index + 1 : item.step}
+          {/* {item.step} */}
         </Button>
       ))}
 

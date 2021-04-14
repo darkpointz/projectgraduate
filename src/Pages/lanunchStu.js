@@ -4,7 +4,7 @@ import { useParams, useHistory } from "react-router-dom";
 import firebase from "firebase/app";
 import swal from "sweetalert";
 import clsx from "clsx";
-
+import Cookies from 'universal-cookie';
 import { PanTool } from "@material-ui/icons";
 
 import {
@@ -152,6 +152,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function LanunchStu() {
   const classes = useStyles();
+  const cookies = new Cookies();
+
   const [quiz, setquiz] = useState([]);
   const [current, setcurrent] = useState(0);
   const [roomName, setroomName] = useState();
@@ -159,6 +161,7 @@ export default function LanunchStu() {
   const [type, settype] = useState();
   const [quizzingStudent, setquizzingStudent] = useState([]);
   const [waiting, setwaiting] = useState(true);
+  const [SQ, setSQ] = useState(false);
 
   const [stepMax, setstepMax] = useState();
   const [raiseHand, setraiseHand] = useState();
@@ -238,6 +241,7 @@ export default function LanunchStu() {
           .collection("Report")
           .doc(params.reportId)
           .onSnapshot((doc) => {
+            console.log(quiz);
             let quizStudent = [];
 
             if (doc.data().start && doc.data().finish === false) {
@@ -249,25 +253,51 @@ export default function LanunchStu() {
                   step: data.step,
                 };
                 if (data.type === "multiplechoice") {
-                  form.choice = data.choice;
+                  if (doc.data().method.SA === true) {
+                    form.choice = shuffleArray(data.choice)
+                  }
+                  else {
+                    form.choice = data.choice;
+                  }
                 }
                 quizStudent.push(form);
               });
-              setquiz(quizStudent);
+              //--- Shuffle Questions
+              if (doc.data().method.SQ === true && !cookies.get('quiz')) {
+                // if (doc.data().method.SQ === true && quiz.length === 0) {
+                setSQ(SQ)
+                let newquiz = shuffleArray(quizStudent)
+                setquiz(newquiz);
+                cookies.set('quiz', newquiz, { path: '/' });
+                console.log("**shuffleArray***");
+              }
+              else if (doc.data().method.SQ === true && cookies.get('quiz')) {
+                setquiz(cookies.get('quiz'))
+                console.log("**ssssArray***");
+              }
+              else if (doc.data().method.SQ === false && quiz.length === 0) {
+                setquiz(quizStudent);
+                console.log("**Array***");
+              }
+
               let indexStudent = doc
                 .data()
                 .student.findIndex((e) => e.stuid === params.stuid);
               setraiseHand(doc.data().student[indexStudent].raiseHand);
+
               //--setคำตอบนร.
-              doc.data().student[indexStudent].quizzing.forEach((data) => {
-                let form = {
-                  answer: data.answer,
-                  step: data.step,
-                  done: false,
-                };
-                quizzingStudent.push(form);
-              });
-              setquizzingStudent(quizzingStudent);
+              if (quizzingStudent.length === 0) {
+                let quizzingStudentFB = []
+                doc.data().student[indexStudent].quizzing.forEach((data) => {
+                  let form = {
+                    answer: data.answer,
+                    step: data.step,
+                    done: false,
+                  };
+                  quizzingStudentFB.push(form);
+                });
+                setquizzingStudent(quizzingStudentFB);
+              }
               settype(doc.data().type);
               setroomName(doc.data().roomName);
               setstepMax(doc.data().quiz.length);
@@ -289,6 +319,7 @@ export default function LanunchStu() {
             if (doc.data().start && doc.data().finish === false) {
               setwaiting(false);
               console.log("doc", doc.data());
+
               setquiz(doc.data().quiz);
               let indexStu = doc.data().student.findIndex((e) => {
                 return e.stuid === params.stuid;
@@ -313,9 +344,24 @@ export default function LanunchStu() {
     return () => {
       if (unsubscribe) {
         unsubscribe();
+        cookies.remove('quiz', { path: '/' });
       }
     };
   }, []);
+
+  const shuffleArray = (array) => {
+    let newarray = array;
+    for (let i = newarray.length - 1; i > 0; i--) {
+      let j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+      //--เก่า
+      // let temp = newarray[i];
+      // newarray[i] = newarray[j];
+      // newarray[j] = temp;
+
+    }
+    return newarray
+  }
 
   const handleFetchAnswer = () => {
     let index;
@@ -361,6 +407,11 @@ export default function LanunchStu() {
   };
 
   const handlebtnFinishQuizCBS = () => {
+    let reportId = params.reportId
+    let formStudent = {
+      stuid: localStorage.getItem("stuid"),
+      reportId: reportId
+    };
     swal({
       title: "Please Confirm?",
       text: "Are you sure you want to finish the quiz?",
@@ -372,12 +423,9 @@ export default function LanunchStu() {
         if (answer) {
           submitAnswer();
         }
-        let formStudent = {
-          stuid: localStorage.getItem("stuid"),
-          reportId: localStorage.getItem("ReportId"),
-        };
         console.log(formStudent);
         localStorage.removeItem("ReportId");
+        cookies.remove('quiz', { path: '/' });
         reportService.finishQuizCBS(formStudent).then((res) => {
           history.push("/login/student/finish");
         });
@@ -398,6 +446,7 @@ export default function LanunchStu() {
         localStorage.removeItem("RoomStudent");
         localStorage.removeItem("stuid");
         localStorage.removeItem("ReportId");
+        cookies.remove('quiz', { path: '/' });
       }
     });
   };
@@ -434,17 +483,20 @@ export default function LanunchStu() {
     setanswer(answer);
     setoldCurrent(step);
     let newQuizzing = quizzingStudent;
+    console.log("newQuizzin----g: ", newQuizzing);
     if (index || index === 0) {
       console.log("indexAnswerMC: ", index);
       setindexAnswerMC(index);
     }
 
+    console.log("indexQuizzing: ", indexQuizzing);
     if (indexQuizzing >= 0) {
       newQuizzing[indexQuizzing] = { answer: answer, step: step };
     } else {
       newQuizzing.push({ answer: answer, step: step });
     }
     setquizzingStudent(newQuizzing);
+    console.log("newQuizzing: ", newQuizzing);
   };
 
   const submitAnswer = () => {
@@ -504,13 +556,14 @@ export default function LanunchStu() {
         >
           <Grid container item xs={5} md={5} justify="center">
             <Typography className={classes.typoStep}>
-              {typeDelivery === "CBS" ? (
+              {current + 1}
+              {/* {typeDelivery === "CBS" ? (
                 <>
                   {current + 1} / {stepMax}
                 </>
               ) : (
                 <>{quiz[current]?.step} .</>
-              )}
+              )} */}
             </Typography>
           </Grid>
           <Grid container item xs={2} md={2} />
@@ -557,6 +610,7 @@ export default function LanunchStu() {
             answer={answer}
             quiz={quiz}
             quizzingStudent={quizzingStudent}
+            SQ={SQ}
           />
         ) : (
           btnSubmitCBT()
@@ -586,7 +640,7 @@ export default function LanunchStu() {
                 <Button
                   className={classes.typoBtn}
                   onClick={handleLogout}
-                  // onClick={() => history.push("/login/student")}
+                // onClick={() => history.push("/login/student")}
                 >
                   Logout
                 </Button>
