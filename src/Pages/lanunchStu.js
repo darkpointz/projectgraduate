@@ -4,7 +4,7 @@ import { useParams, useHistory } from "react-router-dom";
 import firebase from "firebase/app";
 import swal from "sweetalert";
 import clsx from "clsx";
-import Cookies from 'universal-cookie';
+import Cookies from "universal-cookie";
 import { PanTool } from "@material-ui/icons";
 
 import {
@@ -213,7 +213,7 @@ export default function LanunchStu() {
                   settype(doc.data().type);
                   if (done?.done) {
                     setwaiting(true);
-                    // setquiz([]);
+                    setquiz([]);
                   } else {
                     setwaiting(false);
                     setquiz([]);
@@ -224,7 +224,12 @@ export default function LanunchStu() {
                   setquiz(newQuiz);
                 }
               });
-              //--quizzingStudent
+              console.log("newQuiz: ", newQuiz);
+              if (newQuiz.length === 0) {
+                setwaiting(true);
+              }
+
+              //finish
             } else if (doc.data().finish) {
               localStorage.removeItem("liveId");
               localStorage.removeItem("ReportId");
@@ -254,30 +259,25 @@ export default function LanunchStu() {
                 };
                 if (data.type === "multiplechoice") {
                   if (doc.data().method.SA === true) {
-                    form.choice = shuffleArray(data.choice)
-                  }
-                  else {
+                    form.choice = shuffleArray(data.choice);
+                  } else {
                     form.choice = data.choice;
                   }
                 }
                 quizStudent.push(form);
               });
               //--- Shuffle Questions
-              if (doc.data().method.SQ === true && !cookies.get('quiz')) {
+              if (doc.data().method.SQ === true && !cookies.get("quiz")) {
                 // if (doc.data().method.SQ === true && quiz.length === 0) {
-                setSQ(SQ)
-                let newquiz = shuffleArray(quizStudent)
+                setSQ(doc.data().method.SQ);
+                let newquiz = shuffleArray(quizStudent);
                 setquiz(newquiz);
-                cookies.set('quiz', newquiz, { path: '/' });
-                console.log("**shuffleArray***");
-              }
-              else if (doc.data().method.SQ === true && cookies.get('quiz')) {
-                setquiz(cookies.get('quiz'))
-                console.log("**ssssArray***");
-              }
-              else if (doc.data().method.SQ === false && quiz.length === 0) {
+                cookies.set("quiz", newquiz, { path: "/" });
+              } else if (doc.data().method.SQ === true && cookies.get("quiz")) {
+                setSQ(doc.data().method.SQ);
+                setquiz(cookies.get("quiz"));
+              } else if (doc.data().method.SQ === false && quiz.length === 0) {
                 setquiz(quizStudent);
-                console.log("**Array***");
               }
 
               let indexStudent = doc
@@ -287,7 +287,7 @@ export default function LanunchStu() {
 
               //--setคำตอบนร.
               if (quizzingStudent.length === 0) {
-                let quizzingStudentFB = []
+                let quizzingStudentFB = [];
                 doc.data().student[indexStudent].quizzing.forEach((data) => {
                   let form = {
                     answer: data.answer,
@@ -344,7 +344,7 @@ export default function LanunchStu() {
     return () => {
       if (unsubscribe) {
         unsubscribe();
-        cookies.remove('quiz', { path: '/' });
+        cookies.remove("quiz", { path: "/" });
       }
     };
   }, []);
@@ -358,10 +358,9 @@ export default function LanunchStu() {
       // let temp = newarray[i];
       // newarray[i] = newarray[j];
       // newarray[j] = temp;
-
     }
-    return newarray
-  }
+    return newarray;
+  };
 
   const handleFetchAnswer = () => {
     let index;
@@ -373,6 +372,8 @@ export default function LanunchStu() {
   };
 
   const handleShowQuiz = () => {
+    console.log(current);
+    // console.log(quiz[current]);
     return (
       <>
         {quiz[current]?.type === "multiplechoice" ? (
@@ -407,10 +408,10 @@ export default function LanunchStu() {
   };
 
   const handlebtnFinishQuizCBS = () => {
-    let reportId = params.reportId
+    let reportId = params.reportId;
     let formStudent = {
       stuid: localStorage.getItem("stuid"),
-      reportId: reportId
+      reportId: reportId,
     };
     swal({
       title: "Please Confirm?",
@@ -425,7 +426,7 @@ export default function LanunchStu() {
         }
         console.log(formStudent);
         localStorage.removeItem("ReportId");
-        cookies.remove('quiz', { path: '/' });
+        cookies.remove("quiz", { path: "/" });
         reportService.finishQuizCBS(formStudent).then((res) => {
           history.push("/login/student/finish");
         });
@@ -446,7 +447,7 @@ export default function LanunchStu() {
         localStorage.removeItem("RoomStudent");
         localStorage.removeItem("stuid");
         localStorage.removeItem("ReportId");
-        cookies.remove('quiz', { path: '/' });
+        cookies.remove("quiz", { path: "/" });
       }
     });
   };
@@ -640,7 +641,7 @@ export default function LanunchStu() {
                 <Button
                   className={classes.typoBtn}
                   onClick={handleLogout}
-                // onClick={() => history.push("/login/student")}
+                  // onClick={() => history.push("/login/student")}
                 >
                   Logout
                 </Button>

@@ -36,7 +36,7 @@ export default function PaginationLanunchStu({
   setcurrent,
   quiz,
   quizzingStudent,
-  SQ
+  SQ,
 }) {
   const classes = useStyles();
   const [page, setpage] = useState(0);
@@ -121,7 +121,6 @@ export default function PaginationLanunchStu({
     if (answer) {
       submitAnswer();
     }
-
     setcurrent(index);
     //กรณีกดขึ้นหน้า
     if (index > mid) {
@@ -159,16 +158,15 @@ export default function PaginationLanunchStu({
     }
   };
 
-  const handleCheckStyleStep = (index) => {
-    let tf;
+  const handleCheckStyleStep = (step, index) => {
+    let tf = false;
     quizzingStudent.find((e) => {
-      if (e.step === index) {
+      if (e.step === step && SQ === false) {
+        tf = true;
+      } else if (quiz[index].step === e.step && SQ === true) {
         tf = true;
       }
     });
-    if (!tf) {
-      tf = false;
-    }
     return tf;
 
     //**** */
@@ -199,10 +197,12 @@ export default function PaginationLanunchStu({
           key={item.step}
           variant="outlined"
           className={clsx(classes.btnStep, {
-            // [classes.btnTrue]: handleCheckStyleStep(index),
-            [classes.btnTrue]: handleCheckStyleStep(item.step),
+            [classes.btnTrue]: handleCheckStyleStep(item.step, index),
           })}
-          onClick={() => handleSelectPage(item.step - 1)}
+          // [classes.btnTrue]: handleCheckStyleStep(index),
+          //--เก่า
+          // onClick={() => handleSelectPage(item.step - 1)}
+          onClick={() => handleSelectPage(index)}
         >
           {SQ === true ? index + 1 : item.step}
           {/* {item.step} */}

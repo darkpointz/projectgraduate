@@ -3,6 +3,7 @@ import { reportService } from "../Services/reportService";
 import firebase from "firebase/app";
 import { useHistory } from "react-router-dom";
 import { createBrowserHistory } from "history";
+import schedule from "node-schedule";
 
 import {
   makeStyles,
@@ -87,6 +88,7 @@ export default function Result() {
   const [typeDelivery, settypeDelivery] = useState();
   const [type, settype] = useState();
   const [quiz, setquiz] = useState([]);
+  const [method, setmethod] = useState();
   const [roomName, setroomName] = useState();
   const [score, setscore] = useState([]);
   const [student, setstudent] = useState([]);
@@ -126,6 +128,8 @@ export default function Result() {
             });
             //--setโจทย์
             setquiz(doc.data().quiz);
+            //--setOption
+            setmethod(doc.data().method);
             //--setข้อทั้งหมด
             setstepMax(doc.data().quiz.length);
             setroomName(doc.data().roomName);
@@ -219,10 +223,55 @@ export default function Result() {
       oldStep: current + 1,
       newStep: newStep,
     };
+    console.log("formStep ", formStep);
     reportService.teacherNextStepCBT(reportId, formStep).then((res) => {
       if (newStep > formStep.oldStep) {
+        let endAt, min, sec;
+        if (method.timeEachQuestion) {
+          min = method.minEach;
+          sec = method.secEach;
+          let newcreatedAt = new Date();
+
+          newcreatedAt.setMinutes(
+            newcreatedAt.getMinutes() + min,
+            newcreatedAt.getSeconds() + sec
+          );
+          endAt = new Date(newcreatedAt);
+        }
+        if (endAt) {
+          formStep.oldStep = newStep;
+          console.log("newformStep ", formStep);
+          const job = schedule.scheduleJob(endAt, function () {
+            reportService.teacherNextStepCBT(reportId, formStep).then((res) => {
+              console.log("-*-*-*-*");
+            });
+            job.cancel();
+          });
+        }
         setcurrent(current + 1);
       } else {
+        let endAt, min, sec;
+        if (method.timeEachQuestion) {
+          min = method.minEach;
+          sec = method.secEach;
+          let newcreatedAt = new Date();
+
+          newcreatedAt.setMinutes(
+            newcreatedAt.getMinutes() + min,
+            newcreatedAt.getSeconds() + sec
+          );
+          endAt = new Date(newcreatedAt);
+        }
+        if (endAt) {
+          formStep.oldStep = newStep;
+          console.log("newformStep ", formStep);
+          const job = schedule.scheduleJob(endAt, function () {
+            reportService.teacherNextStepCBT(reportId, formStep).then((res) => {
+              console.log("-*-*-*-*");
+            });
+            job.cancel();
+          });
+        }
         setcurrent(current - 1);
       }
     });
@@ -238,6 +287,8 @@ export default function Result() {
       formquiz.choice = quiz[0]?.choice;
     }
     console.log(formquiz);
+    let min, sec;
+
     if (type === "QuickQuestion") {
       reportService
         .teacherStartQuickQuestion(reportId, formquiz)
@@ -247,7 +298,50 @@ export default function Result() {
         });
     } else {
       reportService.teacherStartQuiz(reportId).then((res) => {
-        console.log(res);
+        let endAt;
+        //--setเวลา
+        if (method.timeQuiz) {
+          min = method.minQuiz;
+          sec = method.secQuiz;
+          let newcreatedAt = new Date();
+
+          newcreatedAt.setMinutes(
+            newcreatedAt.getMinutes() + min,
+            newcreatedAt.getSeconds() + sec
+          );
+          endAt = new Date(newcreatedAt);
+        } else if (method.timeEachQuestion) {
+          console.log("-----");
+          min = method.minEach;
+          sec = method.secEach;
+          let newcreatedAt = new Date();
+
+          newcreatedAt.setMinutes(
+            newcreatedAt.getMinutes() + min,
+            newcreatedAt.getSeconds() + sec
+          );
+          endAt = new Date(newcreatedAt);
+        }
+        //--setscheduleถ้ามี
+        if (endAt && method.timeQuiz) {
+          const job = schedule.scheduleJob(endAt, function () {
+            handleBtnFinish();
+            job.cancel();
+          });
+        } else if (endAt && method.timeEachQuestion) {
+          const formStep = {
+            oldStep: 1,
+            newStep: 1,
+          };
+          console.log("formStep", formStep);
+          const job = schedule.scheduleJob(endAt, function () {
+            reportService.teacherNextStepCBT(reportId, formStep).then((res) => {
+              console.log("-*-*-*-*");
+            });
+            job.cancel();
+          });
+        }
+
         setstart(true);
       });
     }

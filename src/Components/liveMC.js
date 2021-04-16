@@ -96,47 +96,14 @@ export default function LiveMC({
                   // value={answer}
                   onClick={() => handleSelectAnswer(item, index)}
                   className={clsx(classes.textField, {
-                    [classes.btnTrue]: item === answer,
-                    // [classes.btnTrue]: index === indexAnswer,
+                    // [classes.btnTrue]: item === answer,
+                    [classes.btnTrue]: index === indexAnswer,
                   })}
                 >
                   {item}
                 </Button>
               </Grid>
             </Grid>
-          );
-        })}
-      </>
-    );
-  };
-
-  const handleTypeCBT = () => {
-    return (
-      <>
-        {quiz.map((item, i) => {
-          {
-            console.log(item);
-          }
-          return (
-            // <Grid container item xs={12} justify="center">
-            //   <Typography>{charStep[i]}</Typography>
-            //   <Button
-            //     id="btnt"
-            //     variant="contained"
-            //     // name={}
-            //     value={answer}
-            //     // value={item}
-            //     onClick={() => handleSelectAnswer(item)}
-            //     // className={classes.textField}
-            //     className={clsx(classes.textField, {
-            //       [classes.btnTrue]: item === answer,
-            //     })}
-            //   >
-            //     {item}
-            //     {/* {"ก.5 คำ และ ข.5 คำก.5 คำ และ ข.5 คำ5 คำ และ ข.5 คำ"} */}
-            //   </Button>
-            // </Grid>
-            <Button />
           );
         })}
       </>

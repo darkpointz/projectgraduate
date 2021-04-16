@@ -10,6 +10,7 @@ import {
   FormControlLabel,
   Switch,
   FormGroup,
+  TextField,
 } from "@material-ui/core";
 import { teal } from "@material-ui/core/colors";
 import clsx from "clsx";
@@ -41,6 +42,9 @@ const useStyles = makeStyles({
     backgroundColor: "#6DC8BE",
     color: "white",
   },
+  textFieldTime: {
+    width: "90%",
+  },
 });
 
 const ChangeSwitch = withStyles({
@@ -67,16 +71,24 @@ export default function SelectMethodQuiz(props) {
     SA: false,
     SADA: false,
     SAAA: false,
-    // time: false,
+    timeQuiz: false,
+    timeEachQuestion: false,
+    minQuiz: 0,
+    minEach: 0,
+    secQuiz: 10,
+    secEach: 10,
   });
+  // const [minQuiz, setminQuiz] = useState(0);
+  // const [minEach, setminEach] = useState(0);
+  // const [secQuiz, setsecQuiz] = useState(10);
+  // const [secEach, setsecEach] = useState(10);
 
   useEffect(() => {
     setselect(selectMethodQuiz);
   }, []);
 
-
   const handleChange = (event) => {
-    const { name, checked } = event.target;
+    const { name, checked, value } = event.target;
     let newSelect = { ...select };
     switch (name) {
       case "SQ":
@@ -91,13 +103,40 @@ export default function SelectMethodQuiz(props) {
       case "SAAA":
         newSelect.SAAA = !newSelect.SAAA;
         break;
+      case "timeQuiz":
+        newSelect.timeQuiz = !newSelect.timeQuiz;
+        if (newSelect.timeQuiz === true) {
+          newSelect.timeEachQuestion = false;
+          newSelect.minEach = 0;
+          newSelect.secEach = 0;
+        }
+        break;
+      case "timeEachQuestion":
+        newSelect.timeEachQuestion = !newSelect.timeEachQuestion;
+        if (newSelect.timeEachQuestion === true) {
+          newSelect.timeQuiz = false;
+          newSelect.minQuiz = 0;
+          newSelect.secQuiz = 0;
+        }
+        break;
+      case "minQuiz":
+        newSelect.minQuiz = value;
+        break;
+      case "minEach":
+        newSelect.minEach = value;
+        break;
+      case "secQuiz":
+        newSelect.secQuiz = value;
+        break;
+      case "secEach":
+        newSelect.secEach = value;
+        break;
       default:
         break;
     }
-    // console.log(newSelect);
     setselect(newSelect);
-    // setselect({ ...select, [event.target.name]: event.target.checked });
-    setselectMethodQuiz(newSelect);
+    let option = true;
+    setselectMethodQuiz(newSelect, option);
   };
 
   const handleClickBtn = (txt) => {
@@ -105,13 +144,16 @@ export default function SelectMethodQuiz(props) {
 
     if (txt === "CBS") {
       newSelect.SADA = false;
+      newSelect.timeEachQuestion = false;
       newSelect.delivery = "CBS";
     } else if (txt === "CBT") {
       newSelect.SQ = false;
+      newSelect.timeQuiz = false;
       newSelect.delivery = "CBT";
     }
     setselect(newSelect);
-    setselectMethodQuiz(newSelect);
+    let option = false;
+    setselectMethodQuiz(newSelect, option);
   };
 
   return (
@@ -242,20 +284,163 @@ export default function SelectMethodQuiz(props) {
           </FormGroup>
         </Grid>
 
-        {/* เวลา */}
-        {/* <Grid item xs={12} container justify="center">
-          <FormControlLabel
-            control={
-              <ChangeSwitch
-                checked={select.time}
-                onChange={handleChange}
-                name="time"
-                color="primary"
-              />
-            }
-            label="Shuffle Questions"
-          />
-        </Grid> */}
+        {/* timeQuiz */}
+        <Grid
+          item
+          xs={12}
+          container
+          className={classes.gridSwitchRow}
+          alignItems="center"
+        >
+          <Grid item xs={6}>
+            <FormControlLabel
+              control={
+                <ChangeSwitch
+                  checked={select.timeQuiz}
+                  onChange={(e) => handleChange(e)}
+                  name="timeQuiz"
+                  color="primary"
+                  disabled={select.delivery === "CBT"}
+                />
+              }
+              label={
+                <Typography className={classes.typoSwitch}>
+                  Set time limit for quiz
+                </Typography>
+              }
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <TextField
+              className={classes.textFieldTime}
+              type="number"
+              variant="outlined"
+              size="small"
+              name="minQuiz"
+              value={select.minQuiz}
+              error={
+                select.minQuiz <= 360 && select.minQuiz >= 0 ? false : true
+              }
+              onChange={(e) => handleChange(e)}
+              InputProps={{
+                inputProps: {
+                  max: 360,
+                  min: 0,
+                },
+              }}
+              disabled={select.timeQuiz === false}
+            />
+          </Grid>
+          <Grid item xs={1}>
+            <Typography className={classes.typoSwitch}>min</Typography>
+          </Grid>
+          <Grid item xs={2}>
+            <TextField
+              className={classes.textFieldTime}
+              type="number"
+              variant="outlined"
+              size="small"
+              name="secQuiz"
+              value={select.secQuiz}
+              error={
+                (select.secQuiz <= 60 && select.secQuiz >= 10) ||
+                select.minQuiz >= 1
+                  ? false
+                  : true
+              }
+              onChange={(e) => handleChange(e)}
+              InputProps={{
+                inputProps: {
+                  max: 60,
+                  min: 10,
+                },
+              }}
+              disabled={select.timeQuiz === false}
+            />
+          </Grid>
+          <Grid item xs={1}>
+            <Typography className={classes.typoSwitch}>sec</Typography>
+          </Grid>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          container
+          className={classes.gridSwitchRow}
+          alignItems="center"
+        >
+          {/* timeEachQuestion */}
+          <Grid item xs={6}>
+            <FormControlLabel
+              control={
+                <ChangeSwitch
+                  checked={select.timeEachQuestion}
+                  onChange={handleChange}
+                  name="timeEachQuestion"
+                  color="primary"
+                  disabled={select.delivery === "CBS"}
+                />
+              }
+              label={
+                <Typography className={classes.typoSwitch}>
+                  Set time limit for each question
+                </Typography>
+              }
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <TextField
+              className={classes.textFieldTime}
+              type="number"
+              variant="outlined"
+              size="small"
+              name="minEach"
+              value={select.minEach}
+              error={
+                select.minEach <= 360 && select.minEach >= 0 ? false : true
+              }
+              onChange={(e) => handleChange(e)}
+              InputProps={{
+                inputProps: {
+                  max: 360,
+                  min: 0,
+                },
+              }}
+              disabled={select.timeEachQuestion === false}
+            />
+          </Grid>
+          <Grid item xs={1}>
+            <Typography className={classes.typoSwitch}>min</Typography>
+          </Grid>
+          <Grid item xs={2}>
+            <TextField
+              className={classes.textFieldTime}
+              type="number"
+              variant="outlined"
+              size="small"
+              name="secEach"
+              value={select.secEach}
+              error={
+                (select.secEach <= 60 && select.secEach >= 10) ||
+                select.minEach >= 1
+                  ? false
+                  : true
+              }
+              // helperText="Incorrect."
+              onChange={(e) => handleChange(e)}
+              InputProps={{
+                inputProps: {
+                  max: 60,
+                  min: 10,
+                },
+              }}
+              disabled={select.timeEachQuestion === false}
+            />
+          </Grid>
+          <Grid item xs={1}>
+            <Typography className={classes.typoSwitch}>sec</Typography>
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );

@@ -68,7 +68,12 @@ export default function DialogSelectSetting(props) {
     SA: false,
     SADA: false,
     SAAA: false,
-    // time: false,
+    timeQuiz: false,
+    timeEachQuestion: false,
+    minQuiz: 0,
+    minEach: 0,
+    secQuiz: 10,
+    secEach: 10,
   });
   let history = useHistory();
 
@@ -117,9 +122,11 @@ export default function DialogSelectSetting(props) {
     setselectQuiz(selectquiz);
   };
 
-  const handleSetMethodQuiz = (selectMethodQuiz) => {
+  const handleSetMethodQuiz = (selectMethodQuiz, option) => {
     console.log(selectMethodQuiz);
-    setselectMethodQuiztf(true);
+    if (!option) {
+      setselectMethodQuiztf(true);
+    }
     setselectMethodQuiz(selectMethodQuiz);
   };
 
