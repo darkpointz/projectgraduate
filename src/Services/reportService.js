@@ -139,9 +139,9 @@ function teacherStartQuickQuestion(reportId, formquiz) {
     });
 }
 
-function teacherStartQuiz(reportId) {
+function teacherStartQuiz(reportId, formTime) {
   return httpClient
-    .post(`/report/teacherStartQuiz/${reportId}`)
+    .post(`/report/teacherStartQuiz/${reportId}`, formTime)
     .then((res) => {
       return res.data;
     })

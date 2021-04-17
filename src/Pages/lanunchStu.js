@@ -6,6 +6,7 @@ import swal from "sweetalert";
 import clsx from "clsx";
 import Cookies from "universal-cookie";
 import { PanTool } from "@material-ui/icons";
+import schedule from "node-schedule";
 
 import {
   AppBar,
@@ -163,6 +164,7 @@ export default function LanunchStu() {
   const [waiting, setwaiting] = useState(true);
   const [SQ, setSQ] = useState(false);
 
+  const [endAt, setendAt] = useState();
   const [stepMax, setstepMax] = useState();
   const [raiseHand, setraiseHand] = useState();
   const [answer, setanswer] = useState();
@@ -190,45 +192,59 @@ export default function LanunchStu() {
             console.log("doc", doc.data());
 
             if (doc.data().start && doc.data().finish === false) {
-              setwaiting(false);
-              setroomName(doc.data().roomName);
-              let indexStu = doc.data().student.findIndex((e) => {
-                return e.stuid === params.stuid;
-              });
-              setraiseHand(doc.data().student[indexStu].raiseHand);
-              setquizzingStudent(doc.data().student[indexStu].quizzing);
-              console.log(doc.data().student[indexStu].quizzing);
-              //--quiz
-              doc.data().quiz.forEach((data) => {
-                if (data.active === true) {
-                  newQuiz.push({
-                    step: data.step,
-                    type: data.type,
-                    choice: data.choice,
-                    question: data.question,
-                  });
-                  let done = doc.data().student[indexStu].quizzing.find((e) => {
-                    return e.step === data.step;
-                  });
-                  settype(doc.data().type);
-                  if (done?.done) {
-                    setwaiting(true);
-                    setquiz([]);
-                  } else {
-                    setwaiting(false);
-                    setquiz([]);
+              let createdAt = new Date().toISOString();
+              setendAt(doc.data().method.endAt);
+              console.log("createdAt: ", createdAt);
+              console.log("endAt: ", endAt);
+              if (createdAt >= endAt && endAt) {
+                let reportId = params.reportId;
+                let formStudent = {
+                  stuid: localStorage.getItem("stuid"),
+                  reportId: reportId,
+                };
+                finishQuizCBSRemoveState(formStudent);
+              } else {
+                setwaiting(false);
+                setroomName(doc.data().roomName);
+                let indexStu = doc.data().student.findIndex((e) => {
+                  return e.stuid === params.stuid;
+                });
+                setraiseHand(doc.data().student[indexStu].raiseHand);
+                setquizzingStudent(doc.data().student[indexStu].quizzing);
+                console.log(doc.data().student[indexStu].quizzing);
+                //--quiz
+                doc.data().quiz.forEach((data) => {
+                  if (data.active === true) {
+                    newQuiz.push({
+                      step: data.step,
+                      type: data.type,
+                      choice: data.choice,
+                      question: data.question,
+                    });
+                    let done = doc
+                      .data()
+                      .student[indexStu].quizzing.find((e) => {
+                        return e.step === data.step;
+                      });
+                    settype(doc.data().type);
+                    if (done?.done) {
+                      setwaiting(true);
+                      setquiz([]);
+                    } else {
+                      setwaiting(false);
+                      setquiz([]);
+                      setquiz(newQuiz);
+                    }
+                    console.log("quiz: ", quiz);
+                  } else if (data.active === false) {
                     setquiz(newQuiz);
                   }
-                  console.log("quiz: ", quiz);
-                } else if (data.active === false) {
-                  setquiz(newQuiz);
+                });
+                console.log("newQuiz: ", newQuiz);
+                if (newQuiz.length === 0) {
+                  setwaiting(true);
                 }
-              });
-              console.log("newQuiz: ", newQuiz);
-              if (newQuiz.length === 0) {
-                setwaiting(true);
               }
-
               //finish
             } else if (doc.data().finish) {
               localStorage.removeItem("liveId");
@@ -250,64 +266,84 @@ export default function LanunchStu() {
             let quizStudent = [];
 
             if (doc.data().start && doc.data().finish === false) {
-              //--setโจทย์โดนไม่มีresult
-              doc.data().quiz.forEach((data) => {
-                let form = {
-                  question: data.question,
-                  type: data.type,
-                  step: data.step,
+              let createdAt = new Date().toISOString();
+              setendAt(doc.data().method.endAt);
+              console.log("createdAt: ", createdAt);
+              console.log("endAt: ", endAt);
+              if (createdAt >= endAt && endAt) {
+                let reportId = params.reportId;
+                let formStudent = {
+                  stuid: localStorage.getItem("stuid"),
+                  reportId: reportId,
                 };
-                if (data.type === "multiplechoice") {
-                  if (doc.data().method.SA === true) {
-                    form.choice = shuffleArray(data.choice);
-                  } else {
-                    form.choice = data.choice;
-                  }
-                }
-                quizStudent.push(form);
-              });
-              //--- Shuffle Questions
-              if (doc.data().method.SQ === true && !cookies.get("quiz")) {
-                // if (doc.data().method.SQ === true && quiz.length === 0) {
-                setSQ(doc.data().method.SQ);
-                let newquiz = shuffleArray(quizStudent);
-                setquiz(newquiz);
-                cookies.set("quiz", newquiz, { path: "/" });
-              } else if (doc.data().method.SQ === true && cookies.get("quiz")) {
-                setSQ(doc.data().method.SQ);
-                setquiz(cookies.get("quiz"));
-              } else if (doc.data().method.SQ === false && quiz.length === 0) {
-                setquiz(quizStudent);
-              }
-
-              let indexStudent = doc
-                .data()
-                .student.findIndex((e) => e.stuid === params.stuid);
-              setraiseHand(doc.data().student[indexStudent].raiseHand);
-
-              //--setคำตอบนร.
-              if (quizzingStudent.length === 0) {
-                let quizzingStudentFB = [];
-                doc.data().student[indexStudent].quizzing.forEach((data) => {
+                finishQuizCBSRemoveState(formStudent);
+              } else {
+                //--setโจทย์โดนไม่มีresult
+                doc.data().quiz.forEach((data) => {
                   let form = {
-                    answer: data.answer,
+                    question: data.question,
+                    type: data.type,
                     step: data.step,
-                    done: false,
                   };
-                  quizzingStudentFB.push(form);
+                  if (data.type === "multiplechoice") {
+                    if (doc.data().method.SA === true) {
+                      form.choice = shuffleArray(data.choice);
+                    } else {
+                      form.choice = data.choice;
+                    }
+                  }
+                  quizStudent.push(form);
                 });
-                setquizzingStudent(quizzingStudentFB);
+                // const job = schedule.scheduleJob(endAt, function () {
+                //   job.cancel();
+                // });
+
+                //--- Shuffle Questions
+                if (doc.data().method.SQ === true && !cookies.get("quiz")) {
+                  // if (doc.data().method.SQ === true && quiz.length === 0) {
+                  setSQ(doc.data().method.SQ);
+                  let newquiz = shuffleArray(quizStudent);
+                  setquiz(newquiz);
+                  cookies.set("quiz", newquiz, { path: "/" });
+                } else if (
+                  doc.data().method.SQ === true &&
+                  cookies.get("quiz")
+                ) {
+                  setSQ(doc.data().method.SQ);
+                  setquiz(cookies.get("quiz"));
+                } else if (
+                  doc.data().method.SQ === false &&
+                  quiz.length === 0
+                ) {
+                  setquiz(quizStudent);
+                }
+
+                let indexStudent = doc
+                  .data()
+                  .student.findIndex((e) => e.stuid === params.stuid);
+                setraiseHand(doc.data().student[indexStudent].raiseHand);
+
+                //--setคำตอบนร.
+                if (quizzingStudent.length === 0) {
+                  let quizzingStudentFB = [];
+                  doc.data().student[indexStudent].quizzing.forEach((data) => {
+                    let form = {
+                      answer: data.answer,
+                      step: data.step,
+                      done: false,
+                    };
+                    quizzingStudentFB.push(form);
+                  });
+                  setquizzingStudent(quizzingStudentFB);
+                }
+                settype(doc.data().type);
+                setroomName(doc.data().roomName);
+                setstepMax(doc.data().quiz.length);
+                setwaiting(false);
+                settypeDelivery("CBS");
               }
-              settype(doc.data().type);
-              setroomName(doc.data().roomName);
-              setstepMax(doc.data().quiz.length);
-              setwaiting(false);
-              settypeDelivery("CBS");
             } else if (doc.data().finish) {
-              localStorage.removeItem("liveId");
-              localStorage.removeItem("ReportId");
-              let room = localStorage.getItem("RoomStudent");
-              history.push(`/login/student/${room}`);
+              removeLocalStorage();
             }
           });
       } else if (res === "QuickQuestion") {
@@ -333,10 +369,7 @@ export default function LanunchStu() {
                 setwaiting(true);
               }
             } else if (doc.data().finish) {
-              localStorage.removeItem("liveId");
-              localStorage.removeItem("ReportId");
-              let room = localStorage.getItem("RoomStudent");
-              history.push(`/login/student/${room}`);
+              removeLocalStorage();
             }
           });
       }
@@ -348,6 +381,13 @@ export default function LanunchStu() {
       }
     };
   }, []);
+
+  const removeLocalStorage = () => {
+    localStorage.removeItem("liveId");
+    localStorage.removeItem("ReportId");
+    let room = localStorage.getItem("RoomStudent");
+    history.push(`/login/student/${room}`);
+  };
 
   const shuffleArray = (array) => {
     let newarray = array;
@@ -368,12 +408,9 @@ export default function LanunchStu() {
       return e.step == quiz[current]?.step;
     });
     return index;
-    // setindexQuizzing(index);
   };
 
   const handleShowQuiz = () => {
-    console.log(current);
-    // console.log(quiz[current]);
     return (
       <>
         {quiz[current]?.type === "multiplechoice" ? (
@@ -424,13 +461,16 @@ export default function LanunchStu() {
         if (answer) {
           submitAnswer();
         }
-        console.log(formStudent);
-        localStorage.removeItem("ReportId");
-        cookies.remove("quiz", { path: "/" });
-        reportService.finishQuizCBS(formStudent).then((res) => {
-          history.push("/login/student/finish");
-        });
+        finishQuizCBSRemoveState(formStudent);
       }
+    });
+  };
+
+  const finishQuizCBSRemoveState = (formStudent) => {
+    localStorage.removeItem("ReportId");
+    cookies.remove("quiz", { path: "/" });
+    reportService.finishQuizCBS(formStudent).then((res) => {
+      history.push("/login/student/finish");
     });
   };
 
@@ -507,12 +547,24 @@ export default function LanunchStu() {
       answer: answer,
     };
     if (type === "QUIZ") {
-      reportService
-        .answerByStudent(formStudent, params.reportId)
-        .then((res) => {
-          setanswer();
-          setoldCurrent();
-        });
+      let createdAt = new Date().toISOString();
+      console.log("createdAt: ", createdAt);
+      console.log("endAt: ", endAt);
+      if (createdAt < endAt || !endAt) {
+        reportService
+          .answerByStudent(formStudent, params.reportId)
+          .then((res) => {
+            setanswer();
+            setoldCurrent();
+          });
+      } else if (createdAt >= endAt && endAt) {
+        let reportId = params.reportId;
+        let formStudent = {
+          stuid: localStorage.getItem("stuid"),
+          reportId: reportId,
+        };
+        finishQuizCBSRemoveState(formStudent);
+      }
     } else if (type === "QuickQuestion") {
       console.log("typeDelivery: ", typeDelivery);
       if (typeDelivery === "QQMC") {

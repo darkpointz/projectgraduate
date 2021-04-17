@@ -120,16 +120,16 @@ export default function SelectMethodQuiz(props) {
         }
         break;
       case "minQuiz":
-        newSelect.minQuiz = value;
+        newSelect.minQuiz = parseInt(value);
         break;
       case "minEach":
-        newSelect.minEach = value;
+        newSelect.minEach = parseInt(value);
         break;
       case "secQuiz":
-        newSelect.secQuiz = value;
+        newSelect.secQuiz = parseInt(value);
         break;
       case "secEach":
-        newSelect.secEach = value;
+        newSelect.secEach = parseInt(value);
         break;
       default:
         break;
