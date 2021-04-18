@@ -120,20 +120,26 @@ export default function Quiz(props) {
     // setbtnCreate(!btnCreate);
   };
 
-  const onsumit = (quizname, quiz) => {
-    // clickCreate();
-    setbtnCreate(!btnCreate);
-    // firebase.firestore().collection("quiz").add({
-    //   quizname: quizname,
-    //   quiz: quiz,
+  const handleChangeHeaderxlsx = (data) => {
+    let newData = [];
+    console.log("data: ", data);
+    // data.map((item) => {
+    //   let form = {};
+    //   form.stuid = item.studentid;
+    //   form.fname = item.firstname;
+    //   form.lname = item.lastname;
+    //   newData.push(form);
     // });
+    return newData;
   };
 
-  const handleClose = (value) => {
+  const handleClose = (value, data) => {
     setOpen(false);
     if (value === "createNew") {
       // setbtnCreate(true);
       history.push("/createquiz/0");
+    } else if (value === "import") {
+      let newData = handleChangeHeaderxlsx(data);
     }
   };
 
@@ -198,6 +204,7 @@ export default function Quiz(props) {
         open={open}
         onClose={handleClose}
         name="create quiz"
+        type="quiz"
       />
       {/* </Grid> */}
     </div>

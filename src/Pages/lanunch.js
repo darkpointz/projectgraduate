@@ -12,7 +12,7 @@ import {
   Grid,
   Divider,
 } from "@material-ui/core";
-import { Person, People } from "@material-ui/icons";
+import { Person, People, DoubleArrowRounded } from "@material-ui/icons";
 import DialogSelectSetting from "../Components/dialogSelectSetting";
 import swal from "sweetalert";
 import DialogSelectRoomQQ from "../Components/dialogSelectRoomQQ";
@@ -204,26 +204,13 @@ export default function Lanunch() {
   return (
     <div className={classes.root}>
       <Grid container spacing={1} justify="center" alignItems="center">
-        <Grid item xs={12} container>
-          <Grid item xs={6} container justify="center">
-            <IconButton
-              className={classes.iconButton}
-              onClick={handleBtnLanunch}
-            >
-              <Paper className={classes.paperClassic}>
-                <Person className={classes.icon} />
-                <Typography className={classes.typolabel}>Classic</Typography>
-              </Paper>
-            </IconButton>
-          </Grid>
-          <Grid item xs={6} container justify="center">
-            <IconButton className={classes.iconButton}>
-              <Paper className={classes.paperClassic}>
-                <People className={classes.icon} />
-                <Typography className={classes.typolabel}>Group</Typography>
-              </Paper>
-            </IconButton>
-          </Grid>
+        <Grid item xs={12} container justify="center">
+          <IconButton className={classes.iconButton} onClick={handleBtnLanunch}>
+            <Paper className={classes.paperClassic}>
+              <DoubleArrowRounded className={classes.icon} />
+              <Typography className={classes.typolabel}>Start</Typography>
+            </Paper>
+          </IconButton>
         </Grid>
 
         <Grid item xs={12}>

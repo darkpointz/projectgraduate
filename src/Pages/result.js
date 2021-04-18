@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import schedule from "node-schedule";
 import Cookies from "universal-cookie";
+import swal from "sweetalert";
 
 import {
   makeStyles,
@@ -150,8 +151,6 @@ export default function Result() {
             console.log("createdAt: ", createdAt);
             console.log("endAt: ", endAt);
             if (createdAt >= endAt && endAt) {
-              // if (createdAt >= method?.endAt && method?.endAt) {
-              console.log("/*/*/*/*");
               cookies.remove("endAt", { path: "/" });
               handleBtnFinish();
             }
@@ -433,13 +432,42 @@ export default function Result() {
   const handleBtnFinish = () => {
     setfinish(true);
     console.log("reportId1 ", reportId);
-    reportService
-      .teacherFinishQuiz(localStorage.getItem("liveId"))
-      .then((res) => {
-        console.log("reportId ", reportId);
-        localStorage.removeItem("liveId");
-        history.push("/launch");
+    if (type === "QuickQuestion") {
+      swal({
+        title: "Please Confirm",
+        text: "You want to save this quick question?",
+        icon: "warning",
+        buttons: ["Don't Save", "Save"],
+      }).then((willFinish) => {
+        if (willFinish) {
+          reportService
+            .teacherFinishQuizAndSaveQuickQuestion(
+              localStorage.getItem("liveId"),
+              localStorage.getItem("userId")
+            )
+            .then((res) => {
+              clearLocalStorageFinish();
+            });
+        } else if (!willFinish) {
+          reportService
+            .teacherFinishQuiz(localStorage.getItem("liveId"))
+            .then((res) => {
+              clearLocalStorageFinish();
+            });
+        }
       });
+    } else if (type === "QUIZ") {
+      reportService
+        .teacherFinishQuiz(localStorage.getItem("liveId"))
+        .then((res) => {
+          clearLocalStorageFinish();
+        });
+    }
+  };
+
+  const clearLocalStorageFinish = () => {
+    localStorage.removeItem("liveId");
+    history.push("/launch");
   };
 
   const saveQuestionQQ = (newQuestion) => {

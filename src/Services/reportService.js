@@ -13,6 +13,7 @@ export const reportService = {
   teacherNextStepCBT,
   teacherStartQuiz,
   teacherFinishQuiz,
+  teacherFinishQuizAndSaveQuickQuestion,
   getAllReport,
   getReportByReportId,
   deleteReportByReportId,
@@ -153,6 +154,17 @@ function teacherStartQuiz(reportId, formTime) {
 function teacherFinishQuiz(reportId) {
   return httpClient
     .post(`/report/teacherFinishQuiz/${reportId}`)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.log("err, ", err);
+    });
+}
+
+function teacherFinishQuizAndSaveQuickQuestion(reportId, userId) {
+  return httpClient
+    .post(`/report/teacherFinishQuizAndSaveQuickQuestion/${reportId}/${userId}`)
     .then((res) => {
       return res.data;
     })

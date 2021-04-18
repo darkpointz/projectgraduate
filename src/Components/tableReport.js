@@ -90,8 +90,11 @@ export default function TableReport() {
   }, []);
 
   const handleDate = (time) => {
-    let date = time.slice(0, 10);
-    return date;
+    let date = new Date(time._seconds * 1000);
+    console.log(date);
+    let showdate = date?.slice(5, 10);
+    console.log(showdate);
+    // return date;
   };
 
   const handleClickDelete = (item, i) => {
@@ -172,7 +175,10 @@ export default function TableReport() {
                       align="center"
                       className={classes.TableCellContent}
                     >
+                      {/* {item.createdAt} */}
                       {handleDate(item.createdAt)}
+                      {/* {item.createdAt.toLocaleString("th-TH")} */}
+                      {/* {new Date(item.createdAt)} */}
                     </TableCell>
                     <TableCell
                       align="center"

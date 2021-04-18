@@ -22,6 +22,7 @@ import {
 } from "@material-ui/icons";
 import ClassStudent from "./classStudent";
 import DialogDelete from "./dialogDelete";
+import DialogChangeclassName from "./dialogChangeclassName";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -73,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 24,
   },
   iconTyperoom: {
-    marginTop: "2px",
+    marginTop: "5px",
     color: "#494944",
   },
 }));
@@ -81,6 +82,7 @@ export default function CardClass(props) {
   const classes = useStyles();
   const { room, index, Deleteroom } = props;
   const [opendialogDel, setopendialogDel] = useState(false);
+  const [openEditName, setopenEditName] = useState(false);
 
   const handleDelete = () => {
     swal({
@@ -105,6 +107,10 @@ export default function CardClass(props) {
     setopendialogDel(false);
   };
 
+  const canceldialogEdit = () => {
+    setopenEditName(false);
+  };
+
   const checkAccountBox = (type) => {
     return (
       <div>
@@ -119,11 +125,20 @@ export default function CardClass(props) {
     );
   };
 
+  const handleConfirmEdit = (newName) => {
+    setopenEditName(false);
+    console.log(newName);
+  };
+
+  const handleEditName = () => {
+    setopenEditName(true);
+  };
+
   return (
     <>
       <Card className={classes.root}>
         <CardContent className={classes.cardContent}>
-          <Box display="flex">
+          <Box display="flex" alignItems="center">
             <Typography
               className={classes.title}
               color="textSecondary"
@@ -131,7 +146,9 @@ export default function CardClass(props) {
             >
               {room.roomName}
             </Typography>
-            <EditTwoTone className={classes.iconEdit} />
+            <IconButton aria-label="iconEdit" onClick={handleEditName}>
+              <EditTwoTone className={classes.iconEdit} />
+            </IconButton>
           </Box>
 
           <Paper className={classes.paperIcon}>
@@ -160,6 +177,12 @@ export default function CardClass(props) {
         confirm={handleDelete}
         onClose={canceldialog}
       ></DialogDelete>
+      <DialogChangeclassName
+        open={openEditName}
+        confirm={handleConfirmEdit}
+        onClose={canceldialogEdit}
+        name={room.roomName}
+      />
     </>
   );
 }

@@ -451,7 +451,7 @@ export default function LanunchStu() {
       reportId: reportId,
     };
     swal({
-      title: "Please Confirm?",
+      title: "Please Confirm",
       text: "Are you sure you want to finish the quiz?",
       icon: "warning",
       buttons: true,

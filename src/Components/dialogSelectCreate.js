@@ -111,6 +111,25 @@ export default function DialogSelectCreateQuiz(props) {
               parserOptions={papaparseOptions}
             />
           </Button>
+        ) : type === "quiz" ? (
+          <Button
+            className={classes.btnImport}
+            variant="contained"
+            size="small"
+          >
+            <CSVReader
+              inputStyle={{
+                opacity: 0,
+                width: "170px",
+                marginLeft: "-162px",
+                textalign: "center",
+              }}
+              // inputName={{}}
+              label="Import with CSV File"
+              onFileLoaded={handleForce}
+              parserOptions={papaparseOptions}
+            />
+          </Button>
         ) : null}
       </Grid>
       {type === "classStudent" ? (
@@ -118,6 +137,15 @@ export default function DialogSelectCreateQuiz(props) {
           <Button
             className={classes.btnTemplate}
             href="https://firebasestorage.googleapis.com/v0/b/project4thquiz.appspot.com/o/templateStudent.csv?alt=media&token=fc9bd36a-19e6-4bf1-9fcc-71de888ad45f"
+          >
+            Download Template CSV
+          </Button>
+        </Grid>
+      ) : type === "quiz" ? (
+        <Grid item xs={12} container justify="flex-end">
+          <Button
+            className={classes.btnTemplate}
+            href="https://firebasestorage.googleapis.com/v0/b/project4thquiz.appspot.com/o/TemplateQuiz.xlsx?alt=media&token=104cfe94-3ded-47bb-a5e6-68021013c126"
           >
             Download Template CSV
           </Button>
