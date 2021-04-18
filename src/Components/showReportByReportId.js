@@ -58,17 +58,15 @@ export default function ShowReportByReportId() {
       setscore(res[0].score);
       setstudent(res[0].student);
       setquizName(res[0].quizName);
-      setcreatedAt(res[0].createdAt);
+      setcreatedAt(res[0].createdAt._seconds);
 
       console.log(res[0]);
       console.log(res[0]);
     });
   }, []);
 
-  const handleDate = (createdAt) => {
-    let date = createdAt?.slice(0, 10);
-    let time = createdAt?.slice(11, 16);
-    date = `${date} ${time}`;
+  const handleDate = (time) => {
+    let date = new Date(time * 1000).toLocaleString("th-TH");
     return date;
   };
 

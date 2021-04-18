@@ -90,11 +90,9 @@ export default function TableReport() {
   }, []);
 
   const handleDate = (time) => {
-    let date = new Date(time._seconds * 1000);
-    console.log(date);
-    let showdate = date?.slice(5, 10);
-    console.log(showdate);
-    // return date;
+    let date = new Date(time._seconds * 1000).toLocaleString("th-TH");
+    // let showdate = date.toLocaleString("th-TH");
+    return date;
   };
 
   const handleClickDelete = (item, i) => {
