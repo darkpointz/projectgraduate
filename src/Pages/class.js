@@ -101,18 +101,25 @@ export default function Class() {
       roomName: newroom.roomName,
       roomPublic: newroom.roomPublic,
     };
-
-    // axios.post("/room/insertRoom", formroom).then((response) => {
-    //   newroom.roomId = response.data.message;
-    //   console.log(response.data.message);
-    //   setroom([...room, newroom]);
-    // });
-    classService.insertRoom(formroom, userId).then((res) => {
-      newroom.roomId = res;
-      setroom([...room, newroom]);
-      swal("Success!", "Create room success!", "success");
-    });
-    setOpenCreateClass(false);
+    classService
+      .insertRoom(formroom, userId)
+      .then((res) => {
+        setOpenCreateClass(false);
+        if (res.data.message === "success") {
+          newroom.roomId = res;
+          setroom([...room, newroom]);
+          swal("Success!", "Create room success!", "success");
+        }
+      })
+      .catch((err) => {
+        if (err.response.status == 403) {
+          swal(
+            "Error!",
+            `The room name ${newroom.roomName} already exists.!`,
+            "error"
+          );
+        }
+      });
   };
 
   const handleDeleteroom = (roomId, index) => {

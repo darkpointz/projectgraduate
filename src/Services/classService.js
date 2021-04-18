@@ -23,15 +23,9 @@ function getAllRoom(uId) {
 }
 
 function insertRoom(formroom, userId) {
-  return httpClient
-    .post(`/room/insertRoom/${userId}`, formroom)
-    .then((res) => {
-      console.log("message: ", res.data.message);
-      return res.data.message;
-    })
-    .catch((err) => {
-      console.log(err.message);
-    });
+  return httpClient.post(`/room/insertRoom/${userId}`, formroom).then((res) => {
+    return res;
+  });
 }
 
 function insertStudentByRoomId(formStudent, roomId) {
@@ -84,9 +78,4 @@ function changeRoomName(roomId, formName) {
     .then((res) => {
       return res;
     });
-  // .catch((err) => {
-  //   if (err.response) {
-  //     return err.response.status;
-  //   }
-  // });
 }
