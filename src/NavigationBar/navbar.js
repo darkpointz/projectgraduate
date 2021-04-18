@@ -27,6 +27,7 @@ import { Menu, ExitToApp, ArrowDropDown } from "@material-ui/icons";
 import { formatMs, makeStyles, useTheme } from "@material-ui/core/styles";
 import { withRouter, Route, Switch } from "react-router-dom";
 import swal from "sweetalert";
+import firebase from "firebase/app";
 
 import Lanunch from "../Pages/lanunch";
 import Report from "../Pages/reports";
@@ -114,14 +115,19 @@ function Navbar(props) {
 
   useEffect(() => {
     const uId = localStorage.getItem("userId");
-    classService.getAllRoom(uId).then((res) => {
-      setroom(res);
-      const selectRoom = localStorage.getItem("Room");
-      const RoomName = localStorage.getItem("RoomName");
-      console.log(RoomName);
-      setselectRoom(selectRoom);
-      setroomName(RoomName);
-    });
+    let unsubscribe = firebase
+      .firestore()
+      .collection("Room")
+      .where("userId", "==", uId)
+      .onSnapshot((querySnapshot) => {
+        var roomArray = [];
+        querySnapshot.forEach((doc) => {
+          roomArray.push(doc.data());
+        });
+        setroom(roomArray);
+        const RoomName = localStorage.getItem("RoomName");
+        setroomName(RoomName);
+      });
   }, []);
 
   const handleDrawerToggle = () => {
