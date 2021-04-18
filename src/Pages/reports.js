@@ -14,6 +14,8 @@ import { quizService } from "../Services/quizService";
 import TableReport from "../Components/tableReport";
 import { firebaseConfig } from "../Auth/firebase";
 import { Link } from "react-router-dom";
+import { reportService } from "../Services/reportService";
+import swal from "sweetalert";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -76,11 +78,14 @@ const useStyles = makeStyles((theme) => ({
 export default function Reports() {
   const classes = useStyles();
 
+  const test = () => {};
+
   return (
     <div className={classes.root}>
       <Grid container spacing={1} direction="column">
         <Grid container item xs={12}>
           <Paper className={classes.paper}>
+            <Button onClick={test}>123</Button>
             <Typography className={classes.typotitlePaper}>Report</Typography>
             <Grid container item xs={12}>
               <TableReport />

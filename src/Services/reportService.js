@@ -21,6 +21,7 @@ export const reportService = {
   finishQuizCBS,
   submitAnswerQQ,
   raiseHandStudent,
+  scoreStudent,
 };
 
 function teacherNextStepCBT(reportId, formStep) {
@@ -111,7 +112,7 @@ function answerByStudent(formStudent, reportId) {
   return httpClient
     .post(`/report/answerByStudent/${reportId}`, formStudent)
     .then((res) => {
-      return res.data;
+      return res;
     })
     .catch((err) => {
       console.log("err, ", err);
@@ -221,6 +222,17 @@ function finishQuizCBS(formStudent) {
 function raiseHandStudent(formStudent) {
   return httpClient
     .post(`/report/raiseHandStudent`, formStudent)
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      console.log("err, ", err);
+    });
+}
+
+function scoreStudent(reportId, stuid) {
+  return httpClient
+    .get(`/report/scoreStudent/${reportId}/${stuid}`)
     .then((res) => {
       return res;
     })

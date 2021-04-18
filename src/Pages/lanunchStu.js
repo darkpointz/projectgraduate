@@ -163,6 +163,7 @@ export default function LanunchStu() {
   const [quizzingStudent, setquizzingStudent] = useState([]);
   const [waiting, setwaiting] = useState(true);
   const [SQ, setSQ] = useState(false);
+  const [method, setmethod] = useState();
 
   const [endAt, setendAt] = useState();
   const [stepMax, setstepMax] = useState();
@@ -194,8 +195,6 @@ export default function LanunchStu() {
             if (doc.data().start && doc.data().finish === false) {
               let createdAt = new Date().toISOString();
               setendAt(doc.data().method.endAt);
-              console.log("createdAt: ", createdAt);
-              console.log("endAt: ", endAt);
               if (createdAt >= endAt && endAt) {
                 let reportId = params.reportId;
                 let formStudent = {
@@ -211,16 +210,22 @@ export default function LanunchStu() {
                 });
                 setraiseHand(doc.data().student[indexStu].raiseHand);
                 setquizzingStudent(doc.data().student[indexStu].quizzing);
-                console.log(doc.data().student[indexStu].quizzing);
+                setmethod(doc.data().method);
                 //--quiz
                 doc.data().quiz.forEach((data) => {
                   if (data.active === true) {
                     newQuiz.push({
                       step: data.step,
                       type: data.type,
-                      choice: data.choice,
                       question: data.question,
                     });
+                    if (data.type === "multiplechoice") {
+                      if (doc.data().method.SA === true) {
+                        newQuiz[0].choice = shuffleArray(data.choice);
+                      } else {
+                        newQuiz[0].choice = data.choice;
+                      }
+                    }
                     let done = doc
                       .data()
                       .student[indexStu].quizzing.find((e) => {
@@ -247,12 +252,20 @@ export default function LanunchStu() {
               }
               //finish
             } else if (doc.data().finish) {
-              localStorage.removeItem("liveId");
-              localStorage.removeItem("ReportId");
-              let room = localStorage.getItem("RoomStudent");
-              console.log("roomName, ", room);
-              history.push(`/login/student/${room}`);
-              // history.push("/login/student");
+              if (doc.data().method.SAAA) {
+                reportService
+                  .scoreStudent(params.reportId, params.stuid)
+                  .then((res) => {
+                    swal(
+                      "Finish!",
+                      `Score: ${res.data.score}/${doc.data().quiz.length} !`,
+                      "success"
+                    );
+                  });
+                removeLocalStorage();
+              } else {
+                removeLocalStorage();
+              }
             }
           });
         settypeDelivery("CBT");
@@ -268,8 +281,7 @@ export default function LanunchStu() {
             if (doc.data().start && doc.data().finish === false) {
               let createdAt = new Date().toISOString();
               setendAt(doc.data().method.endAt);
-              console.log("createdAt: ", createdAt);
-              console.log("endAt: ", endAt);
+              console.log("doc.data().: ", doc.data());
               if (createdAt >= endAt && endAt) {
                 let reportId = params.reportId;
                 let formStudent = {
@@ -297,7 +309,7 @@ export default function LanunchStu() {
                 // const job = schedule.scheduleJob(endAt, function () {
                 //   job.cancel();
                 // });
-
+                setmethod(doc.data().method);
                 //--- Shuffle Questions
                 if (doc.data().method.SQ === true && !cookies.get("quiz")) {
                   // if (doc.data().method.SQ === true && quiz.length === 0) {
@@ -322,7 +334,7 @@ export default function LanunchStu() {
                   .data()
                   .student.findIndex((e) => e.stuid === params.stuid);
                 setraiseHand(doc.data().student[indexStudent].raiseHand);
-
+                // setscore(doc.data().student[indexStudent].countScore);
                 //--setคำตอบนร.
                 if (quizzingStudent.length === 0) {
                   let quizzingStudentFB = [];
@@ -336,6 +348,8 @@ export default function LanunchStu() {
                   });
                   setquizzingStudent(quizzingStudentFB);
                 }
+                //--setscore
+
                 settype(doc.data().type);
                 setroomName(doc.data().roomName);
                 setstepMax(doc.data().quiz.length);
@@ -446,8 +460,9 @@ export default function LanunchStu() {
 
   const handlebtnFinishQuizCBS = () => {
     let reportId = params.reportId;
+    let stuid = params.stuid;
     let formStudent = {
-      stuid: localStorage.getItem("stuid"),
+      stuid: stuid,
       reportId: reportId,
     };
     swal({
@@ -460,6 +475,11 @@ export default function LanunchStu() {
       if (willFinish) {
         if (answer) {
           submitAnswer();
+        }
+        if (method.SAAA) {
+          reportService.scoreStudent(reportId, stuid).then((res) => {
+            swal("Finish!", `Score: ${res.data.score}/${stepMax} !`, "success");
+          });
         }
         finishQuizCBSRemoveState(formStudent);
       }
@@ -554,6 +574,19 @@ export default function LanunchStu() {
         reportService
           .answerByStudent(formStudent, params.reportId)
           .then((res) => {
+            if (method.SADA) {
+              if (res.data.result === true) {
+                swal({
+                  title: "Correct !",
+                  icon: "success",
+                });
+              } else if (res.data.result === false) {
+                swal({
+                  title: "Incorrect !",
+                  icon: "error",
+                });
+              }
+            }
             setanswer();
             setoldCurrent();
           });

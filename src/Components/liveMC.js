@@ -60,6 +60,9 @@ export default function LiveMC({
 
   useEffect(() => {
     setanswer(quizzingStudent?.answer);
+    setindexAnswer(
+      quiz?.choice.findIndex((e) => e === quizzingStudent?.answer)
+    );
   });
 
   const handleSelectAnswer = (item, index) => {

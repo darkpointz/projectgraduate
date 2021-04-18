@@ -114,7 +114,7 @@ export default function TableQuiz({ path }) {
   };
 
   const handleDate = (time) => {
-    let date = time.slice(0, 10);
+    let date = new Date(time._seconds * 1000).toLocaleString("th-TH");
     return date;
   };
 

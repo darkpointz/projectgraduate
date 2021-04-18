@@ -59,7 +59,6 @@ export default function DialogSelectSetting(props) {
   const classes = useStyles();
   const { open, onClose } = props;
   const [activeStep, setActiveStep] = useState(0);
-  const [selectClass, setselectClass] = useState();
   const [selectQuiz, setselectQuiz] = useState();
   const [selectMethodQuiztf, setselectMethodQuiztf] = useState(false);
   const [selectMethodQuiz, setselectMethodQuiz] = useState({
@@ -80,9 +79,23 @@ export default function DialogSelectSetting(props) {
   const steps = ["Select Quiz", "Setting and Choose Delivery Method"];
 
   const handleCloseDialog = () => {
-    setselectClass();
-    setselectQuiz();
     onClose();
+    setActiveStep(0);
+    setselectQuiz();
+    setselectMethodQuiztf(false);
+    setselectMethodQuiz({
+      delivery: "",
+      SQ: false,
+      SA: false,
+      SADA: false,
+      SAAA: false,
+      timeQuiz: false,
+      timeEachQuestion: false,
+      minQuiz: 0,
+      minEach: 0,
+      secQuiz: 10,
+      secEach: 10,
+    });
   };
 
   const handleNext = () => {
