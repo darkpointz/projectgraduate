@@ -23,6 +23,7 @@ import {
 import ClassStudent from "./classStudent";
 import DialogDelete from "./dialogDelete";
 import DialogChangeclassName from "./dialogChangeclassName";
+import { classService } from "../Services/classService";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -80,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 export default function CardClass(props) {
   const classes = useStyles();
-  const { room, index, Deleteroom } = props;
+  const { room, index, Deleteroom, changeRoomName } = props;
   const [opendialogDel, setopendialogDel] = useState(false);
   const [openEditName, setopenEditName] = useState(false);
 
@@ -126,8 +127,24 @@ export default function CardClass(props) {
   };
 
   const handleConfirmEdit = (newName) => {
-    setopenEditName(false);
-    console.log(newName);
+    const formName = {
+      roomName: newName,
+    };
+    classService
+      .changeRoomName(room.roomId, formName)
+      .then((res) => {
+        setopenEditName(false);
+        if (res.data.message === "success") {
+          swal("Success!", "Change room name success!", "success");
+          changeRoomName(index, newName);
+          console.log("res : ", res.data);
+        }
+      })
+      .catch((err) => {
+        if (err.response.status == 403) {
+          swal("Error!", `The room name ${newName} already exists.!`, "error");
+        }
+      });
   };
 
   const handleEditName = () => {

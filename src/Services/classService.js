@@ -8,6 +8,7 @@ export const classService = {
   getRoomById,
   insertStudentByRoomId,
   deleteStudentByRoomId,
+  changeRoomName,
 };
 
 function getAllRoom(uId) {
@@ -75,4 +76,17 @@ function getRoomById(roomId) {
     .catch((err) => {
       console.log(err.message);
     });
+}
+
+function changeRoomName(roomId, formName) {
+  return httpClient
+    .put(`/room/changeRoomName/${roomId}`, formName)
+    .then((res) => {
+      return res;
+    });
+  // .catch((err) => {
+  //   if (err.response) {
+  //     return err.response.status;
+  //   }
+  // });
 }

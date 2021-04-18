@@ -123,6 +123,13 @@ export default function Class() {
     });
   };
 
+  const handleChangeRoomName = (index, newroomName) => {
+    let newRoom = [...room];
+    newRoom[index].roomName = newroomName;
+    setroom(newRoom);
+    console.log(newRoom);
+  };
+
   return (
     <div className={classes.root}>
       <Grid container spacing={3} direction="column">
@@ -152,6 +159,7 @@ export default function Class() {
                 room={room}
                 index={index}
                 Deleteroom={handleDeleteroom}
+                changeRoomName={handleChangeRoomName}
               />
             );
           })}

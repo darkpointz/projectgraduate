@@ -91,7 +91,6 @@ export default function TableReport() {
 
   const handleDate = (time) => {
     let date = new Date(time._seconds * 1000).toLocaleString("th-TH");
-    // let showdate = date.toLocaleString("th-TH");
     return date;
   };
 
