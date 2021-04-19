@@ -122,13 +122,12 @@ export default function Result() {
           .collection("Report")
           .doc(localStorage.getItem("liveId"))
           .onSnapshot((doc) => {
-            console.log(doc.data());
-
             let createdAt = new Date();
+            console.log("createdAt: ", createdAt);
             // let endAt = cookies.get("endAt");
             let endAt = new Date(doc.data().method.endAt);
-            console.log("createdAt: ", createdAt);
             console.log("endAt: ", endAt);
+            console.log("e------ ");
             let sum = (endAt - createdAt) / 1000;
             setcountTime(parseInt(sum));
             if (sum <= 0 && sum) {
@@ -245,16 +244,17 @@ export default function Result() {
       min = method.minEach;
       sec = method.secEach;
       let newcreatedAt = new Date();
+      console.log("newcreatedAt.endAtL::: ", newcreatedAt);
       newcreatedAt.setMinutes(
         newcreatedAt.getMinutes() + min,
         newcreatedAt.getSeconds() + sec
       );
       endAt = new Date(newcreatedAt);
       formStep.endAt = endAt;
+      console.log("formStep.endAtL::: ", endAt);
     }
     if (endAt) {
       // formStep.oldStep = newStep;
-      console.log("newformStep ", formStep);
       reportService.teacherNextStepCBT(reportId, formStep).then((res) => {
         const job = schedule.scheduleJob(endAt, function () {
           formStep.oldStep = newStep;
