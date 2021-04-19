@@ -51,7 +51,7 @@ export default function LiveMC({
   saveAnswerCBS,
   quizzingStudent,
   indexQuizzing,
-  typeDelivery,
+  type,
 }) {
   const classes = useStyles();
   const [answer, setanswer] = useState("");
@@ -60,9 +60,12 @@ export default function LiveMC({
 
   useEffect(() => {
     setanswer(quizzingStudent?.answer);
-    setindexAnswer(
-      quiz?.choice.findIndex((e) => e === quizzingStudent?.answer)
-    );
+    console.log("type: ", type);
+    if (type === "CBS") {
+      setindexAnswer(
+        quiz?.choice.findIndex((e) => e === quizzingStudent?.answer)
+      );
+    }
   });
 
   const handleSelectAnswer = (item, index) => {

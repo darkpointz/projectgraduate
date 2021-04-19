@@ -27,6 +27,7 @@ import QuickTF from "../Components/quickTF";
 import QuickMC from "../Components/quickMC";
 import QuickSA from "../Components/quickSA";
 import DialogShowStudent from "../Components/dialogShowStudent";
+import CountDownTime from "../Components/countDownTime";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -87,6 +88,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Result() {
   const classes = useStyles();
   const cookies = new Cookies();
+  const [countTime, setcountTime] = useState();
   const [reportId, setreportId] = useState();
   const [typeDelivery, settypeDelivery] = useState();
   const [type, settype] = useState();
@@ -113,7 +115,7 @@ export default function Result() {
     reportService.resultTeacher(localStorage.getItem("liveId")).then((res) => {
       setreportId(localStorage.getItem("liveId"));
       settypeDelivery(res);
-      console.log(res);
+
       if (res) {
         unsubscribe = firebase
           .firestore()
@@ -121,6 +123,18 @@ export default function Result() {
           .doc(localStorage.getItem("liveId"))
           .onSnapshot((doc) => {
             console.log(doc.data());
+
+            let createdAt = new Date();
+            // let endAt = cookies.get("endAt");
+            let endAt = new Date(doc.data().method.endAt);
+            console.log("createdAt: ", createdAt);
+            console.log("endAt: ", endAt);
+            let sum = (endAt - createdAt) / 1000;
+            setcountTime(parseInt(sum));
+            if (sum <= 0 && sum) {
+              // if (createdAt >= endAt && endAt) {
+              handleBtnFinish();
+            }
             //--setข้อปัจจุบัน
             doc.data().quiz.find((e) => {
               if (e.active === true) {
@@ -146,14 +160,6 @@ export default function Result() {
             settype(doc.data().type);
             //--
             setfinish(false);
-            let createdAt = new Date().toISOString();
-            let endAt = cookies.get("endAt");
-            console.log("createdAt: ", createdAt);
-            console.log("endAt: ", endAt);
-            if (createdAt >= endAt && endAt) {
-              cookies.remove("endAt", { path: "/" });
-              handleBtnFinish();
-            }
           });
       }
     });
@@ -232,62 +238,108 @@ export default function Result() {
       oldStep: current + 1,
       newStep: newStep,
     };
-    console.log("formStep ", formStep);
+    console.log("oldformStep ", formStep);
+    console.log("----------------......");
     let endAt, min, sec;
-    reportService.teacherNextStepCBT(reportId, formStep).then((res) => {
-      if (newStep > formStep.oldStep) {
-        if (method.timeEachQuestion) {
-          min = method.minEach;
-          sec = method.secEach;
-          let newcreatedAt = new Date();
-          console.log("newcreatedAt: ", newcreatedAt);
-          newcreatedAt.setMinutes(
-            newcreatedAt.getMinutes() + min,
-            newcreatedAt.getSeconds() + sec
-          );
-          endAt = new Date(newcreatedAt);
-          formStep.endAt = endAt;
-        }
-        console.log("newcreatedAt: ", endAt);
-        if (endAt) {
+    if (method.timeEachQuestion) {
+      min = method.minEach;
+      sec = method.secEach;
+      let newcreatedAt = new Date();
+      newcreatedAt.setMinutes(
+        newcreatedAt.getMinutes() + min,
+        newcreatedAt.getSeconds() + sec
+      );
+      endAt = new Date(newcreatedAt);
+      formStep.endAt = endAt;
+    }
+    if (endAt) {
+      // formStep.oldStep = newStep;
+      console.log("newformStep ", formStep);
+      reportService.teacherNextStepCBT(reportId, formStep).then((res) => {
+        const job = schedule.scheduleJob(endAt, function () {
           formStep.oldStep = newStep;
-          const job = schedule.scheduleJob(endAt, function () {
-            reportService.teacherNextStepCBT(reportId, formStep).then((res) => {
-              console.log("-*-*-*-*");
-            });
-            job.cancel();
-          });
-        }
-        setcurrent(current + 1);
-      } else {
-        if (method.timeEachQuestion) {
-          min = method.minEach;
-          sec = method.secEach;
-          let newcreatedAt = new Date();
-          console.log("newcreatedAt: ", newcreatedAt);
+          reportService.teacherNextStepCBT(reportId, formStep);
+          job.cancel();
+        });
 
-          newcreatedAt.setMinutes(
-            newcreatedAt.getMinutes() + min,
-            newcreatedAt.getSeconds() + sec
-          );
-          endAt = new Date(newcreatedAt);
-          formStep.endAt = endAt;
-          console.log("endAt: ", endAt);
+        if (newStep > current + 1) {
+          setcurrent(current + 1);
+        } else {
+          setcurrent(current - 1);
         }
-        if (endAt) {
-          formStep.oldStep = newStep;
-          console.log("newformStep ", formStep);
-          const job = schedule.scheduleJob(endAt, function () {
-            reportService.teacherNextStepCBT(reportId, formStep).then((res) => {
-              console.log("-*-*-*-*");
-            });
-            job.cancel();
-          });
+      });
+    } else {
+      reportService.teacherNextStepCBT(reportId, formStep).then((res) => {
+        if (newStep > formStep.oldStep) {
+          setcurrent(current + 1);
+        } else {
+          setcurrent(current - 1);
         }
-        setcurrent(current - 1);
-      }
-    });
+      });
+    }
   };
+
+  //-------เดิม
+  // const handleteacherNextStep = (newStep) => {
+  //   const formStep = {
+  //     oldStep: current + 1,
+  //     newStep: newStep,
+  //   };
+  //   console.log("formStep ", formStep);
+  //   let endAt, min, sec;
+  //   reportService.teacherNextStepCBT(reportId, formStep).then((res) => {
+  //     if (newStep > formStep.oldStep) {
+  //       if (method.timeEachQuestion) {
+  //         min = method.minEach;
+  //         sec = method.secEach;
+  //         let newcreatedAt = new Date();
+  //         console.log("newcreatedAt: ", newcreatedAt);
+  //         newcreatedAt.setMinutes(
+  //           newcreatedAt.getMinutes() + min,
+  //           newcreatedAt.getSeconds() + sec
+  //         );
+  //         endAt = new Date(newcreatedAt);
+  //         formStep.endAt = endAt;
+  //       }
+  //       console.log("newcreatedAt: ", endAt);
+  //       if (endAt) {
+  //         formStep.oldStep = newStep;
+  //         const job = schedule.scheduleJob(endAt, function () {
+  //           reportService.teacherNextStepCBT(reportId, formStep).then((res) => {
+  //             console.log("-*-*-*-*");
+  //           });
+  //           job.cancel();
+  //         });
+  //       }
+  //       setcurrent(current + 1);
+  //     } else {
+  //       if (method.timeEachQuestion) {
+  //         min = method.minEach;
+  //         sec = method.secEach;
+  //         let newcreatedAt = new Date();
+  //         console.log("newcreatedAt: ", newcreatedAt);
+  //         newcreatedAt.setMinutes(
+  //           newcreatedAt.getMinutes() + min,
+  //           newcreatedAt.getSeconds() + sec
+  //         );
+  //         endAt = new Date(newcreatedAt);
+  //         formStep.endAt = endAt;
+  //         console.log("endAt: ", endAt);
+  //       }
+  //       if (endAt) {
+  //         formStep.oldStep = newStep;
+  //         console.log("newformStep ", formStep);
+  //         const job = schedule.scheduleJob(endAt, function () {
+  //           reportService.teacherNextStepCBT(reportId, formStep).then((res) => {
+  //             console.log("-*-*-*-*");
+  //           });
+  //           job.cancel();
+  //         });
+  //       }
+  //       setcurrent(current - 1);
+  //     }
+  //   });
+  // };
 
   const handleBtnStart = () => {
     let formquiz = {
@@ -319,9 +371,9 @@ export default function Result() {
           newcreatedAt.getSeconds() + sec
         );
         formTime.endAt = new Date(newcreatedAt);
+        console.log("formTime.endAt: ", formTime.endAt);
         cookies.set("endAt", formTime.endAt, { path: "/" });
       } else if (method.timeEachQuestion) {
-        console.log("-----");
         min = method.minEach;
         sec = method.secEach;
         let newcreatedAt = new Date();
@@ -336,7 +388,13 @@ export default function Result() {
       reportService.teacherStartQuiz(reportId, formTime).then((res) => {
         //--setscheduleถ้ามี
         if (formTime.endAt && method.timeQuiz) {
+          let createdAt = new Date();
+          // let endAt = cookies.get("endAt");
+          let endAt = new Date(method.endAt);
+          let sum = (endAt - createdAt) / 1000;
+          setcountTime(parseInt(sum));
           const job = schedule.scheduleJob(formTime.endAt, function () {
+            console.log("---++++384+++--");
             handleBtnFinish();
             job.cancel();
           });
@@ -347,8 +405,8 @@ export default function Result() {
           };
           console.log("formStep123", formStep);
           const job = schedule.scheduleJob(formTime.endAt, function () {
-            // reportService.teacherNextStepCBT(reportId, formStep);
-            handleBtnFinish();
+            reportService.teacherNextStepCBT(reportId, formStep);
+            // handleBtnFinish();
             job.cancel();
           });
         }
@@ -467,6 +525,7 @@ export default function Result() {
 
   const clearLocalStorageFinish = () => {
     localStorage.removeItem("liveId");
+    cookies.remove("endAt", { path: "/" });
     history.push("/launch");
   };
 
@@ -538,6 +597,7 @@ export default function Result() {
       <Grid container spacing={2}>
         <Grid container item xs={6}>
           <Typography className={classes.typoRoomName}>{roomName}</Typography>
+          {countTime ? <CountDownTime counter={countTime} /> : null}
         </Grid>
         <Grid container item xs={6} justify="flex-end">
           {!start && typeDelivery ? (

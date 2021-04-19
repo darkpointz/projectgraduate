@@ -100,6 +100,8 @@ export default function ClassStudent({ match }) {
   const [openEdit, setopenEdit] = useState(false);
   const [openDelete, setopenDelete] = useState(false);
   const [index, setindex] = useState();
+  const [fname, setfname] = useState();
+  const [lname, setlname] = useState();
 
   const classes = useStyles();
 
@@ -165,7 +167,17 @@ export default function ClassStudent({ match }) {
     setOpenAddStudent(false);
   };
 
+  const handleClickEdit = (fname, lname) => {
+    setfname(fname);
+    setlname(lname);
+    setopenEdit(true);
+  };
+
   const handleCloseEdit = () => {
+    setopenEdit(false);
+  };
+
+  const handleChangeNameEdit = () => {
     setopenEdit(false);
   };
 
@@ -188,7 +200,6 @@ export default function ClassStudent({ match }) {
     classService
       .deleteStudentByRoomId(params.id, student[index].stuid)
       .then((res) => {
-        console.log(res);
         list.splice(index, 1);
         setstudent(list);
       })
@@ -278,7 +289,9 @@ export default function ClassStudent({ match }) {
                       <TableCell align="right">
                         <IconButton
                           aria-label="iconEdit"
-                          onClick={() => setopenEdit(true)}
+                          onClick={(e) =>
+                            handleClickEdit(student.fname, student.lname)
+                          }
                         >
                           <Edit className={classes.icon} />
                         </IconButton>
@@ -322,6 +335,8 @@ export default function ClassStudent({ match }) {
       <DialogEditname
         open={openEdit}
         onClose={handleCloseEdit}
+        fname={fname}
+        lname={lname}
         saveNewstudent={handleSavenewstudent}
       />
       <DialogDelete

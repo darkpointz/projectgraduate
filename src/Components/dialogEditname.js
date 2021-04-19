@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   makeStyles,
@@ -7,7 +7,8 @@ import {
   DialogTitle,
   Box,
   TextField,
-  withStyles,
+  DialogContent,
+  DialogActions,
 } from "@material-ui/core";
 import { Clear, Add } from "@material-ui/icons";
 
@@ -33,18 +34,71 @@ const useStyles = makeStyles({
   },
 });
 
-export default function DialogEditname(props) {
+export default function DialogEditname({ onClose, open, fname, lname }) {
   const classes = useStyles();
-  const { onClose, open, name } = props;
+  const [firstname, setfirstname] = useState(fname);
+  const [lastname, setlastname] = useState(lname);
 
   const handleClose = () => {
     onClose();
   };
 
+  const handleChange = (e) => {
+    const { value, name } = e.target;
+    if (name === "firstname") {
+      setfirstname(value);
+    } else if (name === "lastname") {
+      setlastname(value);
+    }
+  };
+
+  const handleConfirm = () => {
+    // confirm(roomName);
+  };
+
   return (
-    <Dialog onClose={handleClose} open={open}>
-      <DialogTitle id="simple-dialog-title">{`Edit Student`}</DialogTitle>
-      <TextField label="FirstName" variant="outlined" size="small"></TextField>
+    <Dialog open={open}>
+      <div className={classes.root}>
+        <DialogTitle id="simple-dialog-title" className={classes.dialogTitle}>
+          Edit Student
+        </DialogTitle>
+        <DialogContent>
+          <Typography className={classes.typoTitle}>First Name</Typography>
+          <TextField
+            id="textfield-edit"
+            variant="outlined"
+            value={firstname}
+            name="firstname"
+            fullWidth
+            onChange={(e) => handleChange(e)}
+          ></TextField>
+          <Typography className={classes.typoTitle}>Last Name</Typography>
+          <TextField
+            id="textfield-edit"
+            variant="outlined"
+            value={lastname}
+            name="lastname"
+            fullWidth
+            onChange={(e) => handleChange(e)}
+          ></TextField>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            className={classes.btnRename}
+            onClick={handleConfirm}
+          >
+            Rename
+          </Button>
+          <Button
+            variant="contained"
+            className={classes.btnCancel}
+            onClick={handleClose}
+          >
+            Cancel
+          </Button>
+        </DialogActions>
+      </div>
     </Dialog>
   );
 }

@@ -78,7 +78,14 @@ const useStyles = makeStyles((theme) => ({
 export default function Reports() {
   const classes = useStyles();
 
-  const test = () => {};
+  const test = () => {
+    let report, createdAt, endAt;
+    reportService.getAllReport(localStorage.getItem("userId")).then((res) => {
+      report = res;
+      createdAt = report[0].createdAt._seconds;
+      console.log(createdAt);
+    });
+  };
 
   return (
     <div className={classes.root}>

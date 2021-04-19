@@ -15,7 +15,7 @@ import jwtDecode from "jwt-decode";
 import LanunchStu from "./Pages/lanunchStu";
 import LiveResult from "./Pages/liveResult";
 import ProtectedRoute from "./Routes/ProtectedRoute";
-import AxiosInterceptor from './Auth/axiosInterceptor'
+import AxiosInterceptor from "./Auth/axiosInterceptor";
 
 // import { AuthProvider, AuthContext } from "./Auth/authService";
 
@@ -32,7 +32,6 @@ export default function App() {
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       setcurrentUser(user);
-      console.log("usesdsdr: ", user);
       const token = localStorage.FBIdToken;
       //เช็คtokenหมดอายุ
       if (token) {
@@ -69,7 +68,6 @@ export default function App() {
       {/* <Navbar displayName={"aod"} displayPic={"/static/images/avatar/2.jpg"} /> */}
 
       {/* <LanunchStu /> */}
-
     </div>
   );
 }

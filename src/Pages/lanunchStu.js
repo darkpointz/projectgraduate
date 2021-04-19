@@ -25,6 +25,7 @@ import LiveTF from "../Components/liveTF";
 import LiveSA from "../Components/liveSA";
 import WaitingForActivity from "../Components/waitingForActivity";
 import PaginationLanunchStu from "../Components/paginationLanunchStu";
+import CountDownTime from "../Components/countDownTime";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -165,6 +166,7 @@ export default function LanunchStu() {
   const [SQ, setSQ] = useState(false);
   const [method, setmethod] = useState();
 
+  const [currentTime, setcurrentTime] = useState();
   const [endAt, setendAt] = useState();
   const [stepMax, setstepMax] = useState();
   const [raiseHand, setraiseHand] = useState();
@@ -191,17 +193,30 @@ export default function LanunchStu() {
           .onSnapshot((doc) => {
             let newQuiz = [];
             console.log("doc", doc.data());
-
             if (doc.data().start && doc.data().finish === false) {
-              let createdAt = new Date().toISOString();
-              setendAt(doc.data().method.endAt);
-              if (createdAt >= endAt && endAt) {
+              let createdAt = new Date();
+              // let createdAt = new Date().toISOString();
+
+              let currentDate = new Date();
+              // setcurrentTime(new Date());
+              let endDate = new Date(doc.data().method.endAt);
+              console.log("createdAt: ", createdAt / 1000);
+              console.log("currentDate: ", currentDate);
+              console.log("endDate: ", endDate);
+              let sum = (endDate - currentDate) / 1000;
+              console.log("sum: ", parseInt(sum));
+              setcurrentTime(parseInt(sum));
+              setendAt(endDate);
+              // if (createdAt >= endAt && endAt) {
+              if (sum <= 0 && sum) {
+                console.log("----: ", endDate);
                 let reportId = params.reportId;
                 let formStudent = {
                   stuid: localStorage.getItem("stuid"),
                   reportId: reportId,
                 };
-                finishQuizCBSRemoveState(formStudent);
+                // finishQuizCBSRemoveState(formStudent);
+                setwaiting(true);
               } else {
                 setwaiting(false);
                 setroomName(doc.data().roomName);
@@ -240,12 +255,10 @@ export default function LanunchStu() {
                       setquiz([]);
                       setquiz(newQuiz);
                     }
-                    console.log("quiz: ", quiz);
                   } else if (data.active === false) {
                     setquiz(newQuiz);
                   }
                 });
-                console.log("newQuiz: ", newQuiz);
                 if (newQuiz.length === 0) {
                   setwaiting(true);
                 }
@@ -279,10 +292,18 @@ export default function LanunchStu() {
             let quizStudent = [];
 
             if (doc.data().start && doc.data().finish === false) {
-              let createdAt = new Date().toISOString();
-              setendAt(doc.data().method.endAt);
-              console.log("doc.data().: ", doc.data());
-              if (createdAt >= endAt && endAt) {
+              let currentDate = new Date();
+              // setcurrentTime(new Date());
+              let endDate = new Date(doc.data().method.endAt);
+              console.log("endAt: ", endDate);
+              console.log("currentDate: ", currentDate);
+              let sum = (endDate - currentDate) / 1000;
+              console.log("sum: ", parseInt(sum));
+
+              cookies.set("countTime", parseInt(sum), { path: "/" });
+              setcurrentTime(parseInt(sum));
+              if (sum <= 0 && sum) {
+                // if (createdAt >= endAt && endAt) {
                 let reportId = params.reportId;
                 let formStudent = {
                   stuid: localStorage.getItem("stuid"),
@@ -399,6 +420,7 @@ export default function LanunchStu() {
   const removeLocalStorage = () => {
     localStorage.removeItem("liveId");
     localStorage.removeItem("ReportId");
+    cookies.remove("countTime", { path: "/" });
     let room = localStorage.getItem("RoomStudent");
     history.push(`/login/student/${room}`);
   };
@@ -541,36 +563,49 @@ export default function LanunchStu() {
   };
 
   const saveAnswerCBS = (step, answer, indexQuizzing, index) => {
-    setanswer(answer);
-    setoldCurrent(step);
-    let newQuizzing = quizzingStudent;
-    console.log("newQuizzin----g: ", newQuizzing);
-    if (index || index === 0) {
-      console.log("indexAnswerMC: ", index);
-      setindexAnswerMC(index);
-    }
-
-    console.log("indexQuizzing: ", indexQuizzing);
-    if (indexQuizzing >= 0) {
-      newQuizzing[indexQuizzing] = { answer: answer, step: step };
+    if (currentTime && currentTime <= 0) {
+      let reportId = params.reportId;
+      let formStudent = {
+        stuid: localStorage.getItem("stuid"),
+        reportId: reportId,
+      };
+      finishQuizCBSRemoveState(formStudent);
     } else {
-      newQuizzing.push({ answer: answer, step: step });
+      setanswer(answer);
+      setoldCurrent(step);
+      let newQuizzing = quizzingStudent;
+      console.log("newQuizzin----g: ", newQuizzing);
+      if (index || index === 0) {
+        console.log("indexAnswerMC: ", index);
+        setindexAnswerMC(index);
+      }
+
+      console.log("indexQuizzing: ", indexQuizzing);
+      if (indexQuizzing >= 0) {
+        newQuizzing[indexQuizzing] = { answer: answer, step: step };
+      } else {
+        newQuizzing.push({ answer: answer, step: step });
+      }
+      setquizzingStudent(newQuizzing);
+      console.log("newQuizzing: ", newQuizzing);
     }
-    setquizzingStudent(newQuizzing);
-    console.log("newQuizzing: ", newQuizzing);
   };
 
+  //--submitCBT
   const submitAnswer = () => {
     const formStudent = {
       stuid: params.stuid,
       step: oldCurrent,
       answer: answer,
     };
+    let createdAt = new Date();
+    // let createdAt = new Date().toISOString();
+    console.log("createdAt603: ", createdAt);
+    console.log("currentTime603: ", currentTime);
+
     if (type === "QUIZ") {
-      let createdAt = new Date().toISOString();
-      console.log("createdAt: ", createdAt);
-      console.log("endAt: ", endAt);
       if (createdAt < endAt || !endAt) {
+        // if (!currentTime) {
         reportService
           .answerByStudent(formStudent, params.reportId)
           .then((res) => {
@@ -590,13 +625,17 @@ export default function LanunchStu() {
             setanswer();
             setoldCurrent();
           });
-      } else if (createdAt >= endAt && endAt) {
+      }
+      //  else if (currentTime <= 0 && currentTime) {
+      else if (createdAt >= endAt && endAt) {
+        console.log("createdAtendAt: ");
         let reportId = params.reportId;
         let formStudent = {
           stuid: localStorage.getItem("stuid"),
           reportId: reportId,
         };
-        finishQuizCBSRemoveState(formStudent);
+        // finishQuizCBSRemoveState(formStudent);
+        setwaiting(true);
       }
     } else if (type === "QuickQuestion") {
       console.log("typeDelivery: ", typeDelivery);
@@ -626,11 +665,24 @@ export default function LanunchStu() {
     });
   };
 
+  const handleEndTime = (count) => {
+    setcurrentTime(count);
+  };
+
   const showContent = () => {
     return (
       <Grid container item xs={12} className={classes.content}>
-        <Grid container item xs={7} md={8} />
-        <Grid container item xs={5} md={4} justify="center">
+        <Grid container item xs={12} md={12} justify="center">
+          {currentTime ? (
+            <CountDownTime
+              counter={currentTime}
+              handleEndTime={handleEndTime}
+            />
+          ) : null}
+          {/* {currentTime} */}
+        </Grid>
+        <Grid container item xs={7} md={7} />
+        <Grid container item xs={5} md={5} justify="center">
           {typeDelivery === "CBS" ? btnFinishQuizCBS() : null}
         </Grid>
         <Grid

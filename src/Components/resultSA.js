@@ -63,7 +63,7 @@ export default function ResultSA({ student, quiz }) {
       </Grid>
       {student.map((item) => {
         return (
-          <Grid container item xs={12}>
+          <Grid container item xs={12} key={item.step}>
             <Grid container item xs={4}>
               <Paper className={classes.paperStudent}>
                 <Typography className={classes.typoStudent}>
