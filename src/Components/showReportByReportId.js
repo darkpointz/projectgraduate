@@ -47,9 +47,6 @@ export default function ShowReportByReportId() {
   const [stepMax, setstepMax] = useState();
   const [quizName, setquizName] = useState();
   const [createdAt, setcreatedAt] = useState();
-  //
-  const [endAt, setendAt] = useState();
-  //
   const [score, setscore] = useState([]);
   const [student, setstudent] = useState([]);
 
@@ -63,9 +60,6 @@ export default function ShowReportByReportId() {
       setstudent(res[0].student);
       setquizName(res[0].quizName);
       setcreatedAt(res[0].createdAt._seconds);
-      setendAt(res[0].method.endAt);
-      console.log("res[0].method.endAt._seconds: ", res[0].method.endAt);
-      console.log("res[0].createdAt._seconds: ", res[0].createdAt._seconds);
     });
   }, []);
 
@@ -74,15 +68,6 @@ export default function ShowReportByReportId() {
     return date;
   };
 
-  const test = () => {
-    let date = new Date(createdAt * 1000);
-    let curdate = new Date();
-    let newdate = new Date(endAt);
-    console.log("createdAt: ", new Date(createdAt * 1000).toISOString());
-    console.log("endAt: ", new Date(endAt));
-    let sum = (newdate - curdate) / 1000;
-    console.log("sum: ", parseInt(sum));
-  };
   return (
     <div className={classes.root}>
       <Grid container spacing={1}>
@@ -92,14 +77,7 @@ export default function ShowReportByReportId() {
               <Typography className={classes.typoQuizName}>
                 {quizName}
               </Typography>
-
-              <Button onClick={test}>123</Button>
             </Grid>
-            {/* <Grid container item xs={3}>
-              <Typography className={classes.typoDate}>
-                {handleDate(createdAt)}
-              </Typography>
-            </Grid> */}
             <Grid container item xs={6} justify="flex-end">
               <Typography className={classes.typoDate}>
                 Date: {handleDate(createdAt)}

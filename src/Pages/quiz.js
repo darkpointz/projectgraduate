@@ -7,17 +7,8 @@ import swal from "sweetalert";
 import DialogSelectCreate from "../Components/dialogSelectCreate";
 import TableQuiz from "../Components/tableQuiz";
 
-import {
-  makeStyles,
-  Paper,
-  Button,
-  FormControl,
-  InputAdornment,
-  Typography,
-  withStyles,
-  TextField,
-  Grid,
-} from "@material-ui/core";
+import { makeStyles, Paper, Button, Typography, Grid } from "@material-ui/core";
+import Cookies from "universal-cookie";
 import { Add, Folder } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
@@ -100,25 +91,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Quiz(props) {
   const { history } = props;
+  const cookies = new Cookies();
   const classes = useStyles();
-  const [btnCreate, setbtnCreate] = useState(false);
   const [open, setOpen] = useState(false);
   const [quiz, setquiz] = useState([]);
-  const [userId, setuserId] = useState();
-  const [path, setpath] = useState("Quiz");
-
-  useEffect(() => {
-    const uId = localStorage.getItem("userId");
-    quizService.getAllQuiz(uId).then((res) => {
-      setquiz(res);
-      setuserId(uId);
-    });
-  }, []);
-
-  const clickCreate = () => {
-    setOpen(true);
-    // setbtnCreate(!btnCreate);
-  };
+  const [path, setpath] = useState("Quizzes");
 
   const handleChangeHeaderxlsx = (data) => {
     let newData = [];
@@ -143,12 +120,6 @@ export default function Quiz(props) {
     }
   };
 
-  const clickFolder = (type) => {
-    setpath(type);
-  };
-
-  const handleDeleteQuiz = () => {};
-
   return (
     //--เดียวเปลี่ยนเป็นrouteแทน***
     <div className={classes.root}>
@@ -165,36 +136,11 @@ export default function Quiz(props) {
         </Grid>
         <Grid container item xs={12}>
           <Paper className={classes.paper}>
-            <Typography className={classes.typotitlePaper}>Quiz</Typography>
-
             <Grid container item xs={12}>
-              <Grid
-                container
-                item
-                xs={2}
-                direction="column"
-                alignItems="center"
-              >
-                <Button
-                  variant="contained"
-                  className={classes.btnFolders}
-                  onClick={(e) => clickFolder("Quiz")}
-                >
-                  <Folder style={{ color: "#fff" }} />
-                  Quizzes
-                </Button>
-                <Button
-                  variant="contained"
-                  className={classes.btnFolders}
-                  onClick={(e) => clickFolder("QuickQuestion")}
-                >
-                  <Folder style={{ color: "#fff" }} />
-                  Quick Question
-                </Button>
-              </Grid>
-              <Grid container item xs={10}>
-                <TableQuiz path={path} />
-              </Grid>
+              <Typography className={classes.typotitlePaper}>Quiz</Typography>
+            </Grid>
+            <Grid container item xs={12} style={{ marginRight: "10px" }}>
+              <TableQuiz />
             </Grid>
           </Paper>
         </Grid>

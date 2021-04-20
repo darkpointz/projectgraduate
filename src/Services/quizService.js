@@ -3,6 +3,8 @@ import { httpClient } from "../Auth/axiosInterceptor";
 
 export const quizService = {
   getAllQuiz,
+  getAllQuizzes,
+  getAllQuickQuestion,
   insertQuiz,
   getQuizByQuizId,
   editQuiz,
@@ -12,6 +14,28 @@ export const quizService = {
 function getAllQuiz(uId) {
   return httpClient
     .get(`/quiz/getAllQuiz/${uId}`)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+}
+
+function getAllQuizzes(uId) {
+  return httpClient
+    .get(`/quiz/getAllQuizzes/${uId}`)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+}
+
+function getAllQuickQuestion(uId) {
+  return httpClient
+    .get(`/quiz/getAllQuickQuestion/${uId}`)
     .then((res) => {
       return res.data;
     })

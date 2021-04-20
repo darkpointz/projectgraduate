@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { reportService } from "../Services/reportService";
+import { quizService } from "../Services/quizService";
 import firebase from "firebase/app";
 import { useHistory } from "react-router-dom";
 import { createBrowserHistory } from "history";
@@ -344,7 +345,6 @@ export default function Result() {
             oldStep: 1,
             newStep: 1,
           };
-          console.log("formStep123456", formStep);
           const job = schedule.scheduleJob(formTime.endAt, function () {
             console.log("fo-*-*-*--*-", formStep);
             reportService.teacherNextStepCBT(reportId, formStep);
@@ -430,10 +430,13 @@ export default function Result() {
   };
 
   const handleBtnFinish = () => {
-    console.log("e--///---- ");
-    console.log("e--///---- ", type);
+    const formquiz = {
+      quizName: "QuickQuestion",
+      quiz: quiz,
+      path: "QuickQuestion",
+    };
+    console.log("formquizformquiz: ", formquiz);
     const typeCookies = cookies.get("type");
-    console.log("reportId1 ", reportId);
     if (typeCookies === "QuickQuestion") {
       swal({
         title: "Please Confirm",
@@ -442,11 +445,17 @@ export default function Result() {
         buttons: ["Don't Save", "Save"],
       }).then((willFinish) => {
         if (willFinish) {
-          reportService
-            .teacherFinishQuizAndSaveQuickQuestion(
-              localStorage.getItem("liveId"),
-              localStorage.getItem("userId")
-            )
+          // reportService
+          //   .teacherFinishQuizAndSaveQuickQuestion(
+          //     localStorage.getItem("liveId"),
+          //     localStorage.getItem("userId")
+          //   )
+          //   .then((res) => {
+          //     clearLocalStorageFinish();
+          //   });
+
+          quizService
+            .insertQuiz(formquiz, localStorage.getItem("userId"))
             .then((res) => {
               clearLocalStorageFinish();
             });
@@ -470,6 +479,7 @@ export default function Result() {
   const clearLocalStorageFinish = () => {
     localStorage.removeItem("liveId");
     cookies.remove("type", { path: "/" });
+    cookies.remove("typedelivery", { path: "/" });
     cookies.remove("endAt", { path: "/" });
     history.push("/launch");
   };

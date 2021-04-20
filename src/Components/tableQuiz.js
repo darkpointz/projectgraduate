@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { quizService } from "../Services/quizService";
 import { useHistory } from "react-router-dom";
+import Cookies from "universal-cookie";
 
 import {
   withStyles,
@@ -15,8 +16,10 @@ import {
   TableHead,
   TableContainer,
   Paper,
+  Grid,
+  Button,
 } from "@material-ui/core";
-import { Add, Delete, Edit } from "@material-ui/icons";
+import { Add, Delete, Edit, Folder } from "@material-ui/icons";
 import swal from "sweetalert";
 
 const StyledTableCell = withStyles((theme) => ({
@@ -31,7 +34,7 @@ const StyledTableCell = withStyles((theme) => ({
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    marginRight: "10px",
+    marginRight: "8px",
     marginBottom: "10px",
   },
   // layotBtnCreate: { display: "flex", justifyContent: "flex-end" },
@@ -71,21 +74,56 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
     marginRight: "10px",
   },
+  btnFolders: {
+    width: "85%",
+    marginBottom: "10px",
+    display: "flex",
+    justifyContent: "space-around",
+    backgroundColor: "#CCECE8",
+    fontFamily: "'Prompt', sans-serif",
+    fontWeight: 600,
+    fontSize: "16px",
+    // color: "#E9E9E9",
+  },
 }));
 
-export default function TableQuiz({ path }) {
+export default function TableQuiz({ arrayQuiz }) {
   const classes = useStyles();
   const [quiz, setquiz] = useState([]);
+  const [path, setpath] = useState("Quizzes");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   let history = useHistory();
 
   useEffect(() => {
     const uId = localStorage.getItem("userId");
+    setquiz(arrayQuiz);
     quizService.getAllQuiz(uId).then((res) => {
-      setquiz(res);
+      let newquiz = [];
+      res.forEach((element) => {
+        if (element.path === path) {
+          newquiz.push(element);
+        }
+      });
+      setquiz(newquiz);
     });
   }, []);
+
+  const clickFolder = (type) => {
+    const uId = localStorage.getItem("userId");
+    setpath(type);
+    setquiz([]);
+    quizService.getAllQuiz(uId).then((res) => {
+      let newquiz = [];
+      res.forEach((element) => {
+        if (element.path === type) {
+          newquiz.push(element);
+        }
+      });
+      setquiz(newquiz);
+      console.log("newquiz:", newquiz);
+    });
+  };
 
   const handleClickEdit = (item) => {
     history.push(`/createquiz/${item.quizId}`);
@@ -113,7 +151,8 @@ export default function TableQuiz({ path }) {
     });
   };
 
-  const handleDate = (time) => {
+  const handleDate = (time, item) => {
+    console.log("item: ", item);
     let date = new Date(time._seconds * 1000).toLocaleString("th-TH");
     return date;
   };
@@ -129,91 +168,122 @@ export default function TableQuiz({ path }) {
 
   return (
     <div className={classes.root}>
-      <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="simple table" stickyHeader>
-          <TableHead>
-            <TableRow className={classes.tableRow}>
-              <StyledTableCell className={classes.TableCellHead}>
-                Name
-              </StyledTableCell>
-              <StyledTableCell align="center" className={classes.TableCellHead}>
-                Date
-              </StyledTableCell>
-              <StyledTableCell
-                align="center"
-                padding="checkbox"
-                className={classes.TableCellHead}
-              >
-                Edit
-              </StyledTableCell>
-              <StyledTableCell
-                align="center"
-                padding="checkbox"
-                className={classes.TableCellHead}
-              >
-                Delete
-              </StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {quiz &&
-              quiz
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((item, i) => (
-                  <TableRow key={item.quizId}>
-                    <TableCell
-                      component="th"
-                      scope="row"
-                      className={classes.TableCellContent}
-                    >
-                      {item.quizName}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      className={classes.TableCellContent}
-                    >
-                      {handleDate(item.createdAt)}
-                      {/* {item.createAt} */}
-                    </TableCell>
+      <Grid container item xs={12}>
+        <Grid container item xs={2} direction="column" alignItems="center">
+          <Button
+            variant="contained"
+            className={classes.btnFolders}
+            // onClick={() => setpath("Quizzes")}
+            onClick={(e) => clickFolder("Quizzes")}
+          >
+            <Folder style={{ color: "#fff" }} />
+            Quizzes
+          </Button>
+          <Button
+            variant="contained"
+            className={classes.btnFolders}
+            // onClick={() => setpath("QuickQuestion")}
+            onClick={(e) => clickFolder("QuickQuestion")}
+          >
+            <Folder style={{ color: "#fff" }} />
+            Quick Question
+          </Button>
+        </Grid>
+        <Grid container item xs={10} justify="flex-end">
+          <TableContainer component={Paper}>
+            <Table
+              className={classes.table}
+              aria-label="simple table"
+              stickyHeader
+            >
+              <TableHead>
+                <TableRow className={classes.tableRow}>
+                  <StyledTableCell className={classes.TableCellHead}>
+                    Name
+                  </StyledTableCell>
+                  <StyledTableCell
+                    align="center"
+                    className={classes.TableCellHead}
+                  >
+                    Date
+                  </StyledTableCell>
+                  <StyledTableCell
+                    align="center"
+                    padding="checkbox"
+                    className={classes.TableCellHead}
+                  >
+                    Edit
+                  </StyledTableCell>
+                  <StyledTableCell
+                    align="center"
+                    padding="checkbox"
+                    className={classes.TableCellHead}
+                  >
+                    Delete
+                  </StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {quiz &&
+                  quiz
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((item, i) => (
+                      <TableRow key={item.quizId}>
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          className={classes.TableCellContent}
+                        >
+                          {item.quizName}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          className={classes.TableCellContent}
+                        >
+                          {handleDate(item.createdAt, item)}
+                          {/* {item.createAt} */}
+                        </TableCell>
 
-                    <TableCell
-                      align="left"
-                      className={classes.TableCellContent}
-                    >
-                      <IconButton
-                        aria-label="iconEdit"
-                        onClick={() => handleClickEdit(item)}
-                      >
-                        <Edit className={classes.icon} />
-                      </IconButton>
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      className={classes.TableCellContent}
-                    >
-                      <IconButton
-                        aria-label="iconDelete"
-                        onClick={() => handleClickDelete(item, i)}
-                      >
-                        <Delete className={classes.icon} />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      {quiz ? (
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 20]}
-          component="div"
-          count={quiz.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-        />
-      ) : null}
+                        <TableCell
+                          align="left"
+                          className={classes.TableCellContent}
+                        >
+                          <IconButton
+                            aria-label="iconEdit"
+                            onClick={() => handleClickEdit(item)}
+                          >
+                            <Edit className={classes.icon} />
+                          </IconButton>
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          className={classes.TableCellContent}
+                        >
+                          <IconButton
+                            aria-label="iconDelete"
+                            onClick={() => handleClickDelete(item, i)}
+                          >
+                            <Delete className={classes.icon} />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          {quiz ? (
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 20]}
+              component="div"
+              count={quiz.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onChangePage={handleChangePage}
+              onChangeRowsPerPage={handleChangeRowsPerPage}
+            />
+          ) : null}
+        </Grid>
+      </Grid>
     </div>
   );
 }
