@@ -81,13 +81,21 @@ export default function TableReport() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   let history = useHistory();
+  const room = localStorage.getItem("RoomName");
   useEffect(() => {
     const uId = localStorage.getItem("userId");
+    setreport([]);
     reportService.getAllReport(uId).then((res) => {
-      setreport(res);
+      let newreport = [];
+      res.forEach((element) => {
+        if (element.roomName === room) {
+          newreport.push(element);
+        }
+      });
+      setreport(newreport);
       console.log(res);
     });
-  }, []);
+  }, [room]);
 
   const handleDate = (time) => {
     let date = new Date(time._seconds * 1000).toLocaleString("th-TH");
