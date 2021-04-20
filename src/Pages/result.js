@@ -124,15 +124,16 @@ export default function Result() {
           .onSnapshot((doc) => {
             let createdAt = new Date();
             console.log("createdAt: ", createdAt);
-            // let endAt = cookies.get("endAt");
             let endAt = new Date(doc.data().method.endAt);
             console.log("endAt: ", endAt);
-            console.log("e------ ");
             let sum = (endAt - createdAt) / 1000;
             setcountTime(parseInt(sum));
             if (sum <= 0 && sum) {
-              // if (createdAt >= endAt && endAt) {
-              handleBtnFinish();
+              let typedelivery = cookies.get("typedelivery");
+              console.log("esum ", sum);
+              if (typedelivery === "CBS") {
+                handleBtnFinish();
+              }
             }
             //--setข้อปัจจุบัน
             doc.data().quiz.find((e) => {
@@ -157,6 +158,11 @@ export default function Result() {
             setstart(doc.data().start);
             //--QQ
             settype(doc.data().type);
+            cookies.set("type", doc.data().type, { path: "/" });
+
+            cookies.set("typedelivery", doc.data().method.delivery, {
+              path: "/",
+            });
             //--
             setfinish(false);
           });
@@ -382,10 +388,12 @@ export default function Result() {
           newcreatedAt.getSeconds() + sec
         );
         formTime.endAt = new Date(newcreatedAt);
+        console.log("formTime.endAt: ", formTime.endAt);
         cookies.set("endAt", formTime.endAt, { path: "/" });
       }
 
       reportService.teacherStartQuiz(reportId, formTime).then((res) => {
+        console.log("39000");
         //--setscheduleถ้ามี
         if (formTime.endAt && method.timeQuiz) {
           let createdAt = new Date();
@@ -393,8 +401,8 @@ export default function Result() {
           let endAt = new Date(method.endAt);
           let sum = (endAt - createdAt) / 1000;
           setcountTime(parseInt(sum));
+          console.log("390---00");
           const job = schedule.scheduleJob(formTime.endAt, function () {
-            console.log("---++++384+++--");
             handleBtnFinish();
             job.cancel();
           });
@@ -403,8 +411,9 @@ export default function Result() {
             oldStep: 1,
             newStep: 1,
           };
-          console.log("formStep123", formStep);
+          console.log("formStep123456", formStep);
           const job = schedule.scheduleJob(formTime.endAt, function () {
+            console.log("fo-*-*-*--*-", formStep);
             reportService.teacherNextStepCBT(reportId, formStep);
             // handleBtnFinish();
             job.cancel();
@@ -488,9 +497,12 @@ export default function Result() {
   };
 
   const handleBtnFinish = () => {
+    console.log("e--///---- ");
+    console.log("e--///---- ", type);
+    const typeCookies = cookies.get("type");
     setfinish(true);
     console.log("reportId1 ", reportId);
-    if (type === "QuickQuestion") {
+    if (typeCookies === "QuickQuestion") {
       swal({
         title: "Please Confirm",
         text: "You want to save this quick question?",
@@ -514,7 +526,7 @@ export default function Result() {
             });
         }
       });
-    } else if (type === "QUIZ") {
+    } else if (typeCookies === "QUIZ") {
       reportService
         .teacherFinishQuiz(localStorage.getItem("liveId"))
         .then((res) => {
@@ -525,6 +537,7 @@ export default function Result() {
 
   const clearLocalStorageFinish = () => {
     localStorage.removeItem("liveId");
+    cookies.remove("type", { path: "/" });
     cookies.remove("endAt", { path: "/" });
     history.push("/launch");
   };
@@ -595,7 +608,7 @@ export default function Result() {
     <div className={classes.root}>
       <CssBaseline />
       <Grid container spacing={2}>
-        <Grid container item xs={6}>
+        <Grid container item xs={6} justify="space-between">
           <Typography className={classes.typoRoomName}>{roomName}</Typography>
           {countTime ? <CountDownTime counter={countTime} /> : null}
         </Grid>

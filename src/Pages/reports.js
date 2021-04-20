@@ -78,21 +78,11 @@ const useStyles = makeStyles((theme) => ({
 export default function Reports() {
   const classes = useStyles();
 
-  const test = () => {
-    let report, createdAt, endAt;
-    reportService.getAllReport(localStorage.getItem("userId")).then((res) => {
-      report = res;
-      createdAt = report[0].createdAt._seconds;
-      console.log(createdAt);
-    });
-  };
-
   return (
     <div className={classes.root}>
       <Grid container spacing={1} direction="column">
         <Grid container item xs={12}>
           <Paper className={classes.paper}>
-            <Button onClick={test}>123</Button>
             <Typography className={classes.typotitlePaper}>Report</Typography>
             <Grid container item xs={12}>
               <TableReport />

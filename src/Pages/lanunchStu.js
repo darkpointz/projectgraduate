@@ -303,13 +303,12 @@ export default function LanunchStu() {
               cookies.set("countTime", parseInt(sum), { path: "/" });
               setcurrentTime(parseInt(sum));
               if (sum <= 0 && sum) {
+              } else if (sum) {
                 // if (createdAt >= endAt && endAt) {
-                let reportId = params.reportId;
-                let formStudent = {
-                  stuid: localStorage.getItem("stuid"),
-                  reportId: reportId,
-                };
-                finishQuizCBSRemoveState(formStudent);
+                const job = schedule.scheduleJob(endDate, function () {
+                  finishQuizCBSRemoveState(formStudent);
+                  job.cancel();
+                });
               } else {
                 //--setโจทย์โดนไม่มีresult
                 doc.data().quiz.forEach((data) => {
