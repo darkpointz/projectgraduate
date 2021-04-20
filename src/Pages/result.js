@@ -101,7 +101,6 @@ export default function Result() {
   const [current, setcurrent] = useState(0);
   const [stepMax, setstepMax] = useState();
   const [start, setstart] = useState();
-  const [finish, setfinish] = useState();
   const [question, setquestion] = useState("");
   const [answerQQ, setanswerQQ] = useState([]);
   const [openDialogShowStudent, setopenDialogShowStudent] = useState(false);
@@ -127,10 +126,11 @@ export default function Result() {
             let endAt = new Date(doc.data().method.endAt);
             console.log("endAt: ", endAt);
             let sum = (endAt - createdAt) / 1000;
+            setcountTime();
             setcountTime(parseInt(sum));
             if (sum <= 0 && sum) {
               let typedelivery = cookies.get("typedelivery");
-              console.log("esum ", sum);
+              setcountTime(0);
               if (typedelivery === "CBS") {
                 handleBtnFinish();
               }
@@ -163,8 +163,6 @@ export default function Result() {
             cookies.set("typedelivery", doc.data().method.delivery, {
               path: "/",
             });
-            //--
-            setfinish(false);
           });
       }
     });
@@ -285,68 +283,6 @@ export default function Result() {
     }
   };
 
-  //-------เดิม
-  // const handleteacherNextStep = (newStep) => {
-  //   const formStep = {
-  //     oldStep: current + 1,
-  //     newStep: newStep,
-  //   };
-  //   console.log("formStep ", formStep);
-  //   let endAt, min, sec;
-  //   reportService.teacherNextStepCBT(reportId, formStep).then((res) => {
-  //     if (newStep > formStep.oldStep) {
-  //       if (method.timeEachQuestion) {
-  //         min = method.minEach;
-  //         sec = method.secEach;
-  //         let newcreatedAt = new Date();
-  //         console.log("newcreatedAt: ", newcreatedAt);
-  //         newcreatedAt.setMinutes(
-  //           newcreatedAt.getMinutes() + min,
-  //           newcreatedAt.getSeconds() + sec
-  //         );
-  //         endAt = new Date(newcreatedAt);
-  //         formStep.endAt = endAt;
-  //       }
-  //       console.log("newcreatedAt: ", endAt);
-  //       if (endAt) {
-  //         formStep.oldStep = newStep;
-  //         const job = schedule.scheduleJob(endAt, function () {
-  //           reportService.teacherNextStepCBT(reportId, formStep).then((res) => {
-  //             console.log("-*-*-*-*");
-  //           });
-  //           job.cancel();
-  //         });
-  //       }
-  //       setcurrent(current + 1);
-  //     } else {
-  //       if (method.timeEachQuestion) {
-  //         min = method.minEach;
-  //         sec = method.secEach;
-  //         let newcreatedAt = new Date();
-  //         console.log("newcreatedAt: ", newcreatedAt);
-  //         newcreatedAt.setMinutes(
-  //           newcreatedAt.getMinutes() + min,
-  //           newcreatedAt.getSeconds() + sec
-  //         );
-  //         endAt = new Date(newcreatedAt);
-  //         formStep.endAt = endAt;
-  //         console.log("endAt: ", endAt);
-  //       }
-  //       if (endAt) {
-  //         formStep.oldStep = newStep;
-  //         console.log("newformStep ", formStep);
-  //         const job = schedule.scheduleJob(endAt, function () {
-  //           reportService.teacherNextStepCBT(reportId, formStep).then((res) => {
-  //             console.log("-*-*-*-*");
-  //           });
-  //           job.cancel();
-  //         });
-  //       }
-  //       setcurrent(current - 1);
-  //     }
-  //   });
-  // };
-
   const handleBtnStart = () => {
     let formquiz = {
       question: question,
@@ -377,7 +313,6 @@ export default function Result() {
           newcreatedAt.getSeconds() + sec
         );
         formTime.endAt = new Date(newcreatedAt);
-        console.log("formTime.endAt: ", formTime.endAt);
         cookies.set("endAt", formTime.endAt, { path: "/" });
       } else if (method.timeEachQuestion) {
         min = method.minEach;
@@ -393,7 +328,6 @@ export default function Result() {
       }
 
       reportService.teacherStartQuiz(reportId, formTime).then((res) => {
-        console.log("39000");
         //--setscheduleถ้ามี
         if (formTime.endAt && method.timeQuiz) {
           let createdAt = new Date();
@@ -401,7 +335,6 @@ export default function Result() {
           let endAt = new Date(method.endAt);
           let sum = (endAt - createdAt) / 1000;
           setcountTime(parseInt(sum));
-          console.log("390---00");
           const job = schedule.scheduleJob(formTime.endAt, function () {
             handleBtnFinish();
             job.cancel();
@@ -500,7 +433,6 @@ export default function Result() {
     console.log("e--///---- ");
     console.log("e--///---- ", type);
     const typeCookies = cookies.get("type");
-    setfinish(true);
     console.log("reportId1 ", reportId);
     if (typeCookies === "QuickQuestion") {
       swal({
@@ -608,11 +540,13 @@ export default function Result() {
     <div className={classes.root}>
       <CssBaseline />
       <Grid container spacing={2}>
-        <Grid container item xs={6} justify="space-between">
+        <Grid container item xs={3}>
           <Typography className={classes.typoRoomName}>{roomName}</Typography>
+        </Grid>
+        <Grid container item xs={6} justify="center">
           {countTime ? <CountDownTime counter={countTime} /> : null}
         </Grid>
-        <Grid container item xs={6} justify="flex-end">
+        <Grid container item xs={3} justify="flex-end">
           {!start && typeDelivery ? (
             <Button
               variant="contained"

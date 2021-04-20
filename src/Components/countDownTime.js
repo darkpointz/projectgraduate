@@ -22,7 +22,7 @@ export default function CountDownTime({ counter, handleEndTime }) {
   const classes = useStyles();
   const cookies = new Cookies();
   const [count, setcount] = useState(counter);
-  // const [count, setcount] = useState(cookies.get("countTime"));
+  // const [count, setcount] = useState(cookies.get("currentTime"));
   useEffect(() => {
     // count > 0 && setTimeout(() => handleEndTime(counter - 1), 1000);
     count > 0 && setTimeout(() => setcount(count - 1), 1000);

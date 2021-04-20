@@ -192,77 +192,67 @@ export default function LanunchStu() {
           .doc(params.reportId)
           .onSnapshot((doc) => {
             let newQuiz = [];
-            console.log("doc", doc.data());
+            setcurrentTime();
             if (doc.data().start && doc.data().finish === false) {
-              let createdAt = new Date();
-              // let createdAt = new Date().toISOString();
-
               let currentDate = new Date();
               // setcurrentTime(new Date());
               let endDate = new Date(doc.data().method.endAt);
-              console.log("createdAt: ", createdAt / 1000);
-              console.log("currentDate: ", currentDate);
               console.log("endDate: ", endDate);
-              let sum = (endDate - currentDate) / 1000;
+              let sum = parseInt((endDate - currentDate) / 1000);
               console.log("sum: ", parseInt(sum));
-              setcurrentTime(parseInt(sum));
+              setcurrentTime(sum);
               setendAt(endDate);
-              // if (createdAt >= endAt && endAt) {
-              if (sum <= 0 && sum) {
-                console.log("----: ", endDate);
-                let reportId = params.reportId;
-                let formStudent = {
-                  stuid: localStorage.getItem("stuid"),
-                  reportId: reportId,
-                };
-                // finishQuizCBSRemoveState(formStudent);
-                setwaiting(true);
-              } else {
-                setwaiting(false);
-                setroomName(doc.data().roomName);
-                let indexStu = doc.data().student.findIndex((e) => {
-                  return e.stuid === params.stuid;
+
+              if (sum) {
+                const job = schedule.scheduleJob(endDate, function () {
+                  setwaiting(true);
+                  job.cancel();
                 });
-                setraiseHand(doc.data().student[indexStu].raiseHand);
-                setquizzingStudent(doc.data().student[indexStu].quizzing);
-                setmethod(doc.data().method);
-                //--quiz
-                doc.data().quiz.forEach((data) => {
-                  if (data.active === true) {
-                    newQuiz.push({
-                      step: data.step,
-                      type: data.type,
-                      question: data.question,
-                    });
-                    if (data.type === "multiplechoice") {
-                      if (doc.data().method.SA === true) {
-                        newQuiz[0].choice = shuffleArray(data.choice);
-                      } else {
-                        newQuiz[0].choice = data.choice;
-                      }
-                    }
-                    let done = doc
-                      .data()
-                      .student[indexStu].quizzing.find((e) => {
-                        return e.step === data.step;
-                      });
-                    settype(doc.data().type);
-                    if (done?.done) {
-                      setwaiting(true);
-                      setquiz([]);
+              }
+
+              setwaiting(false);
+              setroomName(doc.data().roomName);
+              let indexStu = doc.data().student.findIndex((e) => {
+                return e.stuid === params.stuid;
+              });
+              setraiseHand(doc.data().student[indexStu].raiseHand);
+              setquizzingStudent(doc.data().student[indexStu].quizzing);
+              setmethod(doc.data().method);
+              //--quiz
+              doc.data().quiz.forEach((data) => {
+                if (data.active === true) {
+                  newQuiz.push({
+                    step: data.step,
+                    type: data.type,
+                    question: data.question,
+                  });
+                  if (data.type === "multiplechoice") {
+                    if (doc.data().method.SA === true) {
+                      newQuiz[0].choice = shuffleArray(data.choice);
                     } else {
-                      setwaiting(false);
-                      setquiz([]);
-                      setquiz(newQuiz);
+                      newQuiz[0].choice = data.choice;
                     }
-                  } else if (data.active === false) {
+                  }
+                  let done = doc.data().student[indexStu].quizzing.find((e) => {
+                    return e.step === data.step;
+                  });
+                  settype(doc.data().type);
+                  if (done?.done) {
+                    setwaiting(true);
+                    setquiz([]);
+                  } else {
+                    setwaiting(false);
+                    setquiz([]);
                     setquiz(newQuiz);
                   }
-                });
-                if (newQuiz.length === 0) {
-                  setwaiting(true);
+                } else if (data.active === false) {
+                  setquiz(newQuiz);
                 }
+              });
+              if (newQuiz.length === 0) {
+                setwaiting(true);
               }
+
               //finish
             } else if (doc.data().finish) {
               if (doc.data().method.SAAA) {
@@ -302,80 +292,75 @@ export default function LanunchStu() {
 
               cookies.set("countTime", parseInt(sum), { path: "/" });
               setcurrentTime(parseInt(sum));
-              if (sum <= 0 && sum) {
-              } else if (sum) {
-                // if (createdAt >= endAt && endAt) {
+
+              if (sum) {
                 const job = schedule.scheduleJob(endDate, function () {
                   finishQuizCBSRemoveState(formStudent);
                   job.cancel();
                 });
-              } else {
-                //--setโจทย์โดนไม่มีresult
-                doc.data().quiz.forEach((data) => {
-                  let form = {
-                    question: data.question,
-                    type: data.type,
-                    step: data.step,
-                  };
-                  if (data.type === "multiplechoice") {
-                    if (doc.data().method.SA === true) {
-                      form.choice = shuffleArray(data.choice);
-                    } else {
-                      form.choice = data.choice;
-                    }
-                  }
-                  quizStudent.push(form);
-                });
-                // const job = schedule.scheduleJob(endAt, function () {
-                //   job.cancel();
-                // });
-                setmethod(doc.data().method);
-                //--- Shuffle Questions
-                if (doc.data().method.SQ === true && !cookies.get("quiz")) {
-                  // if (doc.data().method.SQ === true && quiz.length === 0) {
-                  setSQ(doc.data().method.SQ);
-                  let newquiz = shuffleArray(quizStudent);
-                  setquiz(newquiz);
-                  cookies.set("quiz", newquiz, { path: "/" });
-                } else if (
-                  doc.data().method.SQ === true &&
-                  cookies.get("quiz")
-                ) {
-                  setSQ(doc.data().method.SQ);
-                  setquiz(cookies.get("quiz"));
-                } else if (
-                  doc.data().method.SQ === false &&
-                  quiz.length === 0
-                ) {
-                  setquiz(quizStudent);
-                }
-
-                let indexStudent = doc
-                  .data()
-                  .student.findIndex((e) => e.stuid === params.stuid);
-                setraiseHand(doc.data().student[indexStudent].raiseHand);
-                // setscore(doc.data().student[indexStudent].countScore);
-                //--setคำตอบนร.
-                if (quizzingStudent.length === 0) {
-                  let quizzingStudentFB = [];
-                  doc.data().student[indexStudent].quizzing.forEach((data) => {
-                    let form = {
-                      answer: data.answer,
-                      step: data.step,
-                      done: false,
-                    };
-                    quizzingStudentFB.push(form);
-                  });
-                  setquizzingStudent(quizzingStudentFB);
-                }
-                //--setscore
-
-                settype(doc.data().type);
-                setroomName(doc.data().roomName);
-                setstepMax(doc.data().quiz.length);
-                setwaiting(false);
-                settypeDelivery("CBS");
               }
+
+              //--setโจทย์โดนไม่มีresult
+              doc.data().quiz.forEach((data) => {
+                let form = {
+                  question: data.question,
+                  type: data.type,
+                  step: data.step,
+                };
+                if (data.type === "multiplechoice") {
+                  if (doc.data().method.SA === true) {
+                    form.choice = shuffleArray(data.choice);
+                  } else {
+                    form.choice = data.choice;
+                  }
+                }
+                quizStudent.push(form);
+              });
+              // const job = schedule.scheduleJob(endAt, function () {
+              //   job.cancel();
+              // });
+              setmethod(doc.data().method);
+              //--- Shuffle Questions
+              if (doc.data().method.SQ === true && !cookies.get("quiz")) {
+                // if (doc.data().method.SQ === true && quiz.length === 0) {
+                setSQ(doc.data().method.SQ);
+                let newquiz = shuffleArray(quizStudent);
+                setquiz(newquiz);
+                cookies.set("quiz", newquiz, { path: "/" });
+              } else if (doc.data().method.SQ === true && cookies.get("quiz")) {
+                setSQ(doc.data().method.SQ);
+                setquiz(cookies.get("quiz"));
+              } else if (doc.data().method.SQ === false && quiz.length === 0) {
+                setquiz(quizStudent);
+              }
+
+              let indexStudent = doc
+                .data()
+                .student.findIndex((e) => e.stuid === params.stuid);
+              setraiseHand(doc.data().student[indexStudent].raiseHand);
+              // setscore(doc.data().student[indexStudent].countScore);
+              //--setคำตอบนร.
+              if (quizzingStudent.length === 0) {
+                let quizzingStudentFB = [];
+                doc.data().student[indexStudent].quizzing.forEach((data) => {
+                  let form = {
+                    answer: data.answer,
+                    step: data.step,
+                    done: false,
+                  };
+                  quizzingStudentFB.push(form);
+                });
+                setquizzingStudent(quizzingStudentFB);
+              }
+              //--setscore
+
+              settype(doc.data().type);
+              setroomName(doc.data().roomName);
+              setstepMax(doc.data().quiz.length);
+              setwaiting(false);
+              settypeDelivery("CBS");
+
+              //--finish
             } else if (doc.data().finish) {
               removeLocalStorage();
             }
