@@ -445,17 +445,11 @@ export default function Result() {
         buttons: ["Don't Save", "Save"],
       }).then((willFinish) => {
         if (willFinish) {
-          // reportService
-          //   .teacherFinishQuizAndSaveQuickQuestion(
-          //     localStorage.getItem("liveId"),
-          //     localStorage.getItem("userId")
-          //   )
-          //   .then((res) => {
-          //     clearLocalStorageFinish();
-          //   });
-
-          quizService
-            .insertQuiz(formquiz, localStorage.getItem("userId"))
+          reportService
+            .teacherFinishQuizAndSaveQuickQuestion(
+              localStorage.getItem("liveId"),
+              localStorage.getItem("userId")
+            )
             .then((res) => {
               clearLocalStorageFinish();
             });

@@ -316,13 +316,9 @@ export default function LanunchStu() {
                 }
                 quizStudent.push(form);
               });
-              // const job = schedule.scheduleJob(endAt, function () {
-              //   job.cancel();
-              // });
               setmethod(doc.data().method);
               //--- Shuffle Questions
               if (doc.data().method.SQ === true && !cookies.get("quiz")) {
-                // if (doc.data().method.SQ === true && quiz.length === 0) {
                 setSQ(doc.data().method.SQ);
                 let newquiz = shuffleArray(quizStudent);
                 setquiz(newquiz);
@@ -338,7 +334,6 @@ export default function LanunchStu() {
                 .data()
                 .student.findIndex((e) => e.stuid === params.stuid);
               setraiseHand(doc.data().student[indexStudent].raiseHand);
-              // setscore(doc.data().student[indexStudent].countScore);
               //--setคำตอบนร.
               if (quizzingStudent.length === 0) {
                 let quizzingStudentFB = [];
@@ -353,7 +348,6 @@ export default function LanunchStu() {
                 setquizzingStudent(quizzingStudentFB);
               }
               //--setscore
-
               settype(doc.data().type);
               setroomName(doc.data().roomName);
               setstepMax(doc.data().quiz.length);
@@ -414,10 +408,6 @@ export default function LanunchStu() {
     for (let i = newarray.length - 1; i > 0; i--) {
       let j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];
-      //--เก่า
-      // let temp = newarray[i];
-      // newarray[i] = newarray[j];
-      // newarray[j] = temp;
     }
     return newarray;
   };
@@ -589,7 +579,6 @@ export default function LanunchStu() {
 
     if (type === "QUIZ") {
       if (createdAt < endAt || !endAt) {
-        // if (!currentTime) {
         reportService
           .answerByStudent(formStudent, params.reportId)
           .then((res) => {
@@ -609,16 +598,13 @@ export default function LanunchStu() {
             setanswer();
             setoldCurrent();
           });
-      }
-      //  else if (currentTime <= 0 && currentTime) {
-      else if (createdAt >= endAt && endAt) {
+      } else if (createdAt >= endAt && endAt) {
         console.log("createdAtendAt: ");
         let reportId = params.reportId;
         let formStudent = {
           stuid: localStorage.getItem("stuid"),
           reportId: reportId,
         };
-        // finishQuizCBSRemoveState(formStudent);
         setwaiting(true);
       }
     } else if (type === "QuickQuestion") {
@@ -677,16 +663,7 @@ export default function LanunchStu() {
           className={classes.gridRowStep}
         >
           <Grid container item xs={5} md={5} justify="center">
-            <Typography className={classes.typoStep}>
-              {current + 1}
-              {/* {typeDelivery === "CBS" ? (
-                <>
-                  {current + 1} / {stepMax}
-                </>
-              ) : (
-                <>{quiz[current]?.step} .</>
-              )} */}
-            </Typography>
+            <Typography className={classes.typoStep}>{current + 1}</Typography>
           </Grid>
           <Grid container item xs={2} md={2} />
           <Grid
@@ -701,7 +678,6 @@ export default function LanunchStu() {
               {raiseHand === false ? <>Raise hand :</> : <>Lower hand :</>}
             </Typography>
             <IconButton onClick={handleRaiseHand}>
-              {/* <PanTool className={classes.iconPanTool} /> */}
               <PanTool
                 className={clsx(classes.iconPanTool, {
                   [classes.iconPanToolTrue]: raiseHand === true,
@@ -742,7 +718,6 @@ export default function LanunchStu() {
   };
 
   return (
-    // <div className={classes.root}>
     <>
       <CssBaseline />
       <Grid container>
@@ -759,11 +734,7 @@ export default function LanunchStu() {
 
               <IconButton>
                 <ExitToApp className={classes.typoBtn} />
-                <Button
-                  className={classes.typoBtn}
-                  onClick={handleLogout}
-                  // onClick={() => history.push("/login/student")}
-                >
+                <Button className={classes.typoBtn} onClick={handleLogout}>
                   Logout
                 </Button>
               </IconButton>
@@ -773,6 +744,5 @@ export default function LanunchStu() {
         {waiting ? <WaitingForActivity /> : showContent()}
       </Grid>
     </>
-    // </div>
   );
 }
