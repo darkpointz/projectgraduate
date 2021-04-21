@@ -107,8 +107,8 @@ export default function ClassStudent({ match }) {
 
   useEffect(() => {
     classService.getRoomById(params.id).then((res) => {
-      setroom(res.room.roomName);
-      setstudent(res.room.student);
+      setroom(res?.room.roomName);
+      setstudent(res?.room.student);
     });
   }, []);
 

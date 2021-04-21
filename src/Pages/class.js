@@ -80,7 +80,6 @@ export default function Class() {
   const classes = useStyles();
   const [openCreateClass, setOpenCreateClass] = useState(false);
   const [room, setroom] = useState([]);
-  const [FBIdToken, setFBIdToken] = useState();
   const [userId, setuserId] = useState();
 
   useEffect(() => {
@@ -105,8 +104,9 @@ export default function Class() {
       .insertRoom(formroom, userId)
       .then((res) => {
         setOpenCreateClass(false);
+        console.log(res.data);
         if (res.data.message === "success") {
-          newroom.roomId = res;
+          newroom.roomId = res.data.roomId;
           setroom([...room, newroom]);
           swal("Success!", "Create room success!", "success");
         }

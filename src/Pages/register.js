@@ -52,7 +52,7 @@ export default function Register() {
       userService
         .register(formRegister)
         .then((res) => {
-          swal("Good job!", "You clicked the button!", "success");
+          swal("Success!", "Register Success!", "success");
           history.push("/login/teacher");
         })
         .catch((err) => {
