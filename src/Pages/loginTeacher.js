@@ -49,31 +49,6 @@ export default function LoginTeacher() {
       .catch((err) => {
         swal("error!", "Check your Email or Password", "error");
       });
-    // userService
-    //   .signInWithEmail(formUser)
-    //   .then((res) => {
-    //     console.log("----------");
-    //     if (!res.data) {
-    //       swal("error!", "Your Email or Password Incorrect!", "error");
-    //     } else {
-    //       swal("Good job!", "You clicked the button!", "success");
-    //       console.log(res.data.stsTokenManager.accessToken);
-    //       console.log(res.data);
-    //       // console.log(res.data.getIdToken());
-
-    //       localStorage.setItem("user", res.data);
-    //       localStorage.setItem("userId", res.data.uid);
-
-    //       const FBUserIDtoken = `Bearer ${res.data.stsTokenManager.accessToken}`;
-    //       localStorage.setItem("FBIdToken", FBUserIDtoken);
-    //       history.push("/launch");
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     swal("error!", "Your Email or Password Incorrect!", "error");
-    //     console.log("++++++++++++");
-    //     console.error(err);
-    //   });
   };
 
   const handleClicklogin = async () => {

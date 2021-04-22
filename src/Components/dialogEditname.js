@@ -34,10 +34,22 @@ const useStyles = makeStyles({
   },
 });
 
-export default function DialogEditname({ onClose, open, fname, lname }) {
+export default function DialogEditname({
+  onClose,
+  open,
+  fname,
+  lname,
+  saveNewstudent,
+  stuid,
+}) {
   const classes = useStyles();
   const [firstname, setfirstname] = useState(fname);
   const [lastname, setlastname] = useState(lname);
+
+  useEffect(() => {
+    setfirstname(fname);
+    setlastname(lname);
+  }, [fname]);
 
   const handleClose = () => {
     onClose();
@@ -53,7 +65,14 @@ export default function DialogEditname({ onClose, open, fname, lname }) {
   };
 
   const handleConfirm = () => {
-    // confirm(roomName);
+    const newStudent = {
+      stuid: stuid,
+      fname: firstname,
+      lname: lastname,
+    };
+    saveNewstudent(newStudent);
+    setfirstname();
+    setlastname();
   };
 
   return (
@@ -65,7 +84,7 @@ export default function DialogEditname({ onClose, open, fname, lname }) {
         <DialogContent>
           <Typography className={classes.typoTitle}>First Name</Typography>
           <TextField
-            id="textfield-edit"
+            id="fname-edit"
             variant="outlined"
             value={firstname}
             name="firstname"
@@ -74,7 +93,7 @@ export default function DialogEditname({ onClose, open, fname, lname }) {
           ></TextField>
           <Typography className={classes.typoTitle}>Last Name</Typography>
           <TextField
-            id="textfield-edit"
+            id="lname-edit"
             variant="outlined"
             value={lastname}
             name="lastname"

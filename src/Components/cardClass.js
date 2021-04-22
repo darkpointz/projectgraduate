@@ -88,7 +88,7 @@ export default function CardClass(props) {
   const handleDelete = () => {
     swal({
       title: "Please Confirm",
-      text: "Are you sure you want to delete?",
+      text: `Are you sure you want to delete ${room.roomName} ?`,
       icon: "warning",
       buttons: true,
       dangerMode: true,
@@ -181,11 +181,7 @@ export default function CardClass(props) {
         <CardActions className={classes.cardActions}>
           {checkAccountBox(room.roomPublic)}
           <IconButton aria-label="iconDelete" onClick={handleDelete}>
-            <Delete
-              className={classes.btnDelete}
-              // onClick={() => setopendialogDel(true)}
-              fontSize="large"
-            />
+            <Delete className={classes.btnDelete} fontSize="large" />
           </IconButton>
         </CardActions>
       </Card>

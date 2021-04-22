@@ -100,6 +100,7 @@ export default function ClassStudent({ match }) {
   const [openEdit, setopenEdit] = useState(false);
   const [openDelete, setopenDelete] = useState(false);
   const [index, setindex] = useState();
+  const [stuid, setstuid] = useState();
   const [fname, setfname] = useState();
   const [lname, setlname] = useState();
 
@@ -162,22 +163,33 @@ export default function ClassStudent({ match }) {
     });
   };
 
+  const handleSaveEditStudent = (newProfile) => {
+    let newStudent = student;
+    newStudent.find((e) => {
+      if (e.stuid === newProfile.stuid) {
+        e.fname = newProfile.fname;
+        e.lname = newProfile.lname;
+      }
+    });
+    setstudent(newStudent);
+    classService.changeProfileStudent(params.id, newProfile).then((res) => {
+      setopenEdit(false);
+    });
+  };
+
   const handleCloseManualAdd = () => {
     setopenDialog(false);
     setOpenAddStudent(false);
   };
 
-  const handleClickEdit = (fname, lname) => {
+  const handleClickEdit = (stuid, fname, lname) => {
+    setstuid(stuid);
     setfname(fname);
     setlname(lname);
     setopenEdit(true);
   };
 
   const handleCloseEdit = () => {
-    setopenEdit(false);
-  };
-
-  const handleChangeNameEdit = () => {
     setopenEdit(false);
   };
 
@@ -290,7 +302,11 @@ export default function ClassStudent({ match }) {
                         <IconButton
                           aria-label="iconEdit"
                           onClick={(e) =>
-                            handleClickEdit(student.fname, student.lname)
+                            handleClickEdit(
+                              student.stuid,
+                              student.fname,
+                              student.lname
+                            )
                           }
                         >
                           <Edit className={classes.icon} />
@@ -335,9 +351,10 @@ export default function ClassStudent({ match }) {
       <DialogEditname
         open={openEdit}
         onClose={handleCloseEdit}
+        stuid={stuid}
         fname={fname}
         lname={lname}
-        saveNewstudent={handleSavenewstudent}
+        saveNewstudent={handleSaveEditStudent}
       />
       <DialogDelete
         open={openDelete}

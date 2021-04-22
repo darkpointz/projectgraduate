@@ -9,6 +9,7 @@ export const classService = {
   insertStudentByRoomId,
   deleteStudentByRoomId,
   changeRoomName,
+  changeProfileStudent,
 };
 
 function getAllRoom(uId) {
@@ -26,6 +27,14 @@ function insertRoom(formroom, userId) {
   return httpClient.post(`/room/insertRoom/${userId}`, formroom).then((res) => {
     return res;
   });
+}
+
+function changeProfileStudent(roomId, newprofilestudent) {
+  return httpClient
+    .post(`/room/changeProfileStudent/${roomId}`, newprofilestudent)
+    .then((res) => {
+      return res;
+    });
 }
 
 function insertStudentByRoomId(formStudent, roomId) {
