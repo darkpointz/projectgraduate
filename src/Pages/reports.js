@@ -78,20 +78,11 @@ const useStyles = makeStyles((theme) => ({
 export default function Reports() {
   const classes = useStyles();
 
-  //--เทส
-  const handleDownload = async () => {
-    var storageRef = firebaseConfig.storage().ref("TemplateQuiz.csv");
-    await storageRef.getDownloadURL().then(function (url) {
-      console.log(url);
-    });
-  };
-
   return (
     <div className={classes.root}>
       <Grid container spacing={1} direction="column">
         <Grid container item xs={12}>
           <Paper className={classes.paper}>
-            <Button onClick={handleDownload}>55</Button>
             <Typography className={classes.typotitlePaper}>Report</Typography>
             <Grid container item xs={12}>
               <TableReport />
