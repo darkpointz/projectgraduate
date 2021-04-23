@@ -127,7 +127,7 @@ export default function ClassStudent({ match }) {
     let newData = [];
     data.map((item) => {
       let form = {};
-      form.stuid = item.studentid;
+      form.stuid = String(item.studentid);
       form.fname = item.firstname;
       form.lname = item.lastname;
       newData.push(form);
@@ -210,6 +210,8 @@ export default function ClassStudent({ match }) {
 
   const handleDeleteStudent = () => {
     const list = [...student];
+    console.log(params.id);
+    console.log(student[index].stuid);
     classService
       .deleteStudentByRoomId(params.id, student[index].stuid)
       .then((res) => {
