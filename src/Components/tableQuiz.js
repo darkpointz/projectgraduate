@@ -55,6 +55,9 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "16px",
     backgroundColor: "#A8DCD7",
   },
+  TableCellBlank: {
+    backgroundColor: "#A8DCD7",
+  },
   icon: {
     color: "black",
   },
@@ -97,8 +100,6 @@ export default function TableQuiz({ newQuiz }) {
 
   useEffect(() => {
     const uId = localStorage.getItem("userId");
-    console.log("tableee");
-    // setquiz(newQuiz);
     quizService.getAllQuiz(uId).then((res) => {
       let newquiz = [];
       res.forEach((element) => {
@@ -128,7 +129,6 @@ export default function TableQuiz({ newQuiz }) {
 
   const handleClickEdit = (item) => {
     history.push(`/createquiz/${item.quizId}`);
-    console.log(item);
   };
 
   const handleClickDelete = (item, index) => {
@@ -269,6 +269,10 @@ export default function TableQuiz({ newQuiz }) {
                         </TableCell>
                       </TableRow>
                     ))}
+                <TableCell className={classes.TableCellBlank} />
+                <TableCell className={classes.TableCellBlank} />
+                <TableCell className={classes.TableCellBlank} />
+                <TableCell className={classes.TableCellBlank} />
               </TableBody>
             </Table>
           </TableContainer>
