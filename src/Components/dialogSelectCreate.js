@@ -67,6 +67,7 @@ export default function DialogSelectCreateQuiz(props) {
 
   const papaparseOptions = {
     header: true,
+    comments: true,
     dynamicTyping: true,
     skipEmptyLines: true,
     transformHeader: (header) => header.toLowerCase().replace(/\W/g, "_"),
@@ -93,7 +94,7 @@ export default function DialogSelectCreateQuiz(props) {
         </Button>
       </Grid>
       <Grid item xs={12} container justify="center">
-        {type === "classStudent" ? (
+        {type ? (
           <Button
             className={classes.btnImport}
             variant="contained"
@@ -102,29 +103,10 @@ export default function DialogSelectCreateQuiz(props) {
             <CSVReader
               inputStyle={{
                 opacity: 0,
-                width: "170px",
+                width: "162px",
                 marginLeft: "-162px",
                 textalign: "center",
               }}
-              label="Import with CSV File"
-              onFileLoaded={handleForce}
-              parserOptions={papaparseOptions}
-            />
-          </Button>
-        ) : type === "quiz" ? (
-          <Button
-            className={classes.btnImport}
-            variant="contained"
-            size="small"
-          >
-            <CSVReader
-              inputStyle={{
-                opacity: 0,
-                width: "170px",
-                marginLeft: "-162px",
-                textalign: "center",
-              }}
-              // inputName={{}}
               label="Import with CSV File"
               onFileLoaded={handleForce}
               parserOptions={papaparseOptions}
@@ -145,7 +127,7 @@ export default function DialogSelectCreateQuiz(props) {
         <Grid item xs={12} container justify="flex-end">
           <Button
             className={classes.btnTemplate}
-            href="https://firebasestorage.googleapis.com/v0/b/project4thquiz.appspot.com/o/TemplateQuiz.xlsx?alt=media&token=104cfe94-3ded-47bb-a5e6-68021013c126"
+            href="https://firebasestorage.googleapis.com/v0/b/project4thquiz.appspot.com/o/TemplateQuiz.csv?alt=media&token=30678998-6185-4b32-80fb-178308a336a3"
           >
             Download Template CSV
           </Button>

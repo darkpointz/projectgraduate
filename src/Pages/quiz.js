@@ -97,26 +97,117 @@ export default function Quiz(props) {
   const [quiz, setquiz] = useState([]);
   const [path, setpath] = useState("Quizzes");
 
-  const handleChangeHeaderxlsx = (data) => {
+  const checkEmpty = (item) => {
+    if (item) {
+      return true;
+    }
+    return false;
+  };
+
+  const handleChangeHeaderCSV = (data) => {
     let newData = [];
     console.log("data: ", data);
-    // data.map((item) => {
-    //   let form = {};
-    //   form.stuid = item.studentid;
-    //   form.fname = item.firstname;
-    //   form.lname = item.lastname;
-    //   newData.push(form);
-    // });
+    data.map((item, i) => {
+      let form = {};
+      form.correct = [];
+      switch (item.type) {
+        case "multiplechoice":
+          form.choice = [];
+          let char = ["A", "B", "C", "D", "E"];
+          let ansArray = [
+            item.answer_a,
+            item.answer_b,
+            item.answer_c,
+            item.answer_d,
+            item.answer_e,
+          ];
+          //--choice
+          for (let index = 0; index < 5; index++) {
+            if (checkEmpty(ansArray[index])) {
+              form.choice.push(String(ansArray[index]));
+            }
+          }
+          //--corrct
+          switch (item.correct) {
+            case "A":
+              form.correct.push(String(ansArray[0]));
+              break;
+            case "B":
+              form.correct.push(String(ansArray[1]));
+              break;
+            case "C":
+              form.correct.push(String(ansArray[2]));
+              break;
+            case "D":
+              form.correct.push(String(ansArray[3]));
+              break;
+            case "E":
+              form.correct.push(String(ansArray[4]));
+              break;
+            default:
+              form.correct.push("");
+              break;
+          }
+
+          form.question = item.question;
+          form.type = item.type;
+          form.step = newData.length + 1;
+          form.active = false;
+          break;
+
+        case "truefalse":
+          form.question = item.question;
+          form.type = item.type;
+          form.correct = String(item.correct).toLowerCase();
+          form.step = newData.length + 1;
+          form.active = false;
+          break;
+
+        case "shortanswer":
+          form.question = item.question;
+          form.type = item.type;
+          form.step = newData.length + 1;
+          form.active = false;
+
+          let correctArray = [
+            item.correct1_short_answer_,
+            item.correct2_short_answer_,
+            item.correct3_short_answer_,
+            item.correct4_short_answer_,
+            item.correct5_short_answer_,
+          ];
+          for (let index = 0; index < 5; index++) {
+            if (checkEmpty(correctArray[index])) {
+              form.correct.push({ ans: String(correctArray[index]) });
+            }
+          }
+          break;
+        default:
+          break;
+      }
+      newData.push(form);
+    });
+    console.log("newData: ", newData);
     return newData;
   };
 
   const handleClose = (value, data) => {
     setOpen(false);
     if (value === "createNew") {
-      // setbtnCreate(true);
       history.push("/createquiz/0");
     } else if (value === "import") {
-      let newData = handleChangeHeaderxlsx(data);
+      let newData = handleChangeHeaderCSV(data);
+      const formquiz = {
+        quizName: "Untitled Quiz",
+        quiz: newData,
+        path: "Quizzes",
+      };
+      quizService
+        .insertQuiz(formquiz, localStorage.getItem("userId"))
+        .then((res) => {
+          swal("Success!", "Create Quiz Success!", "success");
+          setquiz(formquiz);
+        });
     }
   };
 
@@ -140,7 +231,7 @@ export default function Quiz(props) {
               <Typography className={classes.typotitlePaper}>Quiz</Typography>
             </Grid>
             <Grid container item xs={12} style={{ marginRight: "10px" }}>
-              <TableQuiz />
+              <TableQuiz newQuiz={quiz} />
             </Grid>
           </Paper>
         </Grid>

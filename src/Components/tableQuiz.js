@@ -87,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TableQuiz({ arrayQuiz }) {
+export default function TableQuiz({ newQuiz }) {
   const classes = useStyles();
   const [quiz, setquiz] = useState([]);
   const [path, setpath] = useState("Quizzes");
@@ -97,7 +97,8 @@ export default function TableQuiz({ arrayQuiz }) {
 
   useEffect(() => {
     const uId = localStorage.getItem("userId");
-    setquiz(arrayQuiz);
+    console.log("tableee");
+    // setquiz(newQuiz);
     quizService.getAllQuiz(uId).then((res) => {
       let newquiz = [];
       res.forEach((element) => {
@@ -107,7 +108,7 @@ export default function TableQuiz({ arrayQuiz }) {
       });
       setquiz(newquiz);
     });
-  }, []);
+  }, [newQuiz]);
 
   const clickFolder = (type) => {
     const uId = localStorage.getItem("userId");

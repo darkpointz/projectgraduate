@@ -123,6 +123,7 @@ export default function ClassStudent({ match }) {
   };
 
   const handleChangeHeaderCSV = (data) => {
+    console.log(data);
     let newData = [];
     data.map((item) => {
       let form = {};
