@@ -45,12 +45,25 @@ export default function QuickTF({
   saveQuestion,
   question,
   start,
+  student,
 }) {
   const classes = useStyles();
 
   const handleQuestion = (e) => {
     saveQuestion(e.target.value);
   };
+
+  const calculatorPercent = (type) => {
+    let count = 0;
+    if (type === "True") {
+      count = score.True;
+    } else {
+      count = score.False;
+    }
+    let percent = Math.round((count / student.length) * 100);
+    return percent;
+  };
+
   return (
     <div className={classes.root}>
       <Grid container item xs={12} direction="column">
@@ -81,14 +94,18 @@ export default function QuickTF({
         >
           <Typography className={classes.typoTF}>True</Typography>
 
-          <Typography className={classes.typoScore}>{score.True}</Typography>
+          <Typography className={classes.typoScore}>
+            {calculatorPercent("True")}%
+          </Typography>
         </Paper>
       </Grid>
       <Grid container item xs={12} alignItems="center">
         <Paper className={classes.paperAnswer}>
           <Typography className={classes.typoTF}>False</Typography>
 
-          <Typography className={classes.typoScore}>{score.False}</Typography>
+          <Typography className={classes.typoScore}>
+            {calculatorPercent("False")}%
+          </Typography>
         </Paper>
       </Grid>
     </div>

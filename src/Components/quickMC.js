@@ -73,6 +73,7 @@ export default function QuickMC({
   start,
   saveAnswer,
   answerQQ,
+  student,
 }) {
   const classes = useStyles();
   const [answer, setanswer] = useState(answerQQ);
@@ -87,6 +88,13 @@ export default function QuickMC({
     let newanswer = answer;
     console.log("newanswer: ", newanswer);
     saveAnswer(e.target.value, index);
+  };
+
+  const calculatorPercent = (i) => {
+    let count = 0;
+    count = score[i];
+    let percent = Math.round((count / student.length) * 100);
+    return percent;
   };
 
   return (
@@ -130,7 +138,8 @@ export default function QuickMC({
                 <Paper className={classes.paperAnswer}>
                   <Typography className={classes.typoAnswer}>{item}</Typography>
                   <Typography className={classes.typoScore}>
-                    {score[i]}
+                    {/* {score[i]} */}
+                    {calculatorPercent(i)}%
                   </Typography>
                 </Paper>
               ) : (

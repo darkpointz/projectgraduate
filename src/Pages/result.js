@@ -502,6 +502,7 @@ export default function Result() {
             saveQuestion={saveQuestionQQ}
             question={quiz[current].question}
             start={start}
+            student={student}
           />
         ) : typeDelivery === "QQMC" ? (
           <QuickMC
@@ -512,6 +513,7 @@ export default function Result() {
             answerQQ={answerQQ}
             question={quiz[current].question}
             start={start}
+            student={student}
           />
         ) : typeDelivery === "QQSA" ? (
           <QuickSA
