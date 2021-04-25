@@ -168,18 +168,6 @@ export default function PaginationLanunchStu({
       }
     });
     return tf;
-
-    //**** */
-    // let tf;
-    // quizzingStudent.find((e) => {
-    //   if (e.step === index) {
-    //     tf = true;
-    //   }
-    // });
-    // if (!tf) {
-    //   tf = false;
-    // }
-    // return tf;
   };
   return (
     <Grid container item xs={12} justify="center">
@@ -187,7 +175,11 @@ export default function PaginationLanunchStu({
         <Button variant="outlined" onClick={handleFirstPage}>
           <FirstPage className={classes.iconNavigate} />
         </Button>
-        <Button variant="outlined" onClick={handleNavigateBefore}>
+        <Button
+          variant="outlined"
+          onClick={handleNavigateBefore}
+          disabled={current === 0}
+        >
           <NavigateBefore className={classes.iconNavigate} />
         </Button>
       </div>
@@ -210,7 +202,11 @@ export default function PaginationLanunchStu({
       ))}
 
       <div style={{ marginLeft: "8px" }}>
-        <Button variant="outlined" onClick={handleNavigateNext}>
+        <Button
+          variant="outlined"
+          onClick={handleNavigateNext}
+          disabled={current === stepMax - 1}
+        >
           <NavigateNext className={classes.iconNavigate} />
         </Button>
         <Button variant="outlined">

@@ -73,7 +73,6 @@ export default function Multiplechoice(props) {
     { ans: "", correct: false },
   ]);
   const [question, setquestion] = useState("");
-  const [mutiCorrect, setmutiCorrect] = useState(false);
 
   useEffect(() => {
     setquestion(props.questionEdit);
