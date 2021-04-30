@@ -5,6 +5,7 @@ import {
   Button,
   Paper,
 } from "@material-ui/core";
+import swal from "sweetalert";
 import React, { useState, useEffect } from "react";
 import clsx from "clsx";
 
@@ -68,7 +69,13 @@ const Truefalse = (props) => {
     const step = props.step;
     const active = false;
     const list = { step, question, type, correct, active };
-    props.savequiz(list);
+    if (!question) {
+      swal("Error!", "Please insert question!", "error");
+    } else if (!correct) {
+      swal("Error!", "Please insert correct!", "error");
+    } else {
+      props.savequiz(list);
+    }
   };
   const changecorrect = (e) => {
     const { value } = e.currentTarget;

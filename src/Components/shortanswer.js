@@ -6,6 +6,7 @@ import {
   Button,
   Paper,
 } from "@material-ui/core";
+import swal from "sweetalert";
 
 const useStyles = makeStyles({
   root: {
@@ -69,7 +70,13 @@ export default function Shortanswer(props) {
     const step = props.step;
     const active = false;
     const list = { step, question, type, correct, active };
-    props.savequiz(list);
+    if (!question) {
+      swal("Error!", "Please insert question!", "error");
+    } else if (correct[0].ans === "") {
+      swal("Error!", "Please insert correct!", "error");
+    } else {
+      props.savequiz(list);
+    }
   };
 
   const handlequestion = (e) => {

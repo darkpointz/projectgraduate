@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import swal from "sweetalert";
 import {
   makeStyles,
   Checkbox,
@@ -122,7 +123,13 @@ export default function Multiplechoice(props) {
     const active = false;
     // const list = { step, question, type, choice, active };
     const list = { step, question, type, choice, active, correct };
-    props.savequiz(list);
+    if (!question) {
+      swal("Error!", "Please insert question!", "error");
+    } else if (correct.length === 0) {
+      swal("Error!", "Please insert correct!", "error");
+    } else {
+      props.savequiz(list);
+    }
   };
 
   const handleDeletefield = (index) => {
