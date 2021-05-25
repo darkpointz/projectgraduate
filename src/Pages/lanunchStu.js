@@ -197,9 +197,7 @@ export default function LanunchStu() {
               let currentDate = new Date();
               // setcurrentTime(new Date());
               let endDate = new Date(doc.data().method.endAt);
-              console.log("endDate: ", endDate);
               let sum = parseInt((endDate - currentDate) / 1000);
-              console.log("sum: ", parseInt(sum));
               setcurrentTime(sum);
               setendAt(endDate);
 
@@ -285,10 +283,7 @@ export default function LanunchStu() {
               let currentDate = new Date();
               // setcurrentTime(new Date());
               let endDate = new Date(doc.data().method.endAt);
-              console.log("endAt: ", endDate);
-              console.log("currentDate: ", currentDate);
               let sum = (endDate - currentDate) / 1000;
-              console.log("sum: ", parseInt(sum));
 
               cookies.set("countTime", parseInt(sum), { path: "/" });
               setcurrentTime(parseInt(sum));

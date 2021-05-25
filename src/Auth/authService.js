@@ -20,8 +20,14 @@ async function signInWithGoogle() {
       localStorage.setItem("user", currentUser);
       localStorage.setItem("userId", currentUser.uid);
       // axios.defaults.headers.common["Authorization"] = FBIdToken;
-      // console.log(res.user);
-      // console.log("idtoken ", FBIdToken);
+
+      let formRegister = {
+        uid: currentUser.uid,
+        email: currentUser.email,
+        displayName: currentUser.displayName,
+        createdAt: currentUser.metadata.creationTime,
+      };
+      userService.registerUserByGooglesignIn(formRegister);
     })
     .catch((err) => {
       console.log(err.message);
@@ -30,7 +36,7 @@ async function signInWithGoogle() {
     await auth.currentUser
       .getIdToken(true)
       .then((token) => {
-        console.log("tokensdsdsdddd:", token);
+        console.log("token:", token);
         const FBUserIDtoken = `Bearer ${token}`;
         localStorage.setItem("FBIdToken", FBUserIDtoken);
         // axios.defaults.headers.common["Authorization"] = FBUserIDtoken;
@@ -39,6 +45,9 @@ async function signInWithGoogle() {
         console.log(err.message);
       });
   }
+  // userService.registerUserByGooglesignIn(formRegister).then((res) => {
+  //   console.log("registerUserByGooglesignIn");
+  // });
 }
 
 async function signInWithEmail(email, password) {

@@ -52,22 +52,7 @@ export default function App() {
 
   return (
     <div className={classes.container}>
-      {/* {currentUser ? (
-        <Navbar
-          displayName={currentUser.displayName}
-          displayPic={currentUser.photoURL}
-        />
-      ) : userStudent ? (
-        <LanunchStu />
-      ) : (
-        <Login />
-      )} */}
       <ProtectedRoute currentUser={currentUser} userStudent={userStudent} />
-
-      {/* ลองมือถือ */}
-      {/* <Navbar displayName={"aod"} displayPic={"/static/images/avatar/2.jpg"} /> */}
-
-      {/* <LanunchStu /> */}
     </div>
   );
 }

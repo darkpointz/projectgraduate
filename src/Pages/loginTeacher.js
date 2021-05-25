@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { authService } from "../Auth/authService";
 import { auth } from "../Auth/firebase";
 import { useHistory } from "react-router-dom";
-import { createBrowserHistory } from "history";
-
 import { useStyles } from "./styles.js";
 import { useTheme } from "./theme.js";
 import { userService } from "../Services/userService";
@@ -23,8 +21,7 @@ import swal from "sweetalert";
 
 export default function LoginTeacher() {
   const classes = useStyles();
-  // let history = useHistory();
-  const history = createBrowserHistory({ forceRefresh: true });
+  let history = useHistory();
   const [email, setemail] = useState();
   const [password, setpassword] = useState();
 
