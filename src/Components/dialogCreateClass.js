@@ -106,7 +106,9 @@ export default function DialogCreateClass(props) {
             onChange={handletxtfield}
             className={classes.txtfield}
           ></TextField>
-          <Typography className={classes.typoSwitch}>Public</Typography>
+          <Typography className={classes.typoSwitch}>
+            {roomPublic ? "Public" : "Private"}
+          </Typography>
           <ChangeSwitch
             checked={roomPublic}
             onChange={handleChange}
