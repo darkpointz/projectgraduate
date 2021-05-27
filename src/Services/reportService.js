@@ -21,6 +21,7 @@ export const reportService = {
   finishQuizCBS,
   submitAnswerQQ,
   raiseHandStudent,
+  lowerhandByTeacher,
   scoreStudent,
 };
 
@@ -222,6 +223,17 @@ function finishQuizCBS(formStudent) {
 function raiseHandStudent(formStudent) {
   return httpClient
     .post(`/report/raiseHandStudent`, formStudent)
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      console.log("err, ", err);
+    });
+}
+
+function lowerhandByTeacher(reportId) {
+  return httpClient
+    .post(`/report/lowerhandByTeacher/${reportId}`)
     .then((res) => {
       return res;
     })

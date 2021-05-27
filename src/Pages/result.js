@@ -529,7 +529,9 @@ export default function Result() {
   };
 
   const handleCloseDialogShowStudent = () => {
-    setopenDialogShowStudent(false);
+    reportService.lowerhandByTeacher(reportId).then((res) => {
+      setopenDialogShowStudent(false);
+    });
   };
 
   const countStudentRaiseHand = () => {

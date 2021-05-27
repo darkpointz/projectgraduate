@@ -15,6 +15,7 @@ import {
   TextField,
   Avatar,
 } from "@material-ui/core";
+import { authService } from "../Auth/authService";
 import swal from "sweetalert";
 
 export default function Register() {
@@ -61,22 +62,32 @@ export default function Register() {
     }
   };
 
+  const handleClicklogin = async () => {
+    authService.signInWithGoogle().then((res) => {
+      history.push("/launch");
+    });
+  };
+
   return (
     <ThemeProvider theme={useTheme}>
       <CssBaseline />
       <Grid container item xs={12} className={classes.GridAppBar}>
         <AppBar position="sticky" elevation={0} className={classes.appBar}>
           <Toolbar>
-            <Typography variant="h6" className={classes.title}>
-              Qton
-            </Typography>
-            <Button
-              color="inherit"
-              className={classes.btn}
-              onClick={() => history.push("/")}
-            >
-              Login
-            </Button>
+            <Grid container item xs={6}>
+              <Typography variant="h6" className={classes.title}>
+                Qton
+              </Typography>
+            </Grid>
+            <Grid container item xs={6} justify="flex-end">
+              <Button
+                color="inherit"
+                className={classes.btn}
+                onClick={() => history.push("/")}
+              >
+                Login
+              </Button>
+            </Grid>
           </Toolbar>
         </AppBar>
       </Grid>
@@ -178,6 +189,27 @@ export default function Register() {
             >
               Sumbit
             </Button>
+          </Grid>
+          <Grid container item xs={12}>
+            <Grid container item xs={12} justify="center">
+              <Typography variant="body2">Or Sign up with Gmail</Typography>
+            </Grid>
+            <Grid container item xs={12} justify="center">
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.googleButton}
+                startIcon={
+                  <Avatar
+                    src="https://i.ibb.co/QD4Nn4R/google-logo.png"
+                    className={classes.transparent}
+                  />
+                }
+                onClick={handleClicklogin}
+              >
+                Sign up with Google
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
