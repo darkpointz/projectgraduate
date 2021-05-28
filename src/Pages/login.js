@@ -25,16 +25,21 @@ export default function Login() {
         <Grid container item xs={12} className={classes.GridAppBar}>
           <AppBar position="sticky" elevation={0} className={classes.appBar}>
             <Toolbar>
-              <Typography variant="h6" className={classes.title}>
-                Qton
+              <Grid container item xs={6} >
+
+                <Typography variant="h6" className={classes.title}>
+                  Qton
               </Typography>
-              <Button
-                color="inherit"
-                className={classes.btn}
-                onClick={() => history.push("/register")}
-              >
-                Register
+              </Grid>
+              <Grid container item xs={6} justify="flex-end">
+                <Button
+                  color="inherit"
+                  className={classes.btn}
+                  onClick={() => history.push("/register")}
+                >
+                  Register
               </Button>
+              </Grid>
             </Toolbar>
           </AppBar>
         </Grid>
