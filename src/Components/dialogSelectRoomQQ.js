@@ -103,14 +103,8 @@ export default function DialogSelectRoomQQ({ open, onClose, typeQQ }) {
         },
       ];
     }
-    console.log(formReport);
     reportService.insertReportQQ(uId, formReport).then((res) => {
-      console.log("resss: ", res);
       history.push("/result");
-      // if (res) {
-      //   <Link to={`/result`} />;
-      // }
-
       localStorage.setItem("liveId", res);
     });
     onClose();

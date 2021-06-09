@@ -7,12 +7,9 @@ export const userService = {
 };
 
 function registerUserByGooglesignIn(formRegister) {
-  console.log("formRegister");
-  console.log(formRegister);
   return httpClient
     .post(`/user/registerUserByGooglesignIn`, formRegister)
     .then((res) => {
-      console.log("-*-");
       return res.data;
     })
     .catch((err) => {

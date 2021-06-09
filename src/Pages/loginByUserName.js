@@ -12,7 +12,7 @@ import {
 import swal from "sweetalert";
 import { createBrowserHistory } from "history";
 import { useHistory } from "react-router-dom";
-import Cookies from 'universal-cookie';
+import Cookies from "universal-cookie";
 
 import { reportService } from "../Services/reportService";
 
@@ -30,7 +30,6 @@ export default function LoginByUserName({ roomPublic, reportId }) {
     // let stuid = cookies.get('stuid')
     if (stuid) {
       reportService.manageStudentByPrivateRoom(stuid, reportId).then((res) => {
-        console.log("res---------------------");
         if (res.data.message === "succes") {
           localStorage.setItem("stuid", stuid);
           history.push(`/LanunchStu/${reportId}/${stuid}`);
@@ -49,10 +48,9 @@ export default function LoginByUserName({ roomPublic, reportId }) {
       reportService
         .insertStudentByPublicRoom(formStudent, reportId)
         .then((res) => {
-          console.log(res);
           if (res.succes === "succes") {
             localStorage.setItem("stuid", res.stuid);
-            cookies.set('stuid', res.stuid, { path: '/' });
+            cookies.set("stuid", res.stuid, { path: "/" });
             history.push(`/LanunchStu/${reportId}/${res.stuid}`);
           } else {
             swal("Error!", "Check sdfsdfsdfsdfID!", "error");
@@ -64,13 +62,9 @@ export default function LoginByUserName({ roomPublic, reportId }) {
           swal("Error!", "Check your room name!", "error");
         });
     } else {
-      console.log("formStudentlogin: ", stuid);
-      console.log("reportId: ", reportId);
       reportService
         .manageStudentByPrivateRoom(stuid, reportId)
-        // .manageStudentByPrivateRoom(formStudent, reportId)
         .then((res) => {
-          console.log("res- ", res);
           if (res.data.message === "succes") {
             localStorage.setItem("stuid", stuid);
             history.push(`/LanunchStu/${reportId}/${stuid}`);

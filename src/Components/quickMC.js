@@ -76,7 +76,6 @@ export default function QuickMC({
   student,
 }) {
   const classes = useStyles();
-  const [answer, setanswer] = useState(answerQQ);
   let charStep = ["A", "B", "C", "D", "E"]; //กรณี5ตัวเลือก
 
   const handleQuestion = (e) => {
@@ -85,8 +84,6 @@ export default function QuickMC({
   };
 
   const handleAnswer = (e, index) => {
-    let newanswer = answer;
-    console.log("newanswer: ", newanswer);
     saveAnswer(e.target.value, index);
   };
 

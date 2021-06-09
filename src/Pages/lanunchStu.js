@@ -184,7 +184,6 @@ export default function LanunchStu() {
     };
     let unsubscribe;
     reportService.getQuizByStudent(formStudent).then((res) => {
-      console.log(res);
       if (res === "CBT") {
         unsubscribe = firebase
           .firestore()
@@ -276,12 +275,9 @@ export default function LanunchStu() {
           .collection("Report")
           .doc(params.reportId)
           .onSnapshot((doc) => {
-            console.log(quiz);
             let quizStudent = [];
-
             if (doc.data().start && doc.data().finish === false) {
               let currentDate = new Date();
-              // setcurrentTime(new Date());
               let endDate = new Date(doc.data().method.endAt);
               let sum = (endDate - currentDate) / 1000;
 
@@ -294,7 +290,6 @@ export default function LanunchStu() {
                   job.cancel();
                 });
               }
-
               //--setโจทย์โดนไม่มีresult
               doc.data().quiz.forEach((data) => {
                 let form = {
@@ -362,8 +357,6 @@ export default function LanunchStu() {
           .onSnapshot((doc) => {
             if (doc.data().start && doc.data().finish === false) {
               setwaiting(false);
-              console.log("doc", doc.data());
-
               setquiz(doc.data().quiz);
               let indexStu = doc.data().student.findIndex((e) => {
                 return e.stuid === params.stuid;
@@ -373,7 +366,6 @@ export default function LanunchStu() {
               settype(doc.data().type);
               settypeDelivery(doc.data().method);
               if (done) {
-                console.log("done: ", done);
                 setwaiting(true);
               }
             } else if (doc.data().finish) {
@@ -543,20 +535,15 @@ export default function LanunchStu() {
       setanswer(answer);
       setoldCurrent(step);
       let newQuizzing = quizzingStudent;
-      console.log("newQuizzin----g: ", newQuizzing);
       if (index || index === 0) {
-        console.log("indexAnswerMC: ", index);
         setindexAnswerMC(index);
       }
-
-      console.log("indexQuizzing: ", indexQuizzing);
       if (indexQuizzing >= 0) {
         newQuizzing[indexQuizzing] = { answer: answer, step: step };
       } else {
         newQuizzing.push({ answer: answer, step: step });
       }
       setquizzingStudent(newQuizzing);
-      console.log("newQuizzing: ", newQuizzing);
     }
   };
 
@@ -568,10 +555,6 @@ export default function LanunchStu() {
       answer: answer,
     };
     let createdAt = new Date();
-    // let createdAt = new Date().toISOString();
-    console.log("createdAt603: ", createdAt);
-    console.log("currentTime603: ", currentTime);
-
     if (type === "QUIZ") {
       if (createdAt < endAt || !endAt) {
         reportService
@@ -594,7 +577,6 @@ export default function LanunchStu() {
             setoldCurrent();
           });
       } else if (createdAt >= endAt && endAt) {
-        console.log("createdAtendAt: ");
         let reportId = params.reportId;
         let formStudent = {
           stuid: localStorage.getItem("stuid"),
@@ -603,13 +585,11 @@ export default function LanunchStu() {
         setwaiting(true);
       }
     } else if (type === "QuickQuestion") {
-      console.log("typeDelivery: ", typeDelivery);
       if (typeDelivery === "QQMC") {
         formStudent.indexAnswerMC = indexAnswerMC;
       } else {
         formStudent.indexAnswerMC = "-1";
       }
-      console.log("formStudent: ", formStudent);
       reportService.submitAnswerQQ(formStudent, params.reportId).then(() => {
         setanswer();
         setoldCurrent();
@@ -722,11 +702,9 @@ export default function LanunchStu() {
               <Typography variant="h6" className={classes.title}>
                 Qton
               </Typography>
-
               <Typography variant="h6" className={classes.titleRoom}>
                 {roomName}
               </Typography>
-
               <IconButton>
                 <ExitToApp className={classes.typoBtn} />
                 <Button className={classes.typoBtn} onClick={handleLogout}>

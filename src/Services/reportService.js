@@ -40,7 +40,6 @@ function resultTeacher(reportId) {
   return httpClient
     .post(`/report/checkMethodDelivery/${reportId}`)
     .then((res) => {
-      console.log(res.data);
       return res.data;
     })
     .catch((err) => {
@@ -52,7 +51,6 @@ function insertReport(uId, formReport) {
   return httpClient
     .post(`/report/insertReport/${uId}`, formReport)
     .then((res) => {
-      console.log("message: ", res.data.message);
       return res.data.message;
     })
     .catch((err) => {
@@ -64,7 +62,6 @@ function insertReportQQ(uId, formReport) {
   return httpClient
     .post(`/report/insertReportQQ/${uId}`, formReport)
     .then((res) => {
-      console.log("message: ", res.data.message);
       return res.data.message;
     })
     .catch((err) => {
@@ -201,7 +198,6 @@ function deleteReportByReportId(reportId) {
   return httpClient
     .delete(`/report/deleteReportByReportId/${reportId}`)
     .then((res) => {
-      console.log(res.data);
       return res.data;
     })
     .catch((err) => {

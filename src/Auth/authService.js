@@ -36,7 +36,6 @@ async function signInWithGoogle() {
     await auth.currentUser
       .getIdToken(true)
       .then((token) => {
-        console.log("token:", token);
         const FBUserIDtoken = `Bearer ${token}`;
         localStorage.setItem("FBIdToken", FBUserIDtoken);
         // axios.defaults.headers.common["Authorization"] = FBUserIDtoken;
@@ -45,9 +44,6 @@ async function signInWithGoogle() {
         console.log(err.message);
       });
   }
-  // userService.registerUserByGooglesignIn(formRegister).then((res) => {
-  //   console.log("registerUserByGooglesignIn");
-  // });
 }
 
 async function signInWithEmail(email, password) {
@@ -55,7 +51,6 @@ async function signInWithEmail(email, password) {
   await auth
     .signInWithEmailAndPassword(email, password)
     .then((res) => {
-      console.log(res.user);
       currentUser = res.user;
       localStorage.setItem("user", currentUser);
       localStorage.setItem("userId", currentUser.uid);
@@ -66,7 +61,6 @@ async function signInWithEmail(email, password) {
   await auth.currentUser
     .getIdToken(true)
     .then((token) => {
-      console.log("token:", token);
       const FBUserIDtoken = `Bearer ${token}`;
       localStorage.setItem("FBIdToken", FBUserIDtoken);
       // axios.defaults.headers.common["Authorization"] = FBUserIDtoken;
@@ -85,37 +79,8 @@ async function logout() {
       localStorage.removeItem("user");
       localStorage.removeItem("userId");
       localStorage.removeItem("RoomName");
-      console.log("logout_sucess");
     })
     .catch((err) => {
       console.log(err.message);
     });
 }
-
-// ----old---
-// import React, { useState, useEffect, createContext } from "react";
-// import { auth } from "./firebase";
-// import axios from "axios";
-
-// export const AuthContext = createContext();
-// export const AuthProvider = ({ children }) => {
-//   const [currentUser, setcurrentUser] = useState(null);
-//   const [userToken, setuserToken] = useState(null);
-
-//   useEffect(() => {
-//     auth.onAuthStateChanged((user) => {
-//       setcurrentUser(user);
-
-//       // var credential = res.credential;
-//       // var idtoken = credential.idToken;
-//       // setcurrentUser(user);
-//       console.log("usesdsdr: ", user);
-//     });
-//   }, []);
-
-//   return (
-//     <AuthContext.Provider value={{ currentUser }}>
-//       {children}
-//     </AuthContext.Provider>
-//   );
-// };

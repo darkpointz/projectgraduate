@@ -106,7 +106,6 @@ export default function Quiz(props) {
 
   const handleChangeHeaderCSV = (data) => {
     let newData = [];
-    console.log("data: ", data);
     data.map((item, i) => {
       let form = {};
       form.correct = [];
@@ -187,7 +186,6 @@ export default function Quiz(props) {
       }
       newData.push(form);
     });
-    console.log("newData: ", newData);
     return newData;
   };
 

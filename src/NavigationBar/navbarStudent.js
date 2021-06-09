@@ -47,16 +47,13 @@ export default function NavbarStudent() {
               doc.data().student.find((e) => {
                 if (e.stuid === stuid) {
                   submit = e.submit;
-                  console.log("e ", e);
                 }
               });
-              console.log("e.submit: ", submit);
               if (params.room === "finish") {
                 setreport();
                 localStorage.removeItem("ReportId");
               }
               if (submit === false) {
-                console.log(doc.data());
                 setreport(doc.id);
                 setroomPublic(doc.data().roomPublic);
                 localStorage.setItem("ReportId", doc.id);
@@ -70,16 +67,6 @@ export default function NavbarStudent() {
         }
       };
     }
-
-    // if (roomName) {
-    //   reportService.getRoomTypeByStudent(roomName).then((res) => {
-    //     console.log(res);
-    //     if (res) {
-    //       setreport(res.reportId);
-    //       setroomPublic(res.roomPublic);
-    //     }
-    //   });
-    // }
   });
 
   const handleSetRoom = (roomUser, roomPublic) => {

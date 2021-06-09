@@ -123,9 +123,7 @@ export default function Result() {
           .doc(localStorage.getItem("liveId"))
           .onSnapshot((doc) => {
             let createdAt = new Date();
-            console.log("createdAt: ", createdAt);
             let endAt = new Date(doc.data().method.endAt);
-            console.log("endAt: ", endAt);
             let sum = (endAt - createdAt) / 1000;
             setcountTime();
             setcountTime(parseInt(sum));
@@ -242,21 +240,17 @@ export default function Result() {
       oldStep: current + 1,
       newStep: newStep,
     };
-    console.log("oldformStep ", formStep);
-    console.log("----------------......");
     let endAt, min, sec;
     if (method.timeEachQuestion) {
       min = method.minEach;
       sec = method.secEach;
       let newcreatedAt = new Date();
-      console.log("newcreatedAt.endAtL::: ", newcreatedAt);
       newcreatedAt.setMinutes(
         newcreatedAt.getMinutes() + min,
         newcreatedAt.getSeconds() + sec
       );
       endAt = new Date(newcreatedAt);
       formStep.endAt = endAt;
-      console.log("formStep.endAtL::: ", endAt);
     }
     if (endAt) {
       // formStep.oldStep = newStep;
@@ -300,7 +294,6 @@ export default function Result() {
       reportService
         .teacherStartQuickQuestion(reportId, formquiz)
         .then((res) => {
-          console.log(res);
           setstart(true);
         });
     } else {
@@ -324,7 +317,6 @@ export default function Result() {
           newcreatedAt.getSeconds() + sec
         );
         formTime.endAt = new Date(newcreatedAt);
-        console.log("formTime.endAt: ", formTime.endAt);
         cookies.set("endAt", formTime.endAt, { path: "/" });
       }
 
@@ -346,9 +338,7 @@ export default function Result() {
             newStep: 1,
           };
           const job = schedule.scheduleJob(formTime.endAt, function () {
-            console.log("fo-*-*-*--*-", formStep);
             reportService.teacherNextStepCBT(reportId, formStep);
-            // handleBtnFinish();
             job.cancel();
           });
         }
@@ -435,7 +425,6 @@ export default function Result() {
       quiz: quiz,
       path: "QuickQuestion",
     };
-    console.log("formquizformquiz: ", formquiz);
     const typeCookies = cookies.get("type");
     if (typeCookies === "QuickQuestion") {
       swal({
@@ -488,7 +477,6 @@ export default function Result() {
   const saveAnswerQQ = (newAnswer, index) => {
     let newQuiz = quiz;
     newQuiz[current].choice[index] = newAnswer;
-    console.log(newQuiz);
     setquiz(newQuiz);
   };
 

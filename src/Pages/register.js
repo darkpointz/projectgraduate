@@ -49,7 +49,6 @@ export default function Register() {
         fname: fname,
         lname: lname,
       };
-      console.log("formRegister ", formRegister);
       userService
         .register(formRegister)
         .then((res) => {

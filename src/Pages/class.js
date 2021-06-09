@@ -84,11 +84,9 @@ export default function Class() {
 
   useEffect(() => {
     const uId = localStorage.getItem("userId");
-    console.log("userId: ", uId);
     classService.getAllRoom(uId).then((res) => {
       setroom(res);
       setuserId(uId);
-      console.log("res: ", res);
     });
   }, []);
 
@@ -104,7 +102,6 @@ export default function Class() {
       .insertRoom(formroom, userId)
       .then((res) => {
         setOpenCreateClass(false);
-        console.log(res.data);
         if (res.data.message === "success") {
           newroom.roomId = res.data.roomId;
           setroom([...room, newroom]);
@@ -134,7 +131,6 @@ export default function Class() {
     let newRoom = [...room];
     newRoom[index].roomName = newroomName;
     setroom(newRoom);
-    console.log(newRoom);
   };
 
   return (

@@ -123,7 +123,6 @@ export default function ClassStudent({ match }) {
   };
 
   const handleChangeHeaderCSV = (data) => {
-    console.log(data);
     let newData = [];
     data.map((item) => {
       let form = {};
@@ -146,7 +145,6 @@ export default function ClassStudent({ match }) {
       };
 
       setstudent(student.concat(newData));
-      console.log(data);
       classService.insertStudentByRoomId(formStudent, params.id).then((res) => {
         setopenDialog(false);
       });
@@ -158,7 +156,6 @@ export default function ClassStudent({ match }) {
     const formStudent = {
       student: newstudent,
     };
-    console.log(formStudent);
     classService.insertStudentByRoomId(formStudent, params.id).then((res) => {
       setopenDialog(false);
     });
@@ -210,8 +207,6 @@ export default function ClassStudent({ match }) {
 
   const handleDeleteStudent = () => {
     const list = [...student];
-    console.log(params.id);
-    console.log(student[index].stuid);
     classService
       .deleteStudentByRoomId(params.id, student[index].stuid)
       .then((res) => {

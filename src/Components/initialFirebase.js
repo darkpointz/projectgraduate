@@ -14,9 +14,8 @@ export default function initialFirebase() {
     storageBucket: "project4thquiz.appspot.com",
     messagingSenderId: "706805911766",
     appId: "1:706805911766:web:c1c1e4fedc974e157d7977",
-    measurementId: "G-7Q1XCCGX7J"
+    measurementId: "G-7Q1XCCGX7J",
   };
   firebase.initializeApp(firebaseConfig);
   var db = firebase.firestore();
-  console.log("firebaseConfig:::: ", firebaseConfig);
 }

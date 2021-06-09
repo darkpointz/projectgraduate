@@ -52,7 +52,6 @@ export default function ShowReportByReportId() {
 
   useEffect(() => {
     reportService.getReportByReportId(params.reportId).then((res) => {
-      console.log("res[0]: ", res[0]);
       setstudentMax(res[0].student.length);
       setquiz(res[0].quiz);
       setstepMax(res[0].quiz.length);

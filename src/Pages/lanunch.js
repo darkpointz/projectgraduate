@@ -129,7 +129,6 @@ export default function Lanunch() {
   const handleBtnLanunch = () => {
     let liveId = localStorage.getItem("liveId");
     let roomName = localStorage.getItem("RoomName");
-    console.log(roomName);
     if (liveId) {
       swal("Error!", "You should finish your current activity first!", "error");
     } else if (!roomName) {
@@ -188,14 +187,8 @@ export default function Lanunch() {
           },
         ];
       }
-      console.log("formReport: ", formReport);
       reportService.insertReportQQ(uId, formReport).then((res) => {
-        console.log("resss: ", res);
         history.push("/result");
-        // if (res) {
-        //   <Link to={`/result`} />;
-        // }
-
         localStorage.setItem("liveId", res);
       });
     }

@@ -60,7 +60,6 @@ export default function LiveMC({
 
   useEffect(() => {
     setanswer(quizzingStudent?.answer);
-    console.log("type: ", type);
     if (type === "CBS") {
       setindexAnswer(
         quiz?.choice.findIndex((e) => e === quizzingStudent?.answer)

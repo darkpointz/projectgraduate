@@ -111,7 +111,6 @@ export default function PaginationLanunchStu({
     } else if (current > stepMax - 3) {
       setmid(stepMax - 3);
     } else if (current - 1 >= 3 && current > 3) {
-      console.log("cuure: ", current);
       setmid(current - 1);
     }
   };

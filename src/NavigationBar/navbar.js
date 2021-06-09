@@ -208,7 +208,6 @@ function Navbar(props) {
   );
 
   const handleChangeRoom = (event) => {
-    console.log(event.target.value);
     localStorage.setItem("RoomName", event.target.value);
     setroomName(event.target.value);
   };

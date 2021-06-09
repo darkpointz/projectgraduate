@@ -59,7 +59,6 @@ function insertQuiz(formquiz, uId) {
   return httpClient
     .post(`/quiz/insertQuiz/${uId}`, formquiz)
     .then((res) => {
-      console.log("message: ", res.data.message);
       return res.data.message;
     })
     .catch((err) => {
@@ -71,7 +70,6 @@ function editQuiz(formquiz, quizId, userId) {
   return httpClient
     .post(`/quiz/editQuiz/${quizId}/${userId}`, formquiz)
     .then((res) => {
-      console.log("message: ", res.data.message);
       return res.data.message;
     })
     .catch((err) => {
@@ -83,7 +81,6 @@ function deleteQuizByQuizId(quizId) {
   return httpClient
     .delete(`/quiz/deleteQuizByQuizId/${quizId}`)
     .then((res) => {
-      console.log("message: ", res.data.message);
       return res.data.message;
     })
     .catch((err) => {

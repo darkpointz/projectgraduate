@@ -49,7 +49,6 @@ export default function TableSelectClass(props) {
   const handleSelect = (selectedRow) => {
     setselect(selectedRow);
     setselectClass(selectedRow);
-    console.log("selectedRow", selectedRow.student);
   };
 
   return (

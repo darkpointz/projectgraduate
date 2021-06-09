@@ -137,7 +137,6 @@ export default function CardClass(props) {
         if (res.data.message === "success") {
           swal("Success!", "Change room name success!", "success");
           changeRoomName(index, newName);
-          console.log("res : ", res.data);
         }
       })
       .catch((err) => {

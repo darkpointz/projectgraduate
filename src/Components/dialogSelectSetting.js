@@ -111,15 +111,8 @@ export default function DialogSelectSetting(props) {
         quizName: selectQuiz.quizName,
         roomName: roomName,
       };
-      console.log(formReport);
       reportService.insertReport(uId, formReport).then((res) => {
-        console.log("resss: ", res);
-
         history.push("/result");
-        // if (res) {
-        //   <Link to={`/result`} />;
-        // }
-
         localStorage.setItem("liveId", res);
       });
       onClose();
@@ -136,7 +129,6 @@ export default function DialogSelectSetting(props) {
   };
 
   const handleSetMethodQuiz = (selectMethodQuiz, option) => {
-    console.log(selectMethodQuiz);
     if (!option) {
       setselectMethodQuiztf(true);
     }

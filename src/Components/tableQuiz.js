@@ -123,7 +123,6 @@ export default function TableQuiz({ newQuiz }) {
         }
       });
       setquiz(newquiz);
-      console.log("newquiz:", newquiz);
     });
   };
 
@@ -153,7 +152,6 @@ export default function TableQuiz({ newQuiz }) {
   };
 
   const handleDate = (time, item) => {
-    console.log("item: ", item);
     let date = new Date(time._seconds * 1000).toLocaleString("th-TH");
     return date;
   };

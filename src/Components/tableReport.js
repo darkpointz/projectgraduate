@@ -93,7 +93,6 @@ export default function TableReport() {
         }
       });
       setreport(newreport);
-      console.log(res);
     });
   }, [room]);
 
@@ -103,7 +102,6 @@ export default function TableReport() {
   };
 
   const handleClickDelete = (item, i) => {
-    console.log("item: ", item);
     swal({
       title: "Please Confirm",
       text: "Are you sure you want to delete?",

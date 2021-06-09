@@ -95,7 +95,6 @@ export default function Createquiz(props) {
   useEffect(() => {
     if (params.quizId != 0) {
       quizService.getQuizByQuizId(params.quizId).then((res) => {
-        console.log(res);
         setquiz(res.quiz);
         setquizname(res.quizName);
         seteditQuiz(true);
@@ -147,7 +146,6 @@ export default function Createquiz(props) {
   const savequizEdit = (newquiz, index) => {
     let Quiz = [...quiz];
     Quiz[index] = newquiz;
-    console.log(index);
     setquiz(Quiz);
   };
 
